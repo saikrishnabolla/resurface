@@ -56,3 +56,19 @@ class ArchiveStoreTests(unittest.TestCase):
         self.assertEqual([(row["start"], row["text"]) for row in result],
                          [(3.5, "Forward movement is still good movement.")])
         self.assertEqual(self.store.find(self.account, "movement a new subject"), [])
+
+
+class CoverTests(unittest.TestCase):
+    def test_only_browser_image_formats_are_cached(self):
+        from server.archive_store import browser_image_type
+        self.assertEqual(browser_image_type(b"\xff\xd8\xff\xe0data"), "image/jpeg")
+        self.assertEqual(browser_image_type(b"\x89PNG\r\n\x1a\nrest"), "image/png")
+        self.assertEqual(browser_image_type(b"RIFF1234WEBPdata"), "image/webp")
+        self.assertIsNone(browser_image_type(b"\x00\x00\x00\x18ftypheic"))
+        self.assertIsNone(browser_image_type(b""))
+
+    def test_tiktok_cover_prefers_the_jpeg_variant(self):
+        from server.treg_archive import tiktok_row
+        row = {"aweme_id": "7707847360235228430", "desc": "x", "create_time": 1, "video": {"duration": 9000, "cover": {"url_list": [
+            "https://p16-common-sign.tiktokcdn-eu.com/a~x.heic?dr=1", "https://p19-common-sign.tiktokcdn-eu.com/a~x.jpeg?dr=1"]}}}
+        self.assertTrue(tiktok_row(row, "kameronmonet")["thumbnail"].endswith(".jpeg?dr=1"))

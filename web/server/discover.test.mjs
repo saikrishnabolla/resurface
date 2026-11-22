@@ -79,3 +79,19 @@ test('Discover keeps only stories that name the topic and drops reference pages 
   });
   assert.deepEqual(result.stories.map(story => story.url), ['https://valdez.example/p/story']);
 });
+
+test('Discover ranks stories that use the topic words and the creator’s niche, and drops same-headline repeats', async () => {
+  const result = await findStories({ query: 'brand deals', terms: ['brand deals'], context: ['creator', 'economy', 'lawyer'] }, {
+    apiKey: 'test',
+    fetchImpl: async (_url, init) => {
+      assert.match(JSON.parse(init.body).query, /^brand deals creator economy$/);
+      return ok({ news: [
+        { url: 'https://a.example/1', title: 'Early Black Friday deals from every brand', description: 'Shopping list' },
+        { url: 'https://b.example/2', title: 'What creators should know about the brand contract', description: 'A lawyer on creator pay and deal terms' },
+        { url: 'https://c.example/3', title: 'Brand deals are changing', description: 'Phrase match' },
+        { url: 'https://d.example/4', title: 'Brand deals are changing', description: 'Same headline syndicated' },
+      ] });
+    },
+  });
+  assert.deepEqual(result.stories.map(story => story.url), ['https://c.example/3', 'https://b.example/2']);
+});

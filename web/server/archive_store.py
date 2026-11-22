@@ -1,3 +1,4 @@
+import hashlib
 import json
 import os
 import re
@@ -31,6 +32,62 @@ def latest(profile, inventory):
             result.append(video)
             counts[kind] += 1
     return result
+
+
+IMAGE_HOSTS = ("tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com", "tiktokv.com", "tiktokv.us", "tiktokv.eu",
+               "byteoversea.com", "ibytedtos.com", "muscdn.com", "cdninstagram.com", "fbcdn.net", "ytimg.com")
+THUMB_DIR = Path(os.environ.get("RESURFACE_THUMB_DIR", Path(__file__).resolve().parents[2] / ".cache" / "thumbs"))
+MAX_IMAGE = 3_000_000
+
+
+def fetch_image(url):
+    """Download one cover. Some CDNs reject Python's TLS handshake, so fall back to curl for those."""
+    import subprocess
+    import requests
+    try:
+        reply = requests.get(url, timeout=8, stream=True, headers={"User-Agent": "Mozilla/5.0"})
+        kind = reply.headers.get("content-type", "")
+        if reply.status_code != 200 or not kind.startswith("image/"):
+            return None, ""
+        body = reply.raw.read(MAX_IMAGE + 1, decode_content=True)
+        return (body, kind) if body and len(body) <= MAX_IMAGE else (None, "")
+    except requests.exceptions.SSLError:
+        pass
+    except requests.exceptions.RequestException:
+        return None, ""
+    try:
+        run = subprocess.run(["curl", "-s", "--max-time", "8", "--max-filesize", str(MAX_IMAGE), "-A", "Mozilla/5.0",
+                              "-w", "\n%{http_code} %{content_type}", url], capture_output=True, timeout=12)
+    except (OSError, subprocess.SubprocessError):
+        return None, ""
+    data, _, tail = run.stdout.rpartition(b"\n")
+    code, _, kind = tail.decode("ascii", "ignore").partition(" ")
+    return (data, kind.strip()) if code == "200" and kind.startswith("image/") and data else (None, "")
+
+
+def browser_image_type(body):
+    """Only formats every browser can show. HEIC and others are refused."""
+    if not body:
+        return None
+    if body[:3] == b"\xff\xd8\xff":
+        return "image/jpeg"
+    if body[:8] == b"\x89PNG\r\n\x1a\n":
+        return "image/png"
+    if body[:4] == b"RIFF" and body[8:12] == b"WEBP":
+        return "image/webp"
+    return None
+
+
+def thumb_file(video_id):
+    return THUMB_DIR / (hashlib.sha256(video_id.encode()).hexdigest()[:24] + ".img")
+
+
+def proxied(profile, video):
+    """Platform image links expire and block hotlinking, so non-YouTube covers are served from our cache."""
+    if profile["platform"] == "YouTube" or not video.get("thumbnail"):
+        return video
+    return {**video, "thumbnail": "/api/import_youtube?" + "&".join(
+        f"{k}={v}" for k, v in (("profile", profile["url"]), ("thumb", video["id"])))}
 
 
 class ArchiveStore:
@@ -91,7 +148,7 @@ class ArchiveStore:
                           ORDER BY position LIMIT 200""", (key, capacity(profile))).fetchall()
         saved_at, lease_until, message = archive
         return {"profile": profile, "savedAt": saved_at or None, "importing": lease_until > time.time(),
-                "message": message, "videos": [{**json.loads(data), "status": status} for data, status in rows]}
+                "message": message, "videos": [{**proxied(profile, json.loads(data)), "status": status} for data, status in rows]}
 
     def inventory(self, profile, videos, partial=False):
         key = key_for(profile)
@@ -126,6 +183,35 @@ class ArchiveStore:
             row = sql("SELECT status, segments FROM resurface_videos WHERE profile_key=? AND video_id=? AND position<?",
                       (key_for(profile), video_id, capacity(profile))).fetchone()
         return {"status": row[0], "segments": json.loads(row[1])} if row else None
+
+    def thumbnail(self, profile, video_id):
+        """Return (bytes, content_type) for a saved video's cover, caching it the first time it is fetched."""
+        import requests
+        from urllib.parse import urlsplit
+        cached = thumb_file(video_id)
+        if cached.exists():
+            saved = cached.read_bytes()
+            kind = browser_image_type(saved)
+            if kind:
+                return saved, kind
+            cached.unlink(missing_ok=True)
+        with self.connect() as sql:
+            row = sql("SELECT metadata FROM resurface_videos WHERE profile_key=? AND video_id=?",
+                      (key_for(profile), video_id)).fetchone()
+        url = json.loads(row[0]).get("thumbnail") if row else None
+        host = urlsplit(url or "").hostname or ""
+        if not url or not url.startswith("https://") or not any(host == h or host.endswith("." + h) for h in IMAGE_HOSTS):
+            return None
+        body, kind = fetch_image(url)
+        kind = browser_image_type(body)
+        if not kind:
+            return None
+        try:
+            THUMB_DIR.mkdir(parents=True, exist_ok=True)
+            cached.write_bytes(body)
+        except OSError:
+            pass
+        return body, kind
 
     def video(self, profile, video_id):
         with self.connect() as sql:

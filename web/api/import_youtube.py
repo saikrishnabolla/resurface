@@ -6,7 +6,7 @@ from threading import Thread
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from starlette.concurrency import run_in_threadpool
 
 from server.archive_store import ArchiveStore
@@ -100,7 +100,7 @@ def load_caption(profile, video_id, token):
 
 
 @app.get("/api/import_youtube")
-def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = ""):
+def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = "", thumb: str = ""):
     if not protected():
         return error("Live archives are available in the protected preview.", 503)
     try:
@@ -113,6 +113,13 @@ def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = 
         store.setup()
         if video:
             result = store.transcript(account, video)
+        elif thumb:
+            if not VIDEO_ID.fullmatch(thumb):
+                return error("Invalid video.", 400)
+            image = store.thumbnail(account, thumb)
+            if image is None:
+                return error("No cover is saved for this video.", 404)
+            return Response(image[0], media_type=image[1], headers={"Cache-Control": "public, max-age=604800"})
         elif topics:
             return reply(store.topics(account))
         elif q:

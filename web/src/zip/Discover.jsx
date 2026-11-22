@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Header, Loading, ErrorBox, Empty, ClipRow, Thumb, fmt, fdate } from './ui.jsx';
+import { Header, Loading, ErrorBox, Empty, ClipRow, fdate } from './ui.jsx';
 import { searchDiscover } from './discover-model.mjs';
 import { TopicGraph } from './TopicGraph.jsx';
+import { SplitReel } from './SplitReel.jsx';
 
 // One clip per video, newest first, so the list shows distinct moments instead of repeats.
 function distinct(clips, limit = 6) {
@@ -13,24 +14,6 @@ function distinct(clips, limit = 6) {
   return [...seen.values()].slice(0, limit);
 }
 
-function Pairing({ story, clip }) {
-  return <div className="grid md:grid-cols-2 border border-emerald mb-10" aria-label="Best pairing">
-    <div className="p-6 border-b md:border-b-0 md:border-r border-line">
-      <p className="label !text-emerald mb-3">In the news · {fdate(story.date) || 'this week'}</p>
-      <a href={story.url} target="_blank" rel="noreferrer" className="text-2xl font-semibold tracking-tight leading-tight hover:text-emerald">{story.title}</a>
-      <p className="text-mute text-xs mt-3">{story.publisher}</p>
-    </div>
-    <div className="p-6 bg-surface flex gap-4 items-start">
-      <Thumb title={clip.video.title} thumbnail={clip.video.thumbnail} className="w-28 aspect-video shrink-0" />
-      <div className="min-w-0">
-        <p className="label !text-emerald mb-3">You said it · {fdate(clip.video.publishedAt)} · {fmt(clip.start)}</p>
-        <p className="text-xl font-semibold tracking-tight leading-snug">“{clip.excerpt.length > 140 ? clip.excerpt.slice(0, 140) + '…' : clip.excerpt}”</p>
-        <p className="text-mute text-xs mt-3 truncate">{clip.video.title}</p>
-      </div>
-    </div>
-  </div>;
-}
-
 export function Discover({ accounts, entries, findStories, findMatches, loadTopics, onOpen, onResults }) {
   const [niche, setNiche] = useState(null);
   const [rows, setRows] = useState({});
@@ -39,6 +22,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
   const [custom, setCustom] = useState('');
   const [error, setError] = useState('');
   const run = useRef(0);
+  const nicheWords = useRef([]);
   const scope = JSON.stringify(accounts.map(account => account.url));
   const ready = accounts.map(account => entries?.[account.url]?.snapshot?.videos?.length ?? 0).join(',');
 
@@ -47,7 +31,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
     setRows(current => ({ ...current, [term]: { status: 'loading' } }));
     const result = await searchDiscover({
       query: term, accounts, entries,
-      findStories: query => findStories(query, { terms: [query] }),
+      findStories: query => findStories(query, { terms: [query], context: nicheWords.current }),
       findMatches,
     });
     if (token === run.current) setRows(current => ({ ...current, [term]: { status: 'done', ...result } }));
@@ -65,6 +49,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
         .sort((a, b) => b.data.videoCount - a.data.videoCount)[0] ?? {};
       if (data) {
         setNiche({ ...data, account });
+        nicheWords.current = [...new Set(data.topics.slice(0, 12).flatMap(topic => topic.term.split(' ')))].filter(word => word.length > 3);
         const lead = data.topics.filter(topic => topic.videos / data.videoCount < 0.4).slice(0, 6).map(topic => topic.term);
         setOrder(lead);
         const results = await Promise.all(lead.map(term => load(term).catch(() => null)));
@@ -115,7 +100,6 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
           <div id="discover-detail" className="scroll-mt-6">
             {error && <ErrorBox msg={error} />}
             {!selected || !done ? (selected ? <Loading /> : null) : <>
-              {pair && <Pairing story={story} clip={pair.clip} />}
               <h2 className="text-2xl font-semibold tracking-tight mb-2">In the news</h2>
               {done.newsError ? <ErrorBox msg="You.com news search is unavailable right now." retry={() => load(selected)} />
                 : !done.topic.sources.length ? <p className="text-mute py-4">No fresh stories name “{selected}” this week.</p>
@@ -124,6 +108,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
                       <a className="font-medium hover:text-emerald underline underline-offset-4" href={item.url} target="_blank" rel="noreferrer">{item.title}</a>
                       <span className="text-mute text-xs">{item.publisher}{item.date && ` · ${fdate(item.date)}`}</span>
                     </li>)}</ul>}
+              {pair && <SplitReel key={selected} stories={done.topic.sources} moments={moments} />}
               <h2 className="text-2xl font-semibold tracking-tight mb-2">
                 {moments.length ? `${moments.length} video${moments.length === 1 ? '' : 's'} where you cover ${selected}` : `Where you cover ${selected}`}
               </h2>
