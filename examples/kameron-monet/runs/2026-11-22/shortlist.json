@@ -1,0 +1,843 @@
+[
+ {
+  "t": "Anthropic lists in the biggest IPO on record",
+  "d": "Thu 19 Nov",
+  "tag": "breaking",
+  "post": "by Tue 24 Nov",
+  "ty": "safe",
+  "sc": [
+   5,
+   4,
+   4,
+   5,
+   4,
+   4
+  ],
+  "w": "The Claude maker began trading on Nasdaq at roughly a $1.8tn value, then led an AI sell-off that pushed US indexes into correction.",
+  "src": [
+   [
+    "CNBC",
+    "https://www.cnbc.com/2026/11/19/anthropic-ipo-ant-live-updates.html"
+   ],
+   [
+    "AP",
+    "https://apnews.com/article/anthropic-history-openai-dario-amodei-ipo-53fb21bd250b936d93c5c8885af8d393"
+   ],
+   [
+    "CNN",
+    "https://www.cnn.com/2026/11/18/investing/anthropic-ipo-wall-street-ai"
+   ]
+  ],
+  "flag": "Her 19 Aug 2026 video carries a paid Claude Cowork segment, so use the unsponsored clips or disclose. The first clip is about ChatGPT, not Claude: keep the hook about AI in general.",
+  "c": [
+   {
+    "v": "2VQPQUigoUU",
+    "s": 847,
+    "l": "Juxtaposition",
+    "b": "Wall Street loves AI. Would you let it read your contract?",
+    "q": "without using like a ChatGPT, which we all know ain't really that",
+    "t": "Building Community as a Startup Founder | Building a Startup Episode 7",
+    "d": "2026-03-08"
+   },
+   {
+    "v": "cUCiTNo-pTY",
+    "s": 2489,
+    "l": "Principle",
+    "b": "Worth trillions. Still can't tell you what to ask.",
+    "q": "you don't really know what you don't know, right? So, you're asking",
+    "t": "Identity shift to build a multi-million dollar company | Building a Startup Episode 12",
+    "d": "2026-05-25"
+   },
+   {
+    "v": "qazLmqYXljM",
+    "s": 936,
+    "l": "Direct",
+    "b": "She uses Claude. Here's where she stops trusting it.",
+    "q": "searching now with like ChatGPT and Claude and they're great, but it's",
+    "t": "First Paid User, New Hire & Spring in NYC | Building a Startup Episode 10",
+    "d": "2026-04-20"
+   },
+   {
+    "v": "qazLmqYXljM",
+    "s": 303,
+    "l": "Line",
+    "b": "Everyone has the same AI. So what's left?",
+    "q": "when you think of ChatGPT, Claude, Gemini, all of that, what's really",
+    "t": "First Paid User, New Hire & Spring in NYC | Building a Startup Episode 10",
+    "d": "2026-04-20"
+   },
+   {
+    "v": "YgqvwssPhXo",
+    "s": 165,
+    "l": "Principle",
+    "b": "AI is not your replacement. It's your first draft.",
+    "q": "it's not a replacement for me at least, for y'all it shouldn't",
+    "t": "A Realistic Day in My Life as a Tech Founder and Content Creator",
+    "d": "2026-08-19"
+   },
+   {
+    "v": "3rUTpwkprtw",
+    "s": 1592,
+    "l": "Receipt",
+    "b": "January 2025: already paying for AI as a business cost.",
+    "q": "I pay for the like next up for Chad gbt why it's",
+    "t": "LAWYER DIARIES | busy work week in NYC, managing finances as an entrepreneur, easy skincare routine",
+    "d": "2025-01-27"
+   },
+   {
+    "v": "ulVWANmJiG0",
+    "s": 0,
+    "l": "Line",
+    "b": "A founder's view from inside the AI boom.",
+    "q": "If you're building an AI right now, it's like actually insane. My",
+    "t": "Weeks in My Life in NYC | building a tech startup",
+    "d": "2026-09-03"
+   }
+  ],
+  "tot": 35,
+  "r": 1
+ },
+ {
+  "t": "Manhattan's median rent hits a record $5,375",
+  "d": "report out mid Nov, housing plan Wed 18 Nov",
+  "tag": "rising",
+  "post": "any day this week",
+  "ty": "safe",
+  "sc": [
+   5,
+   4,
+   4,
+   4,
+   5,
+   4
+  ],
+  "w": "Realtor.com's third-quarter data put Manhattan asking rents up 8.3% and the citywide median at a record $3,785, days before the mayor and governor announced a $22bn housing package.",
+  "src": [
+   [
+    "Commercial Observer",
+    "https://commercialobserver.com/2026/11/new-york-city-apartment-rents-record-highs/"
+   ],
+   [
+    "Hoodline",
+    "https://hoodline.com/2026/11/mamdani-and-hochul-unveil-nyc-housing-push-as-rents-overcrowding-keep-climbing/"
+   ]
+  ],
+  "flag": "The first clip is her own budget range before she moved, not a market figure. Show both numbers with their dates.",
+  "c": [
+   {
+    "v": "srSZRZQXOgE",
+    "s": 1630,
+    "l": "Number",
+    "b": "In 2023 she called $3,000 crazy. Manhattan is now $5,375.",
+    "q": "rent being $2,000 to $3,000 and up for what I'm really looking",
+    "t": "LIFE UPDATE | I'm moving, I quit, business update, being vulnerable, dating apps, new job?!",
+    "d": "2023-11-10"
+   },
+   {
+    "v": "AMiya40QJ2c",
+    "s": 462,
+    "l": "Emotion",
+    "b": "The prayer every New York renter knows.",
+    "q": "Mind you, I pay over $3,000. Again, we're not going to give",
+    "t": "I Almost Gave Up on My Startup | burnout, faith, and the comeback",
+    "d": "2025-11-02"
+   },
+   {
+    "v": "srSZRZQXOgE",
+    "s": 121,
+    "l": "Explainer",
+    "b": "Before the rent, there's the broker's fee.",
+    "q": "pay this large broker's fee y'all on top of that I'm trying",
+    "t": "LIFE UPDATE | I'm moving, I quit, business update, being vulnerable, dating apps, new job?!",
+    "d": "2023-11-10"
+   },
+   {
+    "v": "41GhF2IIKVM",
+    "s": 2119,
+    "l": "Line",
+    "b": "One month in: where the money actually goes.",
+    "q": "rent is eating up a huge chunk um course I have to",
+    "t": "2023 RECAP + 2024 GOALS | reflecting, having faith, almost quit, moving on, my whole life changed?!",
+    "d": "2024-01-09"
+   },
+   {
+    "v": "LgnXenZ4fJk",
+    "s": 267,
+    "l": "Explainer",
+    "b": "The lease came back higher than the listing.",
+    "q": "the rent price is higher than what so I'm like okay what's",
+    "t": "MOVING VLOG 2 | one way ticket, packing with friends, emotional, moving from Alabama to New York?!",
+    "d": "2023-12-29"
+   },
+   {
+    "v": "NpGbTsrBwpg",
+    "s": 1336,
+    "l": "Emotion",
+    "b": "What a New York studio looks like at these prices.",
+    "q": "there were some that I saw that I was like now can",
+    "t": "LIFE UPDATE | answering your questions, lawyer life, living in NYC, the real tea?",
+    "d": "2024-05-29"
+   }
+  ],
+  "tot": 35,
+  "r": 2
+ },
+ {
+  "t": "Law school acceptance falls to a 20-year low",
+  "d": "Thu 19 Nov",
+  "tag": "rising",
+  "post": "by Fri 27 Nov",
+  "ty": "safe",
+  "sc": [
+   5,
+   4,
+   4,
+   3,
+   5,
+   5
+  ],
+  "w": "AccessLex's annual data shows 65% of applicants got an offer, and 41% of Black applicants against about three quarters of white applicants.",
+  "src": [
+   [
+    "Inside Higher Ed",
+    "https://www.insidehighered.com/news/admissions/graduate/2026/11/20/latest-law-school-data-shows-20-year-low-acceptance-rate"
+   ],
+   [
+    "AccessLex release",
+    "https://www.prnewswire.com/news-releases/legal-education-data-deck-highlights-trends-in-law-school-admissions-and-bar-passage-302944233.html"
+   ]
+  ],
+  "flag": "Her 5% figure is said from memory at a live event. Check it against a current source before putting it on screen.",
+  "c": [
+   {
+    "v": "cUCiTNo-pTY",
+    "s": 1906,
+    "l": "Number",
+    "b": "41% get in. Here's the number at the other end.",
+    "q": "only 5% of lawyers are licensed licensed lawyers are black. 5% in",
+    "t": "Identity shift to build a multi-million dollar company | Building a Startup Episode 12",
+    "d": "2026-05-25"
+   },
+   {
+    "v": "LsuG6z8QNe4",
+    "s": 933,
+    "l": "Answer",
+    "b": "Can you still get in with a low LSAT? She did.",
+    "q": "it was lower than a 160 okay so we said how hard",
+    "t": "IS LAW SCHOOL FOR YOU? | THE LEGAL TEA",
+    "d": "2017-09-15"
+   },
+   {
+    "v": "GVraVDw4M2Y",
+    "s": 642,
+    "l": "Story",
+    "b": "Gap year, second LSAT, then law school.",
+    "q": "took the LSAT did much better I think I got a 150",
+    "t": "My journey from law school to becoming an attorney and CEO | Kameron Monet",
+    "d": "2025-02-02"
+   },
+   {
+    "v": "5cQmG8IMKgU",
+    "s": 1826,
+    "l": "Emotion",
+    "b": "For the applicant who can't afford the test.",
+    "q": "scared to go to law school cuz I can't fund it like",
+    "t": "My entrepreneur mistakes + my journey as an entrepreneur | Kameron Monet",
+    "d": "2025-02-16"
+   },
+   {
+    "v": "LsuG6z8QNe4",
+    "s": 648,
+    "l": "Advice",
+    "b": "When to sit the LSAT so the score lasts.",
+    "q": "can hold for five years so if you take it your junior",
+    "t": "IS LAW SCHOOL FOR YOU? | THE LEGAL TEA",
+    "d": "2017-09-15"
+   },
+   {
+    "v": "eg9c5wtJHfI",
+    "s": 251,
+    "l": "Answer",
+    "b": "2018: the admissions questions she got most.",
+    "q": "the law school admissions test definitely check that video out I will",
+    "t": "My 20 Most Asked Law School Questions! | THE LEGAL TEA |  LAWYER DIARIES | Kameron Monet",
+    "d": "2018-08-03"
+   }
+  ],
+  "tot": 35,
+  "r": 3
+ },
+ {
+  "t": "David Beckham sues Coty for $41m over discount-bin fragrances",
+  "d": "reported Tue 17 Nov",
+  "tag": "rising",
+  "post": "by Wed 25 Nov",
+  "ty": "swing",
+  "sc": [
+   4,
+   4,
+   4,
+   4,
+   5,
+   5
+  ],
+  "w": "His company says its licensing deal was breached when Beckham-branded products turned up in a petrol station bargain bin and at Poundland. Coty wants the case dismissed.",
+  "src": [
+   [
+    "CNA / AP",
+    "https://cnalifestyle.channelnewsasia.com/style-beauty/david-beckham-sues-fragrance-discount-store-bargain-bin-591911"
+   ],
+   [
+    "Nine",
+    "https://www.nine.com.au/entertainment/celebrity/david-beckham-company-sues-61-million-luxury-fragrances-allegedly-sold-in-bargain-bin-20261121-p61fu5.html"
+   ]
+  ],
+  "flag": "A live lawsuit: describe it as alleged, and keep her clip as general advice, not comment on the case.",
+  "c": [
+   {
+    "v": "NpteP3EQP2I",
+    "s": 394,
+    "l": "Principle",
+    "b": "Beckham's $41m problem, explained in one rule.",
+    "q": "make sure that what's in the contract actually was negotiated in emails.",
+    "t": "Focused, Aligned, and Building in Public | Building a Startup Episode 4",
+    "d": "2026-01-01"
+   },
+   {
+    "v": "a4gIfBSujK0",
+    "s": 810,
+    "l": "Principle",
+    "b": "Once your name is out there, can you track it?",
+    "q": "how do I protect my clients when it comes to their trademark",
+    "t": "LAWYER DIARIES | regular busy work week in my life living and working in NYC",
+    "d": "2024-04-12"
+   },
+   {
+    "v": "VTN_EVUdf30",
+    "s": 543,
+    "l": "Explainer",
+    "b": "Watch a lawyer hit the word 'perpetuity' live.",
+    "q": "they put in perpetuity there people I've been working so much today",
+    "t": "LAWYER DIARIES | law firm life, work week, nyc apartment updates, I'm stressed!",
+    "d": "2024-01-15"
+   },
+   {
+    "v": "wZzsdPM_x28",
+    "s": 2409,
+    "l": "Line",
+    "b": "Five words every licensing dispute starts with.",
+    "q": "Did you read it? I signed it already. You've been following me",
+    "t": "rebuilding my app from scratch, becoming a tech founder + life in NYC | LAWYER DIARIES",
+    "d": "2025-05-27"
+   },
+   {
+    "v": "ulVWANmJiG0",
+    "s": 1111,
+    "l": "Explainer",
+    "b": "Signing is the start. Tracking the terms is the job.",
+    "q": "tracking your usage rights, tracking your exclusivity. All that is what our",
+    "t": "Weeks in My Life in NYC | building a tech startup",
+    "d": "2026-09-03"
+   },
+   {
+    "v": "5cQmG8IMKgU",
+    "s": 1108,
+    "l": "Advice",
+    "b": "Her own costly mistake: trademarks came too late.",
+    "q": "not prioritizing trademarks and with that also not vetting attorneys that I",
+    "t": "My entrepreneur mistakes + my journey as an entrepreneur | Kameron Monet",
+    "d": "2025-02-16"
+   }
+  ],
+  "tot": 34,
+  "r": 4
+ },
+ {
+  "t": "Model sues a clothing brand for turning 2021 photos into AI ads",
+  "d": "filed Wed 18 Nov",
+  "tag": "breaking",
+  "post": "by Wed 25 Nov",
+  "ty": "safe",
+  "sc": [
+   5,
+   4,
+   5,
+   2,
+   4,
+   5
+  ],
+  "w": "A Los Angeles model says he was paid in clothes, signed no release, and later found AI-made images and video of himself in the brand's social ads.",
+  "src": [
+   [
+    "PPC Land",
+    "https://ppc.land/model-sues-romperjack-after-2021-photos-became-ai-generated-instagram-ads/"
+   ]
+  ],
+  "flag": "Only one outlet found so far, though it cites the federal case number. Confirm against the court filing before posting.",
+  "c": [
+   {
+    "v": "cUCiTNo-pTY",
+    "s": 2610,
+    "l": "Story",
+    "b": "His face is in the ads. Her client's was on a billboard.",
+    "q": "she saw her face on a billboard, and she was just so",
+    "t": "Identity shift to build a multi-million dollar company | Building a Startup Episode 12",
+    "d": "2026-05-25"
+   },
+   {
+    "v": "qazLmqYXljM",
+    "s": 2057,
+    "l": "Explainer",
+    "b": "'Perpetuity' means forever. Including for AI.",
+    "q": "understand what perpetuity meant in the aftermath. I understood the word means",
+    "t": "First Paid User, New Hire & Spring in NYC | Building a Startup Episode 10",
+    "d": "2026-04-20"
+   },
+   {
+    "v": "apJ1nUZVWbg",
+    "s": 341,
+    "l": "Explainer",
+    "b": "What you sign away when you sign a release.",
+    "q": "they automatically kind of get rights and you kind of just charge",
+    "t": "New Engineer, Webby Honoree & NYC Influencer Events | Building a Startup Episode 11",
+    "d": "2026-04-26"
+   },
+   {
+    "v": "apJ1nUZVWbg",
+    "s": 1846,
+    "l": "Line",
+    "b": "Her warning to creators, in six words.",
+    "q": "they will play in your face and they will let you. So",
+    "t": "New Engineer, Webby Honoree & NYC Influencer Events | Building a Startup Episode 11",
+    "d": "2026-04-26"
+   },
+   {
+    "v": "cSuH88mDAFs",
+    "s": 445,
+    "l": "Story",
+    "b": "Locked in for three years by a deal they didn't read.",
+    "q": "signed with a terrible talent manager that groomed them and took advantage",
+    "t": "Startup Finance Tips for Beginners | CEO Classroom (Mercury Review)",
+    "d": "2026-01-07"
+   }
+  ],
+  "tot": 34,
+  "r": 5
+ },
+ {
+  "t": "Serena Williams launches a $200m venture fund",
+  "d": "Tue 17 Nov",
+  "tag": "breaking",
+  "post": "by Wed 25 Nov",
+  "ty": "swing",
+  "sc": [
+   4,
+   4,
+   4,
+   3,
+   4,
+   5
+  ],
+  "w": "Starfire Ventures will back seed and Series A companies. Coverage repeats the figure that women-only founding teams get about 1% of US venture money.",
+  "src": [
+   [
+    "AfroTech",
+    "https://afrotech.com/serena-williams-and-beth-ferreira-launch-starfire-ventures"
+   ],
+   [
+    "ThePrint",
+    "https://theprint.in/feature/serena-williams-vc-empire-raise-200-million-startups/3100740/"
+   ]
+  ],
+  "flag": "Don't imply she is pitching or has approached the fund.",
+  "c": [
+   {
+    "v": "PUDZg7ci43I",
+    "s": 0,
+    "l": "Emotion",
+    "b": "Serena is raising $200m. This is who it's for.",
+    "q": "No investors yet. No Forbes feature yet. No insert or idea of",
+    "t": "Can a Lawyer Build a Million-Dollar Tech Startup in NYC? - Building a Startup Episode 1",
+    "d": "2025-08-13"
+   },
+   {
+    "v": "vOKBxcD0-Uk",
+    "s": 1690,
+    "l": "Answer",
+    "b": "Why a founder might not take the money yet.",
+    "q": "I am technically not actively fundraising because I haven't made the decision",
+    "t": "Building a Startup: Struggles No One Talks About | Episode 2",
+    "d": "2025-09-17"
+   },
+   {
+    "v": "PUDZg7ci43I",
+    "s": 757,
+    "l": "Principle",
+    "b": "Audience first, investors second.",
+    "q": "Not against angel investors. Not against it. Not against it. Cuz right",
+    "t": "Can a Lawyer Build a Million-Dollar Tech Startup in NYC? - Building a Startup Episode 1",
+    "d": "2025-08-13"
+   },
+   {
+    "v": "ln2JPXuCceE",
+    "s": 882,
+    "l": "Story",
+    "b": "A lawyer learns venture capital from scratch.",
+    "q": "venture capital angel investors the that whole entire process. I was completely",
+    "t": "2025 Recap & 2026 Goals: The Year I Got Strategic, Focused & Confident",
+    "d": "2026-01-04"
+   },
+   {
+    "v": "G7i-OYngjcE",
+    "s": 1011,
+    "l": "Story",
+    "b": "Fresh from the pitch, hoping to close the round.",
+    "q": "hopefully we can secure some funding and close our round. I think",
+    "t": "How I Closed Out a Foundational Year as a Founder | Building a Startup Episode 5",
+    "d": "2026-01-19"
+   },
+   {
+    "v": "VcHORetOqVo",
+    "s": 826,
+    "l": "Emotion",
+    "b": "What women founders say they need besides money.",
+    "q": "female founder community. Like I don't want people looking at me crazy",
+    "t": "LIFE UPDATE | mid-year check-in, Q3 goals + how I'm navigating life as a tech founder in NYC",
+    "d": "2025-06-30"
+   },
+   {
+    "v": "AMiya40QJ2c",
+    "s": 852,
+    "l": "Advice",
+    "b": "The book an investor told her to read.",
+    "q": "had an investor suggest I read this to understand the landscape of",
+    "t": "I Almost Gave Up on My Startup | burnout, faith, and the comeback",
+    "d": "2025-11-02"
+   }
+  ],
+  "tot": 32,
+  "r": 6
+ },
+ {
+  "t": "Thanksgiving travel: 81.5 million on the move, airfares up 17%",
+  "d": "forecast Mon 16 Nov, travel from Tue 24 Nov",
+  "tag": "calendar",
+  "post": "Tue 24 to Sun 29 Nov",
+  "ty": "swing",
+  "sc": [
+   4,
+   3,
+   3,
+   4,
+   4,
+   3
+  ],
+  "w": "AAA expects near-record crowds with the average domestic return flight at $800, and TSA expects its busiest day on Sunday 29 November.",
+  "src": [
+   [
+    "USA Today",
+    "https://www.usatoday.com/story/travel/2026/11/16/thanksgiving-travel-best-worst-times/92760384007/"
+   ],
+   [
+    "NewsNation",
+    "https://www.newsnationnow.com/travel/thanksgiving-travel-road-airport/"
+   ]
+  ],
+  "flag": "None of these clips are from a Thanksgiving trip except the second and last. Label the recording dates clearly.",
+  "c": [
+   {
+    "v": "RlYNzXvhkkc",
+    "s": 137,
+    "l": "Emotion",
+    "b": "81.5 million travelling. One of them will be her.",
+    "q": "I missed the first flight I'm going to be spending most of",
+    "t": "PORTUGAL VLOG | I missed my flight, 31st birthday, girls trip, should I move to Portugal?!",
+    "d": "2024-10-14"
+   },
+   {
+    "v": "D1w9ch633o4",
+    "s": 331,
+    "l": "Echo",
+    "b": "Her own Thanksgiving week, city by city.",
+    "q": "Detroit and Atlanta for Thanksgiving then we have a few more hours",
+    "t": "LAWYER DIARIES | thanksgiving weekend, going home for the holidays, days in Alabama, friendsgiving",
+    "d": "2024-12-22"
+   },
+   {
+    "v": "N1nPVxuNF-Q",
+    "s": 30,
+    "l": "Advice",
+    "b": "The one thing that got her through security fast.",
+    "q": "i have tsa pre-check so i got through pretty quickly but they",
+    "t": "TRAVEL VLOG | solo trip to Miami, EAST Miami hotel tour, luxury, content creation, meet up",
+    "d": "2022-01-16"
+   },
+   {
+    "v": "SrfKyvpu-20",
+    "s": 1473,
+    "l": "Advice",
+    "b": "Her airport rule for a calm travel day.",
+    "q": "getting to the airport really early so that I can relax and",
+    "t": "LAWYER DIARIES | last work week in NYC, pack with me to Ghana, travel essentials, beauty maintenance",
+    "d": "2025-01-12"
+   },
+   {
+    "v": "kIPiTUDEQIM",
+    "s": 418,
+    "l": "Emotion",
+    "b": "What a delay does to a person.",
+    "q": "the delay at the delay I should have known to be camera",
+    "t": "TRAVEL DIARIES | NYC influencer event, first time in San Diego, lawyers, nights out, a wedding?!",
+    "d": "2024-04-30"
+   },
+   {
+    "v": "RlYNzXvhkkc",
+    "s": 2725,
+    "l": "Emotion",
+    "b": "The sentence every stranded traveller says.",
+    "q": "I just want to go home but we're going to we're going",
+    "t": "PORTUGAL VLOG | I missed my flight, 31st birthday, girls trip, should I move to Portugal?!",
+    "d": "2024-10-14"
+   },
+   {
+    "v": "MW2EDha-Eow",
+    "s": 1516,
+    "l": "Echo",
+    "b": "Thanksgiving 2023, on her own.",
+    "q": "Happy Thanksgiving Happy Thanksgiving I slept in which is funny sleeping in",
+    "t": "LAWYER DIARIES | influencer tea, holidays alone cooking dinner, Christmas decor in my apartment?!",
+    "d": "2023-12-13"
+   }
+  ],
+  "tot": 28,
+  "r": 7
+ },
+ {
+  "t": "Student loan borrowers hit billing errors as oversight ramps up",
+  "d": "Tue 17 Nov",
+  "tag": "steady",
+  "post": "within two weeks",
+  "ty": "safe",
+  "sc": [
+   4,
+   3,
+   4,
+   3,
+   3,
+   4
+  ],
+  "w": "Borrowers report wrong bills and stalled relief after July's repayment overhaul, and newly elected Democrats plan to investigate. Pete Buttigieg said his party overreached on forgiveness.",
+  "src": [
+   [
+    "Business Insider",
+    "https://www.businessinsider.com/new-era-student-loan-borrowers-oversight-repayment-protections-democrats-midterms-2026-11"
+   ],
+   [
+    "Newsweek",
+    "https://www.newsweek.com/democrats-student-loan-forgiveness-pete-buttigieg-12722353"
+   ]
+  ],
+  "flag": "Politically charged. Keep the hook on the borrower's experience, not on a party.",
+  "c": [
+   {
+    "v": "u0_qXi6ocAw",
+    "s": 1484,
+    "l": "Emotion",
+    "b": "What nobody explained before she signed.",
+    "q": "the extent of what student loans like having student loans means I",
+    "t": "LIFE UPDATE | holding myself back, financial mistakes, therapy topics, I'm quitting?!",
+    "d": "2024-02-28"
+   },
+   {
+    "v": "GVraVDw4M2Y",
+    "s": 910,
+    "l": "Story",
+    "b": "In the financial aid office, asking for more.",
+    "q": "ask for additional student loans and they're like wait you're like on",
+    "t": "My journey from law school to becoming an attorney and CEO | Kameron Monet",
+    "d": "2025-02-02"
+   },
+   {
+    "v": "ln2JPXuCceE",
+    "s": 2333,
+    "l": "Juxtaposition",
+    "b": "And yet she says the debt was worth it.",
+    "q": "well worth the investment for me. But yeah, so uh but I",
+    "t": "2025 Recap & 2026 Goals: The Year I Got Strategic, Focused & Confident",
+    "d": "2026-01-04"
+   },
+   {
+    "v": "bTrggn9UY94",
+    "s": 2712,
+    "l": "Emotion",
+    "b": "The dream year, in one sentence.",
+    "q": "I pay off all my student loans. I pay off all my",
+    "t": "building a business in New York City, life as a female founder, creator, and lawyer | LAWYER DIARIES",
+    "d": "2025-04-28"
+   },
+   {
+    "v": "3rUTpwkprtw",
+    "s": 151,
+    "l": "Story",
+    "b": "A lawyer's balance sheet, said out loud.",
+    "q": "my main debt is student loans for the most part and then",
+    "t": "LAWYER DIARIES | busy work week in NYC, managing finances as an entrepreneur, easy skincare routine",
+    "d": "2025-01-27"
+   },
+   {
+    "v": "u0_qXi6ocAw",
+    "s": 1680,
+    "l": "Advice",
+    "b": "Her plan for cleaning it up.",
+    "q": "I need to pay off my credit cards I need to figure",
+    "t": "LIFE UPDATE | holding myself back, financial mistakes, therapy topics, I'm quitting?!",
+    "d": "2024-02-28"
+   }
+  ],
+  "tot": 28,
+  "r": 8
+ },
+ {
+  "t": "An AI law firm raises $20m to replace the traditional firm",
+  "d": "Mon 16 Nov",
+  "tag": "steady",
+  "post": "by Wed 25 Nov",
+  "ty": "safe",
+  "sc": [
+   4,
+   3,
+   4,
+   2,
+   3,
+   5
+  ],
+  "w": "London start-up Alecto runs its own regulated firm with lawyers plus AI on fixed fees, backed by Insight Partners and a law firm investor.",
+  "src": [
+   [
+    "Axios",
+    "https://www.axios.com/pro/all-deals/2026/11/16/ai-native-law-firm-alecto-20m"
+   ],
+   [
+    "Law.com",
+    "https://www.law.com/legaltechnews/2026/11/17/ai-powered-conveyancing-provider-alecto-raises-20m-in-seed-round-/"
+   ]
+  ],
+  "flag": "She runs a legal tech company herself, so this reads as her market. Avoid sounding like a competitor comment.",
+  "c": [
+   {
+    "v": "G7i-OYngjcE",
+    "s": 3737,
+    "l": "Principle",
+    "b": "Investors just bet $20m on this exact question.",
+    "q": "I don't have $500 per hour for a lawyer. Where do I",
+    "t": "How I Closed Out a Foundational Year as a Founder | Building a Startup Episode 5",
+    "d": "2026-01-19"
+   },
+   {
+    "v": "cSuH88mDAFs",
+    "s": 456,
+    "l": "Juxtaposition",
+    "b": "Lawyers cost too much. And AI alone isn't the fix.",
+    "q": "lawyers are expensive and lawyers don't care about the creative economy and",
+    "t": "Startup Finance Tips for Beginners | CEO Classroom (Mercury Review)",
+    "d": "2026-01-07"
+   },
+   {
+    "v": "2VQPQUigoUU",
+    "s": 225,
+    "l": "Principle",
+    "b": "Legal tech was built for firms, not for you.",
+    "q": "traditional legal tech companies like I'm sure you know cuz working at",
+    "t": "Building Community as a Startup Founder | Building a Startup Episode 7",
+    "d": "2026-03-08"
+   },
+   {
+    "v": "FuNrs1pv1Hg",
+    "s": 2042,
+    "l": "Story",
+    "b": "The moment a lawyer asked the obvious question.",
+    "q": "Why am I not using tech?\" And then that's when I started",
+    "t": "How I’m Starting 2026 as a Startup Founder | Building a Startup Episode 6",
+    "d": "2026-01-26"
+   },
+   {
+    "v": "G7i-OYngjcE",
+    "s": 1028,
+    "l": "Line",
+    "b": "Her one-line case for cheaper law.",
+    "q": "law should be accessible no matter what stage you are in your",
+    "t": "How I Closed Out a Foundational Year as a Founder | Building a Startup Episode 5",
+    "d": "2026-01-19"
+   }
+  ],
+  "tot": 28,
+  "r": 9
+ },
+ {
+  "t": "Black Friday forecast: a record $12.9bn online",
+  "d": "Fri 27 Nov",
+  "tag": "calendar",
+  "post": "Thu 26 or Fri 27 Nov",
+  "ty": "safe",
+  "sc": [
+   4,
+   3,
+   3,
+   4,
+   3,
+   3
+  ],
+  "w": "Adobe expects online spending up 9.2% on the day, with buy now, pay later use rising and most shoppers saying the economy will shape what they spend.",
+  "src": [
+   [
+    "Bloomberg Intelligence",
+    "https://www.bloomberg.com/professional/insights/markets/five-charts-for-black-friday-most-wanted-gifts-retail-winners-and-more/"
+   ],
+   [
+    "Globe and Mail / Reuters",
+    "https://www.theglobeandmail.com/business/article-wall-streets-week-ahead-black-friday-brings-consumer-spending-into/"
+   ]
+  ],
+  "flag": "Thin match: she talks about budgets and credit cards, not about Black Friday itself, apart from one unboxing.",
+  "c": [
+   {
+    "v": "ln2JPXuCceE",
+    "s": 2079,
+    "l": "Juxtaposition",
+    "b": "A record spending day. Her 2026 money rule.",
+    "q": "no more personal loans or maxed out credit cards in 2026. Can",
+    "t": "2025 Recap & 2026 Goals: The Year I Got Strategic, Focused & Confident",
+    "d": "2026-01-04"
+   },
+   {
+    "v": "4k_1aFvufXg",
+    "s": 939,
+    "l": "Echo",
+    "b": "Her Black Friday orders arrive, December 2023.",
+    "q": "ordered from Black Friday I'm going to open some of those with",
+    "t": "LAWYER DIARIES | NYC apartment approval, stressful work week, being vulnerable, it's official?!",
+    "d": "2023-12-28"
+   },
+   {
+    "v": "Kteo9J3_qOw",
+    "s": 762,
+    "l": "Receipt",
+    "b": "She marked her own budgeting: about 60%.",
+    "q": "create a budget and stick to it I would say 60% I",
+    "t": "2024 RECAP + 2025 GOALS | living in NYC, quarterly goals, life update, my most successful year?!",
+    "d": "2025-01-03"
+   },
+   {
+    "v": "5cQmG8IMKgU",
+    "s": 2623,
+    "l": "Advice",
+    "b": "Her order of operations for spending.",
+    "q": "make the money first okay now there are going to be some",
+    "t": "My entrepreneur mistakes + my journey as an entrepreneur | Kameron Monet",
+    "d": "2025-02-16"
+   }
+  ],
+  "tot": 27,
+  "r": 10
+ }
+]

@@ -49,3 +49,13 @@ next-env.d.ts
 .eslintcache
 .turbo
 .swc
+
+# resurface pipeline: creator content and secrets stay out of the repo
+.keys.env
+*.env
+transcripts/
+transcripts.jsonl
+recs.json
+tool-results/
+*.mp4
+*.mov
