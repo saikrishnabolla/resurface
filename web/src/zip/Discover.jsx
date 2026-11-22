@@ -39,15 +39,18 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
   const [custom, setCustom] = useState('');
   const [error, setError] = useState('');
   const run = useRef(0);
+  const nicheWords = useRef([]);
   const scope = JSON.stringify(accounts.map(account => account.url));
-  const ready = accounts.map(account => entries?.[account.url]?.snapshot?.videos?.length ?? 0).join(',');
+  const ready = accounts.map(account => entries?.[account.url]?.snapshot?.savedAt ?? 0).join(',');
+  const pending = accounts.some(account => !entries?.[account.url]?.phase ||
+    ['checking', 'importing'].includes(entries[account.url].phase));
 
   async function load(term) {
     const token = run.current;
     setRows(current => ({ ...current, [term]: { status: 'loading' } }));
     const result = await searchDiscover({
       query: term, accounts, entries,
-      findStories: query => findStories(query, { terms: [query] }),
+      findStories: query => findStories(query, { terms: [query], context: nicheWords.current }),
       findMatches,
     });
     if (token === run.current) setRows(current => ({ ...current, [term]: { status: 'done', ...result } }));
@@ -56,6 +59,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
 
   useEffect(() => {
     const token = ++run.current;
+    nicheWords.current = [];
     setNiche(null); setRows({}); setOrder([]); setSelected(''); setError('');
     (async () => {
       const loaded = await Promise.all(accounts.map(account => loadTopics(account.url).catch(() => null).then(data => ({ account, data }))));
@@ -65,6 +69,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
         .sort((a, b) => b.data.videoCount - a.data.videoCount)[0] ?? {};
       if (data) {
         setNiche({ ...data, account });
+        nicheWords.current = [...new Set(data.topics.slice(0, 12).flatMap(topic => topic.term.split(' ')))].filter(word => word.length > 3);
         const lead = data.topics.filter(topic => topic.videos / data.videoCount < 0.4).slice(0, 6).map(topic => topic.term);
         setOrder(lead);
         const results = await Promise.all(lead.map(term => load(term).catch(() => null)));
@@ -86,7 +91,14 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
   async function pick(term) {
     setSelected(term);
     setOrder(current => current.includes(term) ? current : [term, ...current]);
-    if (!rows[term] || rows[term].status === 'error') await load(term);
+    if (!rows[term] || rows[term].status === 'error') {
+      setError('');
+      try { await load(term); }
+      catch {
+        setRows(current => ({ ...current, [term]: { status: 'error' } }));
+        setError('Couldn’t search this topic. Try again.');
+      }
+    }
     document.getElementById('discover-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -94,13 +106,14 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
     <Header kicker="01 / Discover" title="What's worth revisiting?"
       sub="Topics you keep coming back to, matched with this week’s news and the moments in your archive that cover them." />
     {!accounts.length ? <Empty text="Connect an account to see your topics." />
-      : !niche ? <Loading />
+      : !niche && !order.length && pending ? <Loading />
         : <>
+          {!niche && !order.length && <Empty text="No recurring topics yet. Try searching for a phrase below." />}
           <div className="border-t border-line mb-12" role="list" aria-label="Your topics">
             {order.map((term, i) => {
               const info = rows[term];
               const stories = info?.status === 'done' ? info.topic.sources.length : null;
-              const videos = niche.topics.find(topic => topic.term === term)?.videos;
+                const videos = niche?.topics.find(topic => topic.term === term)?.videos;
               return <button key={term} type="button" role="listitem" aria-pressed={selected === term} onClick={() => pick(term)}
                 className="w-full flex flex-wrap items-baseline gap-x-5 gap-y-1 py-4 border-b border-line text-left">
                 <span className="label w-6">0{i + 1}</span>
@@ -114,7 +127,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
           </div>
           <div id="discover-detail" className="scroll-mt-6">
             {error && <ErrorBox msg={error} />}
-            {!selected || !done ? (selected ? <Loading /> : null) : <>
+            {!selected || !done ? (selected && !error ? <Loading /> : null) : <>
               {pair && <Pairing story={story} clip={pair.clip} />}
               <h2 className="text-2xl font-semibold tracking-tight mb-2">In the news</h2>
               {done.newsError ? <ErrorBox msg="You.com news search is unavailable right now." retry={() => load(selected)} />
@@ -135,10 +148,10 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
             </>}
           </div>
           <section className="mt-16" aria-label="Your niche map">
-            <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+            {niche && <><div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
               <h2 className="text-2xl font-semibold tracking-tight">Your niche map</h2>
               <span className="label">From {niche.videoCount} transcripts · bigger = in more videos · click a topic</span></div>
-            <TopicGraph topics={niche.topics} links={niche.links} active={selected} onPick={pick} />
+            <TopicGraph topics={niche.topics} links={niche.links} active={selected} onPick={pick} /></>}
             <form className="flex flex-wrap items-end gap-2 mt-6" onSubmit={event => { event.preventDefault(); const term = custom.trim(); if (term) { setCustom(''); void pick(term); } }}>
               <label className="flex-1 min-w-[200px]" htmlFor="discover-topic"><span className="label block mb-2">Look up any other topic</span>
                 <input id="discover-topic" className="input" value={custom} maxLength={120} placeholder="A topic or phrase you’ve said"

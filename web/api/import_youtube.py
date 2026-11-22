@@ -6,10 +6,10 @@ from threading import Thread
 from urllib.parse import urlsplit
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from starlette.concurrency import run_in_threadpool
 
-from server.archive_store import ArchiveStore
+from server.archive_store import ArchiveStore, proxied
 from server.treg_archive import ProviderError, fetch_transcript, import_events, normalize_profile, provider_message
 
 app = FastAPI(docs_url=None, redoc_url=None, openapi_url=None)
@@ -44,7 +44,7 @@ def stream(token, profile, lease, existing):
             elif kind == "item":
                 store.record(profile, event["video"], event["segments"])
                 # Captions are read separately for the video the user selects.
-                yield payload({"kind": "item", "video": event["video"]})
+                yield payload({"kind": "item", "video": proxied(profile, event["video"])})
             elif kind == "done":
                 done = event
                 message = event.get("message")
@@ -96,7 +96,7 @@ def load_caption(profile, video_id, token):
 
 
 @app.get("/api/import_youtube")
-def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = ""):
+def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = "", thumb: str = ""):
     try:
         account = normalize_profile(profile)
     except (ValueError, TypeError):
@@ -107,6 +107,14 @@ def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = 
         store.setup()
         if video:
             result = store.transcript(account, video)
+        elif thumb:
+            if not VIDEO_ID.fullmatch(thumb):
+                return error("Invalid video.", 400)
+            image = store.thumbnail(account, thumb)
+            if image is None:
+                return error("No cover is saved for this video.", 404)
+            return Response(image[0], media_type=image[1], headers={
+                "Cache-Control": "public, max-age=604800", "X-Content-Type-Options": "nosniff"})
         elif topics:
             return reply(store.topics(account))
         elif q:

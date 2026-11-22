@@ -179,10 +179,13 @@ def tiktok_row(row, handle):
     video = mapping(row.get("video"))
     if not TIKTOK_ID.fullmatch(video_id) or not video or row.get("image_post_info"):
         return None
+    # TikTok lists HEIC first, which most browsers cannot show. Take a JPEG from any cover field.
+    urls = [u for key in ("cover", "origin_cover", "dynamic_cover")
+            for u in (mapping(video.get(key)).get("url_list") or []) if isinstance(u, str)]
     art = None
-    for key in ("cover", "origin_cover", "dynamic_cover"):
-        art = thumbnail(first(mapping(video.get(key)).get("url_list")),
-                        {"tiktokcdn.com", "tiktokcdn-us.com", "tiktokv.com", "byteoversea.com", "ibytedtos.com", "muscdn.com"})
+    for u in sorted(urls, key=lambda u: 0 if re.search(r"\.jpe?g(?:\?|$)", u) else 1):
+        art = thumbnail(u, {"tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com", "tiktokv.com", "tiktokv.us", "tiktokv.eu",
+                            "byteoversea.com", "ibytedtos.com", "muscdn.com"})
         if art:
             break
     length_ms = number(video.get("duration"))

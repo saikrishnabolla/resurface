@@ -21,6 +21,7 @@ function time(value) {
 }
 
 function safeUrl(raw) {
+  if (typeof raw === 'string' && raw.startsWith('/api/import_youtube?')) return raw;
   try { const url = new URL(raw); return url.protocol === 'https:' ? url.href : ''; } catch { return ''; }
 }
 
