@@ -144,6 +144,12 @@ html.exp,html.exp body{background:transparent}
 @media (prefers-reduced-motion:reduce){.phone *{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
 footer{margin-top:24px;color:var(--ink-3);font-size:12.5px;max-width:78ch}
 @media (max-width:720px){.frames{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -18px;padding:0 18px 6px}figure{flex:0 0 74%;scroll-snap-align:center}.head{grid-template-columns:auto minmax(0,1fr)}.head button{grid-column:1/-1;justify-self:start}}
+.reels header,.reels footer,.reels .lab span{display:none}
+.reels .wrap{padding:0 0 24px;display:flow-root}
+.reels .story:first-child{margin-top:0}
+.reels .frames{display:block;margin:0;padding:0;overflow:visible}
+.reels figure{max-width:300px;margin:0 auto}
+.reels .lab{font-size:0}
 </style></head><body><div class="wrap">
 <header><h1>Motion options for the news panel</h1>
 <p class="lede">Three takes on the top half of the split screen for each story. Every one moves once, freezes, then keeps a small idle loop so the eye stays on it while the clip plays underneath. Each take also tries a different colour world, one dark, one light and one saturated, so colour can be judged alongside the idea.</p>
@@ -242,7 +248,10 @@ function run(root){
 }
 const HASCLIPS=S.some(s=>s.clip);
 // export mode: an outside script drives time and supplies the clip position, so nothing plays or loops by itself
-const EXP=new URLSearchParams(location.search).get("export");
+const params=new URLSearchParams(location.search);
+const EXP=params.get("export");
+const REELS=!EXP&&params.has("reels");
+if(REELS)document.documentElement.classList.add("reels");
 // the real clip when one is supplied, with captions along its bottom edge and the end pop-up in its corner, otherwise a stand-in
 const CTAS=["Solid pill","Dark glass","White card","Edge tab"],ctaFor=(i,j)=>(i+j)%CTAS.length;
 const clipHtml=(s,k)=>s.clip?'<div class="clip"><video src="'+e(s.clip)+'" muted playsinline preload="auto" style="object-position:'+e(s.pos||"50% 50%")+(s.zoom?';transform:scale('+(+s.zoom)+');transform-origin:'+e(s.pos||"50% 50%"):"")+'"></video><div class="cc"></div><a class="cta s'+k+'" href="https://www.youtube.com/watch?v='+e(s.v)+'" target="_blank" rel="noopener"><span class="pb"><i></i></span>Watch the full video</a></div>':'<div class="clip"><div class="who">@'+e(HANDLE)+"</div>"+person+'<div class="ph">'+(HASCLIPS?"clip not supplied yet":"clip plays here, untouched")+"</div></div>";
@@ -253,7 +262,8 @@ function wire(art){const vs=[...art.querySelectorAll("video")];if(!vs.length)ret
  vs.forEach(v=>{const f=v.closest("figure");f.querySelector(".phone").addEventListener("click",()=>sound(v));f.querySelector(".sb").addEventListener("click",()=>sound(v));f.querySelector(".cta").addEventListener("click",ev=>ev.stopPropagation())});
  vs[0].addEventListener("ended",()=>{if(art.dataset.vis==="1"&&!EXP)build(art)})}
 const pick=s=>Object.values(V).find(v=>v.match.test(s.t));
-function build(art){const i=+art.dataset.i,s=S[i],v=pick(s),fr=art.querySelector(".frames");
+function build(art){const i=+art.dataset.i,s=S[i],original=pick(s),fr=art.querySelector(".frames");
+ const v=REELS?{...original,v:original.v.slice(0,1)}:original;
  if(!fr.children.length){fr.innerHTML=v.v.map((x,j)=>{const p=palFor(i,j);setPal(p);return'<figure><div class="lab">'+NAMES[j]+" <span>"+e(p.n)+"</span>"+(s.clip?'<button type="button" class="sb">Sound off</button>':"")+'</div><div class="phone" style="--p:'+BG+";--hl:"+W+";--mut:"+G+";--acc:"+A+'"><div class="top"></div>'+clipHtml(s,ctaFor(i,j))+'</div><form class="fb" data-r="'+s.r+'" data-j="'+j+'" data-pal="'+e(p.n)+'"><input type="text" placeholder="Feedback on this one" aria-label="Feedback"><button type="submit">Send</button></form><div class="fbs" data-k="'+s.r+'-'+j+'"></div></figure>'}).join("");wire(art)}
  // replay: redraw only the news panels, then restart the clips from the top
  v.v.forEach((x,j)=>{setPal(palFor(i,j));fr.children[j].querySelector(".top").innerHTML='<div class="dl"><span class="date">'+e(s.d)+'</span><span class="srcl">'+e(s.src)+'</span></div><div class="hl">'+e(v.hl)+'</div><svg viewBox="0 0 360 190" role="img" aria-label="'+e(x[0])+'">'+x[1]()+"</svg>"});
