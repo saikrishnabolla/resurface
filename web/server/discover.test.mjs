@@ -84,14 +84,45 @@ test('Discover ranks stories that use the topic words and the creator’s niche,
   const result = await findStories({ query: 'brand deals', terms: ['brand deals'], context: ['creator', 'economy', 'lawyer'] }, {
     apiKey: 'test',
     fetchImpl: async (_url, init) => {
-      assert.match(JSON.parse(init.body).query, /^brand deals creator economy$/);
+      const { query } = JSON.parse(init.body);
+      if (query !== 'brand deals creators influencers') return ok({ news: [] });
       return ok({ news: [
         { url: 'https://a.example/1', title: 'Early Black Friday deals from every brand', description: 'Shopping list' },
         { url: 'https://b.example/2', title: 'What creators should know about the brand contract', description: 'A lawyer on creator pay and deal terms' },
-        { url: 'https://c.example/3', title: 'Brand deals are changing', description: 'Phrase match' },
-        { url: 'https://d.example/4', title: 'Brand deals are changing', description: 'Same headline syndicated' },
+        { url: 'https://c.example/3', title: 'Brand deals are changing for creators' },
+        { url: 'https://d.example/4', title: 'Brand deals are changing for creators' },
       ] });
     },
   });
   assert.deepEqual(result.stories.map(story => story.url), ['https://c.example/3', 'https://b.example/2']);
+});
+
+test('Discover finds sponsorship coverage, fills with dated month results, and never pads with retail offers', async () => {
+  const calls = [];
+  const date = days => new Date(Date.now() - days * 86400000).toISOString();
+  const result = await findStories({ query: 'brand deals', terms: ['brand deals'], context: ['york', 'social'] }, {
+    apiKey: 'test',
+    fetchImpl: async (_url, init) => {
+      const { query, freshness } = JSON.parse(init.body);
+      calls.push([query, freshness]);
+      if (calls.length === 1) return ok({ news: [
+        { title: 'Creators rethink brand deals', url: 'https://a.example/1', page_age: date(1) },
+        { title: 'Brand deals: Black Friday price cuts', url: 'https://retail.example/deals', page_age: date(1) },
+      ] });
+      if (freshness === 'week') return ok({ news: [
+        { title: 'Creator sponsorships surge in sports', url: 'https://b.example/2', page_age: date(2) },
+      ] });
+      return ok({ news: [
+        ...Array.from({ length: 6 }, (_, i) => ({
+          title: `Influencer brand partnerships report #${i}`, url: `https://report-${i}.example/issue`, page_age: date(12 + i),
+        })),
+        { title: 'Creator sponsorships older than a month', url: 'https://older.example/story', page_age: date(40) },
+      ] });
+    },
+  });
+  assert.deepEqual(calls.map(call => call[1]), ['week', 'week', 'month']);
+  assert.ok(calls.every(call => !call[0].includes('york')));
+  assert.equal(result.stories.length, 8);
+  assert.deepEqual(result.stories.slice(0, 2).map(story => story.url), ['https://a.example/1', 'https://b.example/2']);
+  assert.ok(result.stories.slice(2).every(story => story.url.startsWith('https://report-')));
 });

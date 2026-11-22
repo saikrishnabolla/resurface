@@ -1,5 +1,18 @@
 const SEARCH_URL = 'https://ydc-index.io/v1/search';
 const MAX_STORIES = 8;
+const TARGET_STORIES = 6;
+const DAY = 86_400_000;
+const DIRECTORY_TITLE = /^\d+ law schools? in .+rankings\b/i;
+const GUIDE_TITLE = /^(how to|top \d+|best \d+)\b|\b(ultimate guide|\d{4} guide|step.by.step)\b/i;
+const RELATED = [
+  ['brand deal', 'creator sponsorships', 'influencer brand partnerships', 'paid partnerships', 'sponsored content', 'brand collaborations'],
+  ['creator economy', 'creator monetization', 'influencer marketing', 'creator business'],
+  ['usage right', 'licensing rights', 'content licensing', 'image rights'],
+  ['short form', 'short form video', 'vertical video', 'short videos'],
+  ['legal education', 'law school', 'legal training'],
+  ['tech founder', 'startup founders', 'tech startups', 'startup funding'],
+];
+const cleanKey = words => words.join(' ');
 // Reference, dictionary and homepage results are not events. Drop them.
 const REFERENCE_HOSTS = /(^|\.)(wikipedia\.org|wikimedia\.org|grokipedia\.com|britannica\.com|dictionary\.com|cambridge\.org|merriam-webster\.com|wiktionary\.org|fandom\.com)$/;
 const squash = value => (typeof value === 'string' ? value : '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
@@ -37,39 +50,31 @@ function articleDate(value) {
 const stem = word => (word.length > 3 ? word.replace(/s$/, '') : word);
 const wordsOf = value => squash(value).split(' ').filter(Boolean);
 
-// How well a story fits a topic. 3: it says the phrase. 2: it uses every word of the topic and at least one word
-// from the creator's niche. 1: some topic word plus two niche words. 0: no fit. This keeps "brand deals" stories
-// about creators and drops Black Friday lists and unrelated pages that share one word.
-function fit(item, terms, context) {
-  const haystack = ` ${squash(`${item?.title} ${item?.description}`)} `;
-  if (terms.slice(0, 3).some(term => squash(term) && haystack.includes(` ${squash(term)} `))) return 3;
-  if (!context.length) return 0;
-  const have = new Set(wordsOf(haystack).map(stem));
-  const topicWords = [...new Set(terms.slice(0, 3).flatMap(wordsOf).map(stem))];
-  const niche = new Set(context.map(stem).filter(word => !topicWords.includes(word) && have.has(word))).size;
-  if (topicWords.length && topicWords.every(word => have.has(word)) && niche >= 1) return 2;
-  return topicWords.some(word => have.has(word)) && niche >= 2 ? 1 : 0;
+function fit(item, terms, related, context) {
+  const title = wordsOf(item?.title).map(stem);
+  const words = [...title, ...wordsOf(item?.description).map(stem)];
+  const have = new Set(words);
+  const hasPhrase = (tokens, term) => ` ${cleanKey(tokens)} `.includes(` ${term} `);
+  if (terms.includes('brand deal') && !words.some(word => /^(creator|influencer|sponsor|sponsorship|ugc|tiktok|instagram|youtube)$/.test(word))) return 0;
+  if (terms.some(term => hasPhrase(title, term))) return 5;
+  if (related.some(term => hasPhrase(title, term))) return 4;
+  if (terms.some(term => hasPhrase(words, term))) return 4;
+  if (related.some(term => hasPhrase(words, term))) return 3;
+  return [...terms, ...related].some(term => {
+    const parts = term.split(' ');
+    return parts.length > 1 && parts.every(word => have.has(word)) &&
+      context.some(word => !parts.includes(word) && have.has(word));
+  }) ? 2 : 0;
 }
 
-export async function findStories({ query, terms, context } = {}, { apiKey, fetchImpl = fetch } = {}) {
-  if (typeof query !== 'string' || !query.trim() || query.trim().length > 160) {
-    throw problem(400, 'Enter a topic between 1 and 160 characters.');
-  }
-  if (typeof apiKey !== 'string' || !apiKey.trim()) {
-    throw problem(503, 'Live news search is not configured.');
-  }
-  const niche = (Array.isArray(context) ? context : []).filter(word => typeof word === 'string' && word.length <= 30).slice(0, 24).flatMap(wordsOf);
-  const topicWords = new Set((Array.isArray(terms) ? terms : []).flatMap(wordsOf).map(stem));
-  // Steer the search toward the creator's world by adding the two niche words that are not part of the topic.
-  const extra = [...new Set(niche.filter(word => word.length > 3 && !topicWords.has(stem(word))))].slice(0, 2);
-  const searchQuery = text([text(query, 160), ...extra].join(' '), 200);
+async function search(query, freshness, count, apiKey, fetchImpl) {
   let response;
   try {
     response = await fetchImpl(SEARCH_URL, {
       method: 'POST',
       headers: { 'X-API-Key': apiKey.trim(), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: searchQuery, freshness: 'week', count: 12 }),
-      signal: AbortSignal.timeout(10_000),
+      body: JSON.stringify({ query, freshness, count }),
+      signal: AbortSignal.timeout(freshness === 'month' ? 7_000 : 8_000),
       redirect: 'error',
     });
   } catch (error) {
@@ -84,40 +89,78 @@ export async function findStories({ query, terms, context } = {}, { apiKey, fetc
       || (results.news === undefined && !Array.isArray(results.web))) {
     throw problem(502, 'You.com did not return a usable search response.');
   }
+  return results;
+}
 
-  const stories = [];
-  const seen = new Set();
-  const news = results.news ?? [];
-  const datedWeb = (Array.isArray(results.web) ? results.web : []).filter(item => {
+function candidates(results, windowDays, terms, related, context, fallback) {
+  const inWindow = item => {
     const date = articleDate(item?.page_age);
     const age = date ? Date.now() - Date.parse(date) : Infinity;
-    return age >= -86_400_000 && age <= 8 * 86_400_000;
-  });
-  for (const item of [...news, ...datedWeb]) {
+    return age >= -DAY && age <= windowDays * DAY;
+  };
+  const news = (results.news ?? []).filter(item => !fallback || inWindow(item));
+  const datedWeb = (Array.isArray(results.web) ? results.web : []).filter(inWindow);
+  return [...news.map(item => [item, true]), ...datedWeb.map(item => [item, false])].flatMap(([item, isNews]) => {
     const url = sourceUrl(item?.url);
     const title = text(item?.title, 200);
-    if (!url || !title) continue;
-    if (REFERENCE_HOSTS.test(url.hostname) || url.pathname.replace(/\//g, '') === '') continue;
-    const score = Array.isArray(terms) && terms.length ? fit(item, terms, niche) : 3;
-    if (!score) continue;
-    const key = `${url.hostname.replace(/^www\./, '')}${url.pathname.replace(/\/$/, '')}${url.search}`;
-    const sameStory = squash(title).slice(0, 70);
-    if (seen.has(key) || seen.has(sameStory)) continue;
-    seen.add(key);
-    seen.add(sameStory);
-    stories.push({
-      score,
+    if (!url || !title || REFERENCE_HOSTS.test(url.hostname) || url.pathname.replace(/\//g, '') === '' ||
+        (terms.length && DIRECTORY_TITLE.test(title))) return [];
+    const score = terms.length ? fit(item, terms, related, context) : 3;
+    if (!score) return [];
+    const publishedAt = articleDate(item.page_age);
+    return [{
+      score, recent: !fallback || Date.now() - Date.parse(publishedAt) <= 8 * DAY,
+      editorial: terms.length ? Number(isNews) + (GUIDE_TITLE.test(title) ? -2 : 0) : 0,
+      publisher: url.hostname.replace(/^www\./, ''),
+      key: `${url.hostname.replace(/^www\./, '')}${url.pathname.replace(/\/$/, '')}`,
       title,
       url: url.href,
       description: text(item.description, 380),
-      publishedAt: articleDate(item.page_age),
-    });
-    if (stories.length >= 24) break;
+      publishedAt,
+    }];
+  });
+}
+
+function rank(rows, diverse = false) {
+  const seen = new Set(), titles = new Set();
+  const publishers = new Map();
+  return [...rows].sort((a, b) => Number(b.recent) - Number(a.recent) ||
+    b.score + b.editorial - a.score - a.editorial).filter(row => {
+    const title = squash(row.title).slice(0, 90);
+    if (seen.has(row.key) || titles.has(title) || (diverse && (publishers.get(row.publisher) ?? 0) >= 3)) return false;
+    seen.add(row.key);
+    titles.add(title);
+    publishers.set(row.publisher, (publishers.get(row.publisher) ?? 0) + 1);
+    return true;
+  }).slice(0, MAX_STORIES);
+}
+
+export async function findStories({ query, terms, context } = {}, { apiKey, fetchImpl = fetch } = {}) {
+  if (typeof query !== 'string' || !query.trim() || query.trim().length > 160) {
+    throw problem(400, 'Enter a topic between 1 and 160 characters.');
   }
-  // Best fit first; provider order breaks ties. Drop weak one-word matches when stronger stories exist.
-  const best = Math.max(0, ...stories.map(story => story.score));
-  const kept = stories.map((story, index) => ({ story, index })).filter(({ story }) => story.score >= Math.min(2, best))
-    .sort((a, b) => b.story.score - a.story.score || a.index - b.index).slice(0, MAX_STORIES)
-    .map(({ story: { score: _score, ...story } }) => story);
-  return { stories: kept };
+  if (typeof apiKey !== 'string' || !apiKey.trim()) {
+    throw problem(503, 'Live news search is not configured.');
+  }
+  const cleanQuery = text(query, 160);
+  const topics = (Array.isArray(terms) ? terms : []).slice(0, 3)
+    .map(term => cleanKey(wordsOf(text(term, 120)).map(stem))).filter(Boolean);
+  const niche = (Array.isArray(context) ? context : []).slice(0, 24).flatMap(wordsOf).map(stem);
+  const keyFor = term => cleanKey(wordsOf(term).map(stem));
+  const aliases = (RELATED.find(group => group.some(term => topics.includes(keyFor(term)))) ?? [])
+    .filter(term => !topics.includes(keyFor(term)));
+  const related = aliases.map(term => cleanKey(wordsOf(term).map(stem)));
+  const exactQuery = topics.includes('brand deal') ? `${cleanQuery} creators influencers` : cleanQuery;
+  const expanded = aliases.length ? aliases.slice(0, 2).join(' ') : `${cleanQuery} news coverage`;
+  const primary = await search(exactQuery, 'week', topics.length ? 20 : 12, apiKey, fetchImpl);
+  let rows = candidates(primary, 8, topics, related, niche, false);
+  if (topics.length && rank(rows, true).filter(row => row.score >= 3 && row.editorial >= 0).length < TARGET_STORIES) {
+    const second = await search(expanded, 'week', 20, apiKey, fetchImpl).catch(() => null);
+    if (second) rows = rows.concat(candidates(second, 8, topics, related, niche, false));
+  }
+  if (topics.length && rank(rows, true).filter(row => row.score >= 3 && row.editorial >= 0).length < TARGET_STORIES) {
+    const fallback = await search(expanded, 'month', 20, apiKey, fetchImpl).catch(() => null);
+    if (fallback) rows = rows.concat(candidates(fallback, 31, topics, related, niche, true));
+  }
+  return { stories: rank(rows, topics.length > 0).map(({ score, recent, key, publisher, editorial, ...story }) => story) };
 }

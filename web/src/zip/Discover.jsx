@@ -15,7 +15,7 @@ function distinct(clips, limit = 6) {
 function Pairing({ story, clip }) {
   return <div className="grid md:grid-cols-2 border border-emerald mb-10" aria-label="Best pairing">
     <div className="p-6 border-b md:border-b-0 md:border-r border-line">
-      <p className="label !text-emerald mb-3">In the news · {fdate(story.date) || 'this week'}</p>
+      <p className="label !text-emerald mb-3">In the news{story.date && ` · ${fdate(story.date)}`}</p>
       <a href={story.url} target="_blank" rel="noreferrer" className="text-2xl font-semibold tracking-tight leading-tight hover:text-emerald">{story.title}</a>
       <p className="text-mute text-xs mt-3">{story.publisher}</p>
     </div>
@@ -106,7 +106,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
 
   return <>
     <Header kicker="01 / Discover" title="What's worth revisiting?"
-      sub="Topics you keep coming back to, matched with this week’s news and the moments in your archive that cover them." />
+      sub="Topics you keep coming back to, matched with recent news and the moments in your archive that cover them." />
     {!accounts.length ? <Empty text="Connect an account to see your topics." />
       : !niche && !order.length && pending ? <Loading />
         : <>
@@ -121,7 +121,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
                 <span className="label w-6">0{i + 1}</span>
                 <span className={`text-3xl md:text-5xl font-semibold tracking-tight ${selected === term ? 'text-emerald' : 'text-ink hover:text-emerald'}`}>{term}</span>
                 {stories > 0 && <span className="label !text-emerald border border-emerald px-1.5 py-0.5">{stories} in the news</span>}
-                {stories === 0 && <span className="label">Quiet this week</span>}
+                {stories === 0 && <span className="label">No recent stories</span>}
                 {stories === null && <span className="label">Checking news…</span>}
                 {videos && <span className="label ml-auto">{videos} videos</span>}
               </button>;
@@ -133,8 +133,8 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
               {pair && <Pairing story={story} clip={pair.clip} />}
               <h2 className="text-2xl font-semibold tracking-tight mb-2">In the news</h2>
               {done.newsError ? <ErrorBox msg="You.com news search is unavailable right now." retry={() => load(selected)} />
-                : !done.topic.sources.length ? <p className="text-mute py-4">No fresh stories name “{selected}” this week.</p>
-                  : <ul aria-label="You.com news" className="border-t border-line mb-10">{done.topic.sources.slice(0, 5).map(item =>
+                : !done.topic.sources.length ? <p className="text-mute py-4">No relevant recent stories found for “{selected}”.</p>
+                  : <ul aria-label="You.com news" className="border-t border-line mb-10">{done.topic.sources.map(item =>
                     <li key={item.url} className="border-b border-line py-3 flex flex-wrap items-baseline gap-x-4">
                       <a className="font-medium hover:text-emerald underline underline-offset-4" href={item.url} target="_blank" rel="noreferrer">{item.title}</a>
                       <span className="text-mute text-xs">{item.publisher}{item.date && ` · ${fdate(item.date)}`}</span>
