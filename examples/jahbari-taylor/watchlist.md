@@ -1,0 +1,46 @@
+# Watchlist: Jahbari Taylor
+Named brands and products he talks about (videos / mentions), from 198 captioned videos.
+
+- American Express: 72 / 122
+- Amex Platinum: 67 / 157
+- Chase: 58 / 231
+- Amex Gold: 49 / 99
+- Capital One: 40 / 66
+- Venture X: 25 / 44
+- SoFi: 19 / 33
+- Sapphire Reserve: 19 / 44
+- Uber Eats: 19 / 19
+- Freedom Unlimited: 18 / 33
+- Hilton: 12 / 12
+- Sapphire Preferred: 11 / 29
+- Google: 9 / 10
+- Bank of America: 8 / 11
+- Delta card: 8 / 9
+- Freedom Flex: 7 / 19
+- Marriott: 7 / 7
+- Wells Fargo: 6 / 9
+- Walmart: 6 / 8
+- DoorDash: 6 / 7
+- United: 5 / 7
+- Amazon: 4 / 7
+- Target: 4 / 4
+- Disney: 4 / 4
+- Nvidia: 4 / 8
+- OpenAI / ChatGPT: 4 / 9
+- Hyatt: 4 / 5
+- Secured card: 3 / 4
+- Apple: 3 / 5
+- Netflix: 3 / 3
+- TikTok: 3 / 6
+- Citi: 2 / 3
+- Robinhood: 2 / 4
+- Mastercard: 1 / 1
+- Synchrony: 1 / 3
+- Freedom Rise: 1 / 5
+- Costco: 1 / 1
+- Sora: 1 / 2
+- Meta: 1 / 1
+- McDonald's: 1 / 1
+- Arby's: 1 / 2
+- Southwest: 1 / 1
+- Spotify: 1 / 1

@@ -12,7 +12,7 @@ ap = argparse.ArgumentParser()
 ap.add_argument('shortlist'); ap.add_argument('variants'); ap.add_argument('out')
 ap.add_argument('--handle', default='creator'); ap.add_argument('--title', default='Motion options')
 ap.add_argument('--cues', help='JSON file mapping story rank to caption cues [[start_s, end_s, text], ...], timed from the start of the clip')
-ap.add_argument('--clips', help='JSON file mapping story rank to a clip: {"1": {"file": "01.mp4", "pos": "40% 50%"}}; paths are relative to OUT.html')
+ap.add_argument('--clips', help='JSON file mapping story rank to a clip: {"1": {"file": "01.mp4", "pos": "40% 50%", "zoom": 1.2}}; paths are relative to OUT.html')
 a = ap.parse_args()
 here = os.path.dirname(os.path.abspath(__file__))
 stories = []
@@ -24,7 +24,7 @@ for s in json.load(open(a.shortlist)):
     stories.append(dict(r=s['r'], t=s['t'], d=m.group(0) if m else s['d'], src=s['src'][0][0],
                         b=c['b'], q=c['q'], v=c['v'], s=c['s']))
     k = clips.get(str(s['r']))
-    if k: stories[-1].update(clip=k['file'] if isinstance(k, dict) else k, pos=(k.get('pos') if isinstance(k, dict) else None) or '50% 50%', cues=cues.get(str(s['r']), []))
+    if k: stories[-1].update(clip=k['file'] if isinstance(k, dict) else k, pos=(k.get('pos') if isinstance(k, dict) else None) or '50% 50%', cues=cues.get(str(s['r']), []), zoom=(k.get('zoom') if isinstance(k, dict) else None))
 js = lambda o: json.dumps(o, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
 page = open(os.path.join(here, 'template.html')).read()
 page = (page.replace('__DATA__', js(stories))

@@ -1,0 +1,92 @@
+import json,re
+R={r['id']:r for r in (json.loads(l) for l in open('transcripts.jsonl'))}
+def clip(v,s,l,b,anchor):
+    S=R[v]['segments']; rx=re.compile(re.escape(anchor),re.I)
+    cands=[(abs(t0-s),i) for i,(t0,t) in enumerate(S) if rx.search(t) or rx.search(t+' '+(S[i+1][1] if i+1<len(S) else ''))]
+    assert cands,(v,anchor)
+    i=min(cands)[1]; q=' '.join(x[1] for x in S[i:i+3]); q=' '.join(q.split()[:12])
+    return dict(v=v,s=int(S[i][0]),l=l,b=b,q=q,t=R[v]['title'],d=(R[v]['published'] or '')[:10])
+S=[
+dict(t="Billions in tariff refunds start flowing back to companies",d="Thu 19 Nov",tag="rising",post="by Wed 25 Nov",ty="safe",sc=[5,5,5,3,5,5],
+ w="Customs has cleared about $128bn in refunds for the emergency tariffs the Supreme Court struck down in February. ProPublica's new database shows FedEx, Walmart and Apple expecting billions; most shoppers who paid higher prices get nothing directly.",
+ src=[["ProPublica","https://www.propublica.org/article/tariff-refund-database-cash-back"],["Forbes","https://www.forbes.com/sites/nathangoldman/2026/11/20/walmart-apple-and-fedex-are-getting-tariff-refunds-will-consumers/"],["Daily Caller","https://dailycaller.com/2026/11/20/washington-cleared-128-billion-in-tariff-refunds-whos-still-waiting/"]],
+ flag="His February clip says refunds were uncertain and Costco might wait years. That was true then; the news panel carries today's facts. The billionaires line is sarcasm, keep it as a joke not a claim.",
+ c=[clip("rYGg2nYZvLI",0,"Receipt","In February he asked who gets the refund. Now we know.","refund checks are coming"),
+    clip("rYGg2nYZvLI",43,"Line","His one-line forecast for your share.","ethical"),
+    clip("rYGg2nYZvLI",19,"Explainer","Why the refund goes to companies, not you.","Most companies pass"),
+    clip("5en3GE1o4u4",0,"Echo","How the tariffs came back the same week they fell.","struck down, but he")]),
+dict(t="Trump backs a 10% cap on credit card interest",d="Sat 21 Nov",tag="breaking",post="by Thu 26 Nov",ty="safe",sc=[5,4,4,5,5,5],
+ w="Trump told Fox News he would work with the incoming Democratic Congress on a one-year 10% cap. Average card APR is about 19.7%; banks say a cap would mean fewer cards and smaller rewards.",
+ src=[["AP","https://apnews.com/article/trump-credit-cards-interest-rates-warren-banks-098a69b520e520e535eebe595cd0c64a"],["The Hill","https://thehill.com/business/6235394-trump-calls-credit-card-cap/"]],
+ flag="Political story: state it neutrally, no side taken. No bill has passed. Trim each clip before his 'link in bio' line.",
+ c=[clip("3PeH5iUU5O8",44,"Principle","Cap or no cap, his rule for cards doesn't change.","the most important thing"),
+    clip("WbwQowbgriQ",42,"Advice","Who credit cards are actually for.","if you know that you're"),
+    clip("RQNNIu3Sgas",0,"Answer","Banks say rewards would shrink. Here's what's at stake.","The American Express Platinum card is"),
+    clip("oVJx3E1HT4w",10,"Explainer","Why card companies watch who pays late.","American Express has a lot of data"),
+    clip("5mRyW7AQn1Y",31,"Number","10% sounds low. Some cards already charge 0% for 15 months.","0% APR")]),
+dict(t="Bitcoin falls below $60,000, worst month since 2022",d="Fri 20 Nov",tag="rising",post="by Mon 30 Nov",ty="swing",sc=[5,5,4,4,5,4],
+ w="Bitcoin dropped more than 20% in November and traded under $60,000, its lowest since early July, as spot ETFs saw about $3.5bn of outflows.",
+ src=[["Yahoo Finance","https://finance.yahoo.com/markets/article/bitcoin-plunges-below-59000-on-pace-for-its-worst-month-since-june-2022-192922111.html"],["Crypto Briefing","https://cryptobriefing.com/bitcoin-falls-20-percent-november/"]],
+ flag="His clips are from February, when he explained an earlier slide. The prices he quotes are February's, so never put them beside today's number as if current.",
+ c=[clip("-BtL0nQoBng",65,"Echo","The Bitcoin bro, checking his portfolio again.","how's your Bitcoin doing now"),
+    clip("mOL3Y4qHGSQ",44,"Explainer","The snowball effect, in 15 seconds.","the snowball effect"),
+    clip("mOL3Y4qHGSQ",58,"Advice","What to do while it falls.","So, what should we do"),
+    clip("-BtL0nQoBng",0,"Juxtaposition","Gold vs Bitcoin: the bet that aged.","I bet I'll make more money")]),
+dict(t="Stores may soon refuse premium rewards cards",d="Mon 16 Nov",tag="rising",post="by Fri 27 Nov",ty="swing",sc=[4,5,4,4,5,5],
+ w="Visa and Mastercard asked a judge to approve a $38bn swipe-fee settlement that ends the 'Honor All Cards' rule, letting merchants turn down premium rewards cards while still taking standard ones. Walmart and retail groups object.",
+ src=[["Reuters via Investing.com","https://www.investing.com/news/stock-market-news/visa-mastercard-urge-approval-of-38-billion-swipe-fee-settlement-5030740"],["PYMNTS","https://www.pymnts.com/cpi-posts/visa-mastercard-seek-approval-for-38-billion-swipe-fee-settlement/"]],
+ flag="Not approved yet: say 'could', not 'will'. Amex is not part of this Visa and Mastercard case, so lead with a Visa or Mastercard card where possible (Venture X, Sapphire, Freedom).",
+ c=[clip("RQNNIu3Sgas",8,"Juxtaposition","Stores may get to say no to the cards he ranks top.","I'd actually"),
+    clip("jGWkMmRA7LE",50,"Juxtaposition","235k people watched this ranking. The store may not care.","Capital One"),
+    clip("RQNNIu3Sgas",31,"Answer","If premium cards get refused, the starter card still works.","Chase Freedom"),
+    clip("edxtkiK4Yos",0,"Line","'One of the most expensive credit cards out there.'","The American Express Platinum card is")]),
+dict(t="S&P 500 and Dow fall into correction",d="Fri 20 Nov",tag="breaking",post="by Wed 25 Nov",ty="safe",sc=[5,4,4,5,5,4],
+ w="Both indexes closed more than 10% below their records and the Nasdaq wiped out its 2026 gain, capping its worst week since March 2020 as Nvidia and AI stocks sold off.",
+ src=[["CNBC","https://www.cnbc.com/2026/11/20/sp-500-correction-market-sell-off.html"],["NBC News","https://www.nbcnews.com/business/markets/anthropic-shares-markets-selloff-nasdaq-rcna610394"],["CBC","https://www.cbc.ca/news/business/anthropic-ipo-markets-today-9.7429534"]],
+ flag="The first clip is about a recession, which this is not: the bridge line is about preparing, not predicting.",
+ c=[clip("oVJx3E1HT4w",36,"Advice","Markets down 10%. His answer is two words.","prepare for"),
+    clip("3PeH5iUU5O8",16,"Line","'90 plus percent of people cannot outperform the market.'","Day trading"),
+    clip("MzOFM-0fcG8",2,"Explainer","What an index fund is, before you panic-sell one.","standard S&P 500 ETF"),
+    clip("vD3aSGZsip0",14,"Principle","The boring plan, on a scary week.","S&P 500")]),
+dict(t="Thanksgiving dinner costs more for the first time since 2022",d="Wed 18 Nov",tag="calendar",post="by Wed 25 Nov",ty="swing",sc=[4,5,4,4,5,4],
+ w="The Farm Bureau's annual survey puts dinner for 10 at $58.63, up 6%, with a 16lb turkey up 10% to $23.68.",
+ src=[["American Farm Bureau","https://www.fb.org/intel/markets/thanksgiving-dinner-cost-ticks-upward-in-2026"],["IBTimes","https://www.ibtimes.com/thanksgiving-dinner-costs-rise-2026-farm-bureau-survey-3810026"]],
+ flag="The card earn rates in these clips are from 2024 and 2025. Check each card's current supermarket rate before posting. Clips come from affiliate videos ('Disclosure in Description'): keep the caption credit and disclosure.",
+ c=[clip("55pgikXM-ik",0,"Advice","Turkey's up 10%. At least make the card pay you back.","supermarkets"),
+    clip("jGWkMmRA7LE",37,"Advice","His S-tier card for the supermarket run.","American Express Gold"),
+    clip("pSDiCouLHuQ",15,"Explainer","Points on groceries, explained.","supermarkets")]),
+dict(t="Report: SEC probes Nvidia's accounting as shares slide",d="Fri 20 Nov",tag="rising",post="by Mon 30 Nov",ty="swing",sc=[4,4,4,5,4,4],
+ w="Reuters reported regulators are examining Nvidia's accounting. Shares fell 14% on Friday and nearly 40% in November, a month that began with Jensen Huang resigning as CEO.",
+ src=[["CNBC","https://www.cnbc.com/2026/11/20/sp-500-correction-market-sell-off.html"],["CBC","https://www.cbc.ca/news/business/anthropic-ipo-markets-today-9.7429534"]],
+ flag="The probe is sourced to an unnamed-source Reuters report: say 'reported'. His own 9 Nov Huang short is very recent, so the resurfaced value is low; lead with the August clip.",
+ c=[clip("MzOFM-0fcG8",37,"Principle","He named Nvidia. Then he named the risk.","individual stocks"),
+    clip("8j-c-gCbe3Y",0,"Direct","How this month started for Nvidia.","Chinese spy"),
+    clip("3PeH5iUU5O8",16,"Line","Picking winners is harder than it looks.","Day trading")]),
+dict(t="Mortgage rates jump back to 7.28% as a December rate hike looms",d="Thu 19 Nov",tag="rising",post="by Tue 8 Dec",ty="safe",sc=[5,3,4,4,4,5],
+ w="Freddie Mac's 30-year average rose from 7.11% to 7.28%, ending a four-week slide, with markets pricing a likely Fed hike on 9 December. Savings rates are edging up after September's hike.",
+ src=[["AP","https://apnews.com/article/mortgage-rates-federal-reserve-housing-real-estate-e0a6562c064b373c50c28002980d3002"],["LA Times","https://www.latimes.com/business/story/2026-11-20/mortgage-rates-rise-again-ending-four-week-slide"],["NerdWallet","https://www.nerdwallet.com/banking/best/high-yield-online-savings-accounts"]],
+ flag="Bank APYs he quotes (SoFi, Amex, Chase) are from his November videos; recheck before posting. Trim before the 'links in my bio' lines.",
+ c=[clip("WrA3rMj7E_A",48,"Number","He priced a home at 6.5%. It's 7.28% now.","6.5% interest rate"),
+    clip("Bimd-owKwkk",0,"Answer","Rates are going up. Is your bank paying you any of it?","Don't use Chase Bank"),
+    clip("A3mA0mTganY",0,"Advice","Where higher rates actually reach you.","best high-yield")]),
+dict(t="Amex Platinum's $600 hotel credit gets a two-night rule",d="Fri 20 Nov",tag="breaking",post="by Fri 27 Nov",ty="safe",sc=[5,3,4,3,4,5],
+ w="From 1 January 2027, Fine Hotels + Resorts bookings must be at least two nights to count toward the Platinum card's $600 hotel credit. The card's other credits stay the same.",
+ src=[["Yahoo Finance","https://finance.yahoo.com/personal-finance/credit-cards/article/amex-platinums-benefits-updates-2027-181143354.html"],["Travel Update","https://travelupdate.com/trending-amex-platinum-card-changes-in-2026-updated-list-with-key-dates/"]],
+ flag="Confirm on Amex's own benefit terms (only card-review sites so far). His older clip cites the earlier $200 credit: use the 12 Nov clip first, and never show both numbers as current.",
+ c=[clip("edxtkiK4Yos",3,"Advice","Worth it only if you travel. Now you'd better stay two nights.","most expensive"),
+    clip("XQqVpsx3G7A",190,"Receipt","He warned the hotel credit had fine print.","credit card nerds")]),
+dict(t="Thanksgiving travel streak ends as airfare jumps 31%",d="Mon 16 Nov",tag="calendar",post="by Tue 24 Nov",ty="safe",sc=[4,4,4,4,4,4],
+ w="AAA projects 81.5 million travellers, its first projected dip outside 2020 since 2008, with gas near $4 a gallon and Hopper putting average domestic round trips at $402.",
+ src=[["Skift","https://skift.com/2026/11/16/thanksgiving-travel-decline-aaa/"],["The Hill","https://thehill.com/policy/transportation/6223078-airfare-gas-prices-thanksgiving-holiday-travel-predictions/"]],
+ flag="His gas clip names apps; check none has a paid tie-in in that video.",
+ c=[clip("ykNJR9wDv7c",0,"Advice","Gas near $4. His three-app trick.","secret gas stations"),
+    clip("7XFy6SRqBz8",0,"Answer","What a trip actually costs, line by line.","how much is a trip"),
+    clip("edxtkiK4Yos",43,"Advice","Flying anyway? The card he'd book it on.","Chase Sapphire")]),
+]
+for s in S: s['tot']=s['sc'][0]*2+s['sc'][1]*2+sum(s['sc'][2:])
+S.sort(key=lambda s:-s['tot'])
+for i,s in enumerate(S,1): s['r']=i
+json.dump(S,open('run/shortlist.json','w'),indent=1,ensure_ascii=False)
+for s in S:
+    print(s['r'],s['tot'],s['t']); 
+    for c in s['c']: print('   ',c['v'],c['s'],c['l'],'|',c['q'])
