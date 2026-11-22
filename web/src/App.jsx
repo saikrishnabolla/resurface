@@ -520,13 +520,7 @@ export function App() {
   return <div className="min-h-screen md:flex">
     <aside className="zip-sidebar md:w-60 md:fixed md:inset-y-0 border-b md:border-b-0 md:border-r border-line p-6 flex md:flex-col gap-8 overflow-x-auto">
       <button type="button" className="inline-flex items-center self-start shrink-0 gap-2.5 p-0" onClick={() => { if (workspace && !editing) show('discover'); }}>
-        <svg aria-hidden="true" width="32" height="32" viewBox="0 0 48 48">
-          <rect x="3" y="10" width="42" height="22" rx="11" fill="#7BDDB0" />
-          <circle cx="15" cy="21" r="5.5" fill="#080A09" />
-          <path d="M27 14.5v13l10-6.5z" fill="#080A09" />
-          <path d="M8 38h32M14 44h20" stroke="#7BDDB0" strokeWidth="3" strokeLinecap="round" />
-        </svg>
-        <span className="text-2xl font-semibold tracking-tight">resurface</span>
+        <img src="/logo.png" alt="resurface" width="150" height="38" className="h-auto w-[150px]" />
       </button>
       {workspace && !editing && <nav aria-label="Main" className="flex md:flex-col gap-1">{sections.map(([key, label], i) =>
         <button key={key} type="button" aria-current={view === key ? 'page' : undefined} onClick={() => show(key)}
