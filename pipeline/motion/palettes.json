@@ -1,0 +1,11 @@
+[
+ {"n":"Midnight lemon","family":"dark","bg":"#0f1218","ink":"#ffffff","accent":"#ffd84a","alt":"#ff5a4f","onAlt":"#0f1218","muted":"#8a93a1","dim":"#2c323b","card":"#171b21"},
+ {"n":"Forest mint","family":"dark","bg":"#0b2a22","ink":"#f1fff8","accent":"#5df2b0","alt":"#ff8a5b","onAlt":"#0b2a22","muted":"#86b3a2","dim":"#1a4a3c","card":"#0f3a2f"},
+ {"n":"Aubergine pink","family":"dark","bg":"#2a1036","ink":"#fff4fb","accent":"#ff7ad1","alt":"#ffd166","onAlt":"#2a1036","muted":"#b99ac6","dim":"#4a2460","card":"#3a184a"},
+ {"n":"Paper cobalt","family":"light","bg":"#f4efe6","ink":"#14213d","accent":"#1f4fff","alt":"#e63946","onAlt":"#ffffff","muted":"#6b6f7a","dim":"#d9d2c3","card":"#fffaf0"},
+ {"n":"Mint tomato","family":"light","bg":"#dff5e8","ink":"#10261b","accent":"#d93a26","alt":"#7a3cff","onAlt":"#ffffff","muted":"#4f6b5c","dim":"#b9dcc8","card":"#f2fff7"},
+ {"n":"Butter violet","family":"light","bg":"#fff3b0","ink":"#2b1a4f","accent":"#6a2cff","alt":"#e0342b","onAlt":"#ffffff","muted":"#6e6340","dim":"#ecd97a","card":"#fffbe0"},
+ {"n":"Signal red","family":"saturated","bg":"#d42015","ink":"#ffffff","accent":"#ffe45c","alt":"#14110f","onAlt":"#ffffff","muted":"#fff0ee","dim":"#aa190f","card":"#bb1c12"},
+ {"n":"Electric blue","family":"saturated","bg":"#1f3bff","ink":"#ffffff","accent":"#c8ff3d","alt":"#ff8ae6","onAlt":"#14110f","muted":"#d5daff","dim":"#1429c9","card":"#182fe0"},
+ {"n":"Hot orange","family":"saturated","bg":"#f56600","ink":"#1a0f05","accent":"#3a12b8","alt":"#ffffff","onAlt":"#1a0f05","muted":"#5c3410","dim":"#d95a00","card":"#ff8124"}
+]
