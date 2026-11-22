@@ -8,7 +8,8 @@ import { prepareTranscript, transcriptRows } from './transcript.mjs';
 import { CreatorOnboarding } from './Onboarding.jsx';
 import { normalizeAccount, normalizeWorkspace, readWorkspace, workspaceKey } from './creator-workspace.mjs';
 import { Discover } from './zip/Discover.jsx';
-import { Header, Thumb, Empty, fdate, fmt } from './zip/ui.jsx';
+import { TopicGraph } from './zip/TopicGraph.jsx';
+import { Header, Thumb, Empty, Loading, fdate, fmt } from './zip/ui.jsx';
 import './zip/zip.css';
 
 const ARCHIVE = '/api/import_youtube';
@@ -475,12 +476,16 @@ function CreatorArchive({ workspace, onEdit, entries, start, sourceJump, clips }
   </>;
 }
 
-const sections = [['discover', 'Discover'], ['archive', 'Archive']];
+const sections = [['discover', 'Discover'], ['archive', 'Archive'], ['niche', 'Niche Map']];
 
 function Dashboard({ workspace, onEdit, view, setView }) {
   const { entries, start } = useCreatorArchives(workspace.accounts);
   const [results, setResults] = useState([]);
   const [sourceJump, setSourceJump] = useState(null);
+  const [niche, setNiche] = useState(undefined);
+  const [topicRequest, setTopicRequest] = useState(null);
+  const importing = workspace.accounts.some(account =>
+    !entries[account.url]?.phase || ['checking', 'importing'].includes(entries[account.url].phase));
   const allowed = new Set(workspace.accounts.map(account => account.url));
   const clips = results.filter(clip => allowed.has(clip.profile.url));
 
@@ -491,8 +496,19 @@ function Dashboard({ workspace, onEdit, view, setView }) {
   }
   return <>
     <div hidden={view !== 'discover'}><Discover accounts={workspace.accounts} entries={entries}
-      findStories={findStories} findMatches={findMatches} loadTopics={loadTopics} onOpen={openInArchive} onResults={setResults} /></div>
+      findStories={findStories} findMatches={findMatches} loadTopics={loadTopics} onOpen={openInArchive}
+      onResults={setResults} niche={niche} onNiche={setNiche} topicRequest={topicRequest} /></div>
     <div hidden={view !== 'archive'}><CreatorArchive {...{workspace, onEdit, entries, start, sourceJump, clips}} /></div>
+    <div hidden={view !== 'niche'}>
+      <Header kicker="03 / Niche Map" title="Your niche map"
+        sub="Recurring topics in your transcripts. Select a topic to see its news and clips in Discover." />
+      {niche ? <>
+        <p className="label mb-3">From {niche.videoCount} transcripts · larger topics appear in more videos</p>
+        <TopicGraph topics={niche.topics} links={niche.links} active={topicRequest?.term} onPick={term => {
+          setTopicRequest({ term }); setView('discover');
+        }} />
+      </> : niche === undefined || importing ? <Loading /> : <Empty text="No recurring topics yet. Check back after more transcripts are saved." />}
+    </div>
   </>;
 }
 

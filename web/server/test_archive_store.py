@@ -1,9 +1,24 @@
 import os
+import json
 import tempfile
 import unittest
 from unittest.mock import patch
 
-from server.archive_store import ArchiveStore
+from server.archive_store import ArchiveStore, topic_graph
+
+
+class TopicGraphTests(unittest.TestCase):
+    def test_filters_caption_filler_but_keeps_recurring_subjects(self):
+        rows = [(json.dumps({"id": str(i), "title": str(i)}), json.dumps([
+            {"start": 0, "text": "Please please. Totally different. Years ago. I don’t want a pro tip."},
+            {"start": 2, "text": "Usage rights are distinct from intellectual property."},
+            {"start": 20, "text": "Brand brand."},
+            {"start": 40, "text": "Deals."},
+        ])) for i in range(4)]
+        terms = {node["term"] for node in topic_graph(rows)["topics"]}
+        self.assertTrue({"usage rights", "intellectual property"} <= terms)
+        self.assertTrue({"please please", "totally different", "years ago", "don twant",
+                         "pro tip", "brand brand", "brand deals"}.isdisjoint(terms))
 
 
 class ArchiveStoreTests(unittest.TestCase):

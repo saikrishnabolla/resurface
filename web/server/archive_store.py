@@ -287,25 +287,47 @@ class ArchiveStore:
 STOP = set("""about above after again all also always am an and any are around because been before being between both but can cant could did does doing dont down each even every few for from get gets getting go goes going gonna got had has have having her here hers him his how i id if im in into is it its ive just kind know let like little look lot made make many may maybe me might more most much must my need never not now of off okay on one only or other our out over own people really right said same say see she should so some something sort still such take than that thats the their them then there these they thing things think this those through too two up us very want was way we well were what when where which while who why will with would yeah yes you your youre actually basically literally gonna going wanna kinda stuff anything another next give myself stay tuned cuz sometimes low key everything nothing someone sometimes done tknow ofmine description box feel feeling feels music applause laughter hello beautiful morning quick quickly super excited cute child anyway definitely check comment below somebody last night real tiktok love work life good great better makes making content guys guy video videos today time times one two three first second back come comes came use used using go put pretty because cause also thank thanks hey hi welcome subscribe channel""".split())
 
 
+TOPIC_STOP = STOP | set("""please totally different ago year years month months days week weeks
+later recently tonight yesterday tomorrow honestly seriously genuinely truly super absolutely
+pretty sorry welcome firstly secondly lastly don doesn didn won isn wasn weren aren hasn haven
+couldn wouldn shouldn couldnve wouldnt shouldnt wasnt isnt couldnt doesnt didnt yall let's""".split())
+
+NON_TOPICS = {"pro tip", "long story", "same thing", "every single", "full disclosure", "little bit"}
+
+
+def topic_words(text):
+    # Captions often spell contractions as "don t" or "don’t". Keep them out of topic candidates.
+    text = re.sub(r"\b(don|doesn|didn|can|couldn|won|wouldn|shouldn|isn|aren|wasn|weren|hasn|haven)[’'\s]+t\b",
+                  r"\1t", text, flags=re.IGNORECASE)
+    return normalize(text).split()
+
+
 def topic_graph(rows, limit=24):
     docs = []
     for video, raw in rows:
         meta = json.loads(video)
         words = []
-        for line in json.loads(raw):
-            words.extend(normalize(line["text"]).split())
-        docs.append((meta, words, json.loads(raw)))
-    df, first = {}, {}
-    for meta, words, lines in docs:
+        lines = json.loads(raw)
+        previous = None
+        for line in lines:
+            if previous is not None and line["start"] - previous > 8:
+                words.append(".")
+            words.extend(topic_words(line["text"]))
+            previous = line["start"]
+        docs.append((meta, words, lines))
+    df = {}
+    for meta, words, _ in docs:
         counts = {}
         for i, w in enumerate(words):
-            if len(w) > 3 and w not in STOP and not w.isdigit():
+            if len(w) > 3 and w not in TOPIC_STOP and w.isalpha():
                 counts[w] = counts.get(w, 0) + 1
-            if i and len(w) > 2 and len(words[i - 1]) > 2 and w not in STOP and words[i - 1] not in STOP:
+            if i and w != words[i - 1] and all(len(word) > 2 and word.isalpha() and word not in TOPIC_STOP
+                                              for word in (w, words[i - 1])):
                 key = words[i - 1] + " " + w
-                counts[key] = counts.get(key, 0) + 1
+                if key not in NON_TOPICS:
+                    counts[key] = counts.get(key, 0) + 1
         for term, n_said in counts.items():
-            # A single word said once in passing is not a topic; require it to be said twice in the video.
+            # Single words need stronger evidence than a phrase.
             if " " in term or n_said >= 8:
                 df.setdefault(term, set()).add(meta["id"])
     n = max(len(docs), 1)
@@ -326,7 +348,7 @@ def topic_graph(rows, limit=24):
         chosen.append(term)
         if len(chosen) >= limit:
             break
-    patterns = {t: re.compile(r"\b" + r"\W+".join(map(re.escape, t.split())) + r"\b") for t in chosen}
+    patterns = {t: re.compile(r"\b" + r" ".join(map(re.escape, t.split())) + r"\b") for t in chosen}
     pair, nodes = {}, {t: {"term": t, "videos": len(df[t]), "mentions": 0, "sample": None} for t in chosen}
     for meta, words, lines in docs:
         text = " ".join(words)

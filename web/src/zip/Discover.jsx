@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Header, Loading, ErrorBox, Empty, ClipRow, Thumb, fmt, fdate } from './ui.jsx';
 import { searchDiscover } from './discover-model.mjs';
-import { TopicGraph } from './TopicGraph.jsx';
 
 // One clip per video, newest first, so the list shows distinct moments instead of repeats.
 function distinct(clips, limit = 6) {
@@ -31,8 +30,7 @@ function Pairing({ story, clip }) {
   </div>;
 }
 
-export function Discover({ accounts, entries, findStories, findMatches, loadTopics, onOpen, onResults }) {
-  const [niche, setNiche] = useState(null);
+export function Discover({ accounts, entries, findStories, findMatches, loadTopics, onOpen, onResults, niche, onNiche, topicRequest }) {
   const [rows, setRows] = useState({});
   const [order, setOrder] = useState([]);
   const [selected, setSelected] = useState('');
@@ -60,22 +58,22 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
   useEffect(() => {
     const token = ++run.current;
     nicheWords.current = [];
-    setNiche(null); setRows({}); setOrder([]); setSelected(''); setError('');
+    onNiche(undefined); setRows({}); setOrder([]); setSelected(''); setError('');
     (async () => {
       const loaded = await Promise.all(accounts.map(account => loadTopics(account.url).catch(() => null).then(data => ({ account, data }))));
       if (token !== run.current) return;
       // Use the account with the deepest transcript archive as the picture of the creator's niche.
       const { account, data } = loaded.filter(item => item.data?.topics?.length)
         .sort((a, b) => b.data.videoCount - a.data.videoCount)[0] ?? {};
+      onNiche(data ? { ...data, account } : null);
       if (data) {
-        setNiche({ ...data, account });
         nicheWords.current = [...new Set(data.topics.slice(0, 12).flatMap(topic => topic.term.split(' ')))].filter(word => word.length > 3);
         const lead = data.topics.filter(topic => topic.videos / data.videoCount < 0.4).slice(0, 6).map(topic => topic.term);
         setOrder(lead);
         const results = await Promise.all(lead.map(term => load(term).catch(() => null)));
         if (token !== run.current) return;
         const best = lead.find((term, i) => results[i]?.topic.sources.length && results[i].clips.length) ?? lead[0];
-        setSelected(best);
+        setSelected(current => current || best || '');
       }
     })();
     return () => { run.current += 1; };
@@ -102,6 +100,10 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
     document.getElementById('discover-detail')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  useEffect(() => {
+    if (topicRequest) void pick(topicRequest.term);
+  }, [topicRequest]);
+
   return <>
     <Header kicker="01 / Discover" title="What's worth revisiting?"
       sub="Topics you keep coming back to, matched with this week’s news and the moments in your archive that cover them." />
@@ -113,7 +115,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
             {order.map((term, i) => {
               const info = rows[term];
               const stories = info?.status === 'done' ? info.topic.sources.length : null;
-                const videos = niche?.topics.find(topic => topic.term === term)?.videos;
+              const videos = niche?.topics.find(topic => topic.term === term)?.videos;
               return <button key={term} type="button" role="listitem" aria-pressed={selected === term} onClick={() => pick(term)}
                 className="w-full flex flex-wrap items-baseline gap-x-5 gap-y-1 py-4 border-b border-line text-left">
                 <span className="label w-6">0{i + 1}</span>
@@ -147,11 +149,7 @@ export function Discover({ accounts, entries, findStories, findMatches, loadTopi
                 : <Empty text="No saved transcript says that exact phrase." />}
             </>}
           </div>
-          <section className="mt-16" aria-label="Your niche map">
-            {niche && <><div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-              <h2 className="text-2xl font-semibold tracking-tight">Your niche map</h2>
-              <span className="label">From {niche.videoCount} transcripts · bigger = in more videos · click a topic</span></div>
-            <TopicGraph topics={niche.topics} links={niche.links} active={selected} onPick={pick} /></>}
+          <section className="mt-16" aria-label="Search another topic">
             <form className="flex flex-wrap items-end gap-2 mt-6" onSubmit={event => { event.preventDefault(); const term = custom.trim(); if (term) { setCustom(''); void pick(term); } }}>
               <label className="flex-1 min-w-[200px]" htmlFor="discover-topic"><span className="label block mb-2">Look up any other topic</span>
                 <input id="discover-topic" className="input" value={custom} maxLength={120} placeholder="A topic or phrase you’ve said"
