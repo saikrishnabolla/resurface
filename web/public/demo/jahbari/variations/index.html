@@ -144,6 +144,8 @@ html.exp,html.exp body{background:transparent}
 @media (prefers-reduced-motion:reduce){.phone *{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
 footer{margin-top:24px;color:var(--ink-3);font-size:12.5px;max-width:78ch}
 @media (max-width:720px){.frames{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -18px;padding:0 18px 6px}figure{flex:0 0 74%;scroll-snap-align:center}.head{grid-template-columns:auto minmax(0,1fr)}.head button{grid-column:1/-1;justify-self:start}}
+:root.reels{color-scheme:dark;--bg:transparent;--surface:var(--app-surface,#141917);--ink:var(--app-ink,#f7f8f5);--ink-2:var(--app-muted,#9ca7a1);--ink-3:var(--ink-2);--line:var(--app-rule,#2a322e)}
+.reels :focus-visible{outline-color:var(--app-accent,#7bddb0)}
 .reels header,.reels footer,.reels .lab span{display:none}
 .reels .wrap{padding:0 0 24px;display:flow-root}
 .reels .story:first-child{margin-top:0}

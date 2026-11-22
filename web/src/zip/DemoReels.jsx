@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 
+const themeTokens = ['surface', 'ink', 'muted', 'rule', 'accent'];
+
 export function DemoReels() {
   const observer = useRef(null);
   useEffect(() => () => observer.current?.disconnect(), []);
@@ -7,6 +9,12 @@ export function DemoReels() {
   function fit(event) {
     observer.current?.disconnect();
     const frame = event.currentTarget;
+    const root = frame.contentDocument?.documentElement;
+    if (!root) return;
+    const theme = getComputedStyle(frame);
+    for (const token of themeTokens) {
+      root.style.setProperty(`--app-${token}`, theme.getPropertyValue(`--${token}`));
+    }
     const content = frame.contentDocument?.querySelector('.wrap');
     if (!content) return;
     const resize = () => { frame.style.height = `${Math.ceil(content.getBoundingClientRect().height)}px`; };
