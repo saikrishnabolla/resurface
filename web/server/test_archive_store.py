@@ -43,6 +43,21 @@ class ArchiveStoreTests(unittest.TestCase):
         self.store.release_caption(self.account, "video1")
         self.assertTrue(self.store.claim_caption(self.account, "video1"))
 
+    def test_cover_backfill_keeps_existing_captions_and_ignores_unknown_videos(self):
+        profile = {"platform": "TikTok", "url": "https://www.tiktok.com/@example"}
+        lease = self.store.claim(profile, False)
+        self.store.inventory(profile, [{"id": "1", "title": "A clip"}])
+        cues = [{"start": 39, "text": "Creator economy."}]
+        self.store.record(profile, {"id": "1", "status": "ok"}, cues)
+        self.store.finish(profile, lease, True, "")
+        jpeg = b"\xff\xd8\xff\xe0data"
+        self.assertEqual(self.store.save_covers(profile, [("1", jpeg), ("2", jpeg)]), 1)
+        self.assertEqual(self.store.save_covers(profile, [("1", jpeg)]), 0)
+        self.assertEqual(self.store.transcript(profile, "1"), {"status": "ok", "segments": cues})
+        self.assertIn("thumb=1", self.store.snapshot(profile)["videos"][0]["thumbnail"])
+        self.assertEqual(self.store.thumbnail(profile, "1"), (jpeg, "image/jpeg"))
+        self.assertIsNone(self.store.thumbnail(profile, "2"))
+
     def test_archive_search_preserves_first_cue_across_multiple_cues(self):
         self.store.inventory(self.account, [{"id": "video1", "title": "A video", "format": "video"}])
         self.store.record(self.account, {"id": "video1", "status": "ok"}, [

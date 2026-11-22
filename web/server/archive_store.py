@@ -1,4 +1,3 @@
-import hashlib
 import json
 import os
 import re
@@ -37,13 +36,19 @@ def latest(profile, inventory):
 
 IMAGE_HOSTS = ("tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com", "tiktokv.com", "tiktokv.us", "tiktokv.eu",
                "byteoversea.com", "ibytedtos.com", "muscdn.com", "cdninstagram.com", "fbcdn.net", "ytimg.com")
-THUMB_DIR = Path(os.environ.get("RESURFACE_THUMB_DIR", "/tmp/resurface-thumbs" if os.environ.get("VERCEL")
-                               else Path(__file__).resolve().parents[2] / ".cache" / "thumbs"))
 MAX_IMAGE = 3_000_000
 
 
 def fetch_image(url):
     import requests
+    try:
+        parsed = urlsplit(url or "")
+        host = parsed.hostname or ""
+        if parsed.scheme != "https" or parsed.port not in (None, 443) or parsed.username is not None or not any(
+                host == allowed or host.endswith("." + allowed) for allowed in IMAGE_HOSTS):
+            return None
+    except ValueError:
+        return None
     try:
         with requests.get(url, timeout=(3, 5), stream=True, allow_redirects=False,
                           headers={"User-Agent": "Mozilla/5.0"}) as reply:
@@ -73,14 +78,9 @@ def browser_image_type(body):
     return None
 
 
-def thumb_file(profile, video_id):
-    key = f"{key_for(profile)}:{video_id}"
-    return THUMB_DIR / (hashlib.sha256(key.encode()).hexdigest() + ".img")
-
-
-def proxied(profile, video):
+def proxied(profile, video, has_cover=False):
     """Platform image links expire and block hotlinking, so non-YouTube covers are served from our cache."""
-    if profile["platform"] == "YouTube" or not video.get("thumbnail"):
+    if profile["platform"] == "YouTube" or not (has_cover or video.get("thumbnail")):
         return video
     return {**video, "thumbnail": "/api/import_youtube?" + urlencode(
         {"profile": profile["url"], "thumb": video["id"]})}
@@ -123,6 +123,9 @@ class ArchiveStore:
             sql("""CREATE TABLE IF NOT EXISTS resurface_caption_claims (
                 profile_key TEXT NOT NULL, video_id TEXT NOT NULL, lease_until BIGINT NOT NULL,
                 PRIMARY KEY (profile_key, video_id))""")
+            sql("""CREATE TABLE IF NOT EXISTS resurface_covers (
+                profile_key TEXT NOT NULL, video_id TEXT NOT NULL, image BYTEA NOT NULL,
+                PRIMARY KEY (profile_key, video_id))""")
 
     def claim(self, profile, refresh):
         key, now, lease = key_for(profile), int(time.time()), uuid4().hex
@@ -140,11 +143,14 @@ class ArchiveStore:
             archive = sql("SELECT saved_at, lease_until, message FROM resurface_archives WHERE profile_key=?", (key,)).fetchone()
             if archive is None:
                 return None
-            rows = sql("""SELECT metadata, status FROM resurface_videos WHERE profile_key=? AND position<?
-                          ORDER BY position LIMIT 200""", (key, capacity(profile))).fetchall()
+            rows = sql("""SELECT metadata, status, c.video_id IS NOT NULL FROM resurface_videos v
+                          LEFT JOIN resurface_covers c ON c.profile_key=v.profile_key AND c.video_id=v.video_id
+                          WHERE v.profile_key=? AND position<? ORDER BY position LIMIT 200""",
+                       (key, capacity(profile))).fetchall()
         saved_at, lease_until, message = archive
         return {"profile": profile, "savedAt": saved_at or None, "importing": lease_until > time.time(),
-                "message": message, "videos": [{**proxied(profile, json.loads(data)), "status": status} for data, status in rows]}
+                "message": message, "videos": [{**proxied(profile, json.loads(data), cover), "status": status}
+                                               for data, status, cover in rows]}
 
     def inventory(self, profile, videos, partial=False):
         key = key_for(profile)
@@ -180,36 +186,39 @@ class ArchiveStore:
                       (key_for(profile), video_id, capacity(profile))).fetchone()
         return {"status": row[0], "segments": json.loads(row[1])} if row else None
 
-    def thumbnail(self, profile, video_id):
-        """Return (bytes, content_type) for a saved video's cover, caching it the first time it is fetched."""
-        cached = thumb_file(profile, video_id)
-        if cached.exists():
-            saved = cached.read_bytes()
-            kind = browser_image_type(saved)
-            if kind:
-                return saved, kind
+    def save_covers(self, profile, covers):
+        """Save browser-safe images for existing archive rows without touching metadata or transcripts."""
+        key = key_for(profile)
+        saved = 0
         with self.connect() as sql:
-            row = sql("SELECT metadata FROM resurface_videos WHERE profile_key=? AND video_id=? AND position<?",
+            for video_id, image in covers:
+                if not browser_image_type(image) or len(image) > MAX_IMAGE:
+                    continue
+                row = sql("""INSERT INTO resurface_covers (profile_key, video_id, image)
+                    SELECT profile_key, video_id, ? FROM resurface_videos
+                    WHERE profile_key=? AND video_id=? AND position<?
+                    ON CONFLICT (profile_key, video_id) DO NOTHING RETURNING video_id""",
+                    (image, key, video_id, capacity(profile))).fetchone()
+                saved += bool(row)
+        return saved
+
+    def thumbnail(self, profile, video_id):
+        with self.connect() as sql:
+            row = sql("""SELECT metadata, image FROM resurface_videos v LEFT JOIN resurface_covers c
+                         ON c.profile_key=v.profile_key AND c.video_id=v.video_id
+                         WHERE v.profile_key=? AND v.video_id=? AND position<?""",
                       (key_for(profile), video_id, capacity(profile))).fetchone()
-        url = json.loads(row[0]).get("thumbnail") if row else None
-        try:
-            parsed = urlsplit(url or "")
-            host = parsed.hostname or ""
-            allowed = parsed.scheme == "https" and parsed.port in (None, 443) and parsed.username is None and any(
-                host == h or host.endswith("." + h) for h in IMAGE_HOSTS)
-        except ValueError:
-            allowed = False
-        if not allowed:
+        if row is None:
             return None
-        body = fetch_image(url)
+        metadata, image = row
+        if image:
+            body = bytes(image)
+            return body, browser_image_type(body)
+        body = fetch_image(json.loads(metadata).get("thumbnail"))
         kind = browser_image_type(body)
         if not kind:
             return None
-        try:
-            THUMB_DIR.mkdir(parents=True, exist_ok=True)
-            cached.write_bytes(body)
-        except OSError:
-            pass
+        self.save_covers(profile, [(video_id, body)])
         return body, kind
 
     def video(self, profile, video_id):
