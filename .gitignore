@@ -59,3 +59,7 @@ recs.json
 tool-results/
 *.mp4
 *.mov
+
+# the example run keeps its cut clips beside the page that plays them
+!examples/kameron-monet/runs/2026-11-22/clips/*.mp4
+!examples/kameron-monet/runs/2026-11-22/clips/*.mov
