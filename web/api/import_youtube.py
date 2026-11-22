@@ -2,8 +2,6 @@ import json
 import logging
 import os
 import re
-from hashlib import sha256
-from ipaddress import ip_address
 from threading import Thread
 from urllib.parse import urlsplit
 
@@ -26,21 +24,6 @@ def reply(data, status=200):
 
 def error(message, status):
     return reply({"error": message}, status)
-
-
-def public_quota(headers, kind):
-    if os.environ.get("VERCEL_ENV") != "production":
-        return None
-    forwarded = headers.get("x-vercel-forwarded-for") or headers.get("x-forwarded-for", "")
-    try:
-        ip = str(ip_address(forwarded))
-    except ValueError:
-        ip = "unknown"
-    retry = store.consume_public_quota(kind, sha256(ip.encode()).hexdigest())
-    if retry:
-        return JSONResponse({"error": "Daily archive limit reached. Try again tomorrow (UTC)."},
-                            status_code=429, headers={"Cache-Control": "no-store", "Retry-After": str(retry)})
-    return None
 
 
 def payload(event):
@@ -82,7 +65,7 @@ def run_local_import(token, profile, lease, existing):
         logger.error("Background archive import failed: %s", type(exc).__name__)
 
 
-def load_caption(profile, video_id, token, headers):
+def load_caption(profile, video_id, token):
     if not VIDEO_ID.fullmatch(video_id):
         return error("Invalid video.", 400)
     store.setup()
@@ -101,9 +84,6 @@ def load_caption(profile, video_id, token, headers):
         result = store.transcript(profile, video_id)
         if result and result["status"] in ("ok", "no_captions"):
             return reply(result)
-        limited = public_quota(headers, "caption")
-        if limited is not None:
-            return limited
         segments = fetch_transcript(token, profile, video)
         status = "ok" if segments else "no_captions"
         store.record(profile, {**video, "status": status}, segments)
@@ -162,7 +142,7 @@ async def update_archive(request: Request):
         if video is not None:
             if not isinstance(video, str):
                 return error("Invalid video.", 400)
-            return await run_in_threadpool(load_caption, profile, video, os.environ.get("TREG_API_KEY"), request.headers)
+            return await run_in_threadpool(load_caption, profile, video, os.environ.get("TREG_API_KEY"))
         await run_in_threadpool(store.setup)
         snapshot = await run_in_threadpool(store.snapshot, profile)
         if snapshot and (snapshot["importing"] or (snapshot["savedAt"] and not refresh)):
@@ -170,9 +150,6 @@ async def update_archive(request: Request):
         token = os.environ.get("TREG_API_KEY")
         if not token:
             return error("Treg is not configured.", 503)
-        limited = await run_in_threadpool(public_quota, request.headers, "import")
-        if limited is not None:
-            return limited
         lease = await run_in_threadpool(store.claim, profile, refresh)
         if not lease:
             return reply(await run_in_threadpool(store.snapshot, profile))

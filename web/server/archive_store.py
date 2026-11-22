@@ -70,27 +70,6 @@ class ArchiveStore:
             sql("""CREATE TABLE IF NOT EXISTS resurface_caption_claims (
                 profile_key TEXT NOT NULL, video_id TEXT NOT NULL, lease_until BIGINT NOT NULL,
                 PRIMARY KEY (profile_key, video_id))""")
-            sql("""CREATE TABLE IF NOT EXISTS resurface_public_quota (
-                bucket TEXT PRIMARY KEY, window_id BIGINT NOT NULL, used INTEGER NOT NULL)""")
-
-    def consume_public_quota(self, kind, client, *, now=None):
-        day_seconds = 86400
-        seconds = int(time.time() if now is None else now)
-        window = seconds // day_seconds
-        per_client, sitewide = {"import": (4, 8), "caption": (30, 120)}[kind]
-        with self.connect() as sql:
-            for bucket, limit in ((f"{kind}:client:{client}", per_client), (f"{kind}:global", sitewide)):
-                allowed = sql("""INSERT INTO resurface_public_quota (bucket, window_id, used)
-                    VALUES (?, ?, 1) ON CONFLICT (bucket) DO UPDATE
-                    SET window_id=excluded.window_id,
-                        used=CASE WHEN resurface_public_quota.window_id < excluded.window_id THEN 1
-                                  ELSE resurface_public_quota.used + 1 END
-                    WHERE resurface_public_quota.window_id < excluded.window_id
-                       OR (resurface_public_quota.window_id = excluded.window_id AND resurface_public_quota.used < ?)
-                    RETURNING used""", (bucket, window, limit)).fetchone()
-                if not allowed:
-                    return day_seconds - seconds % day_seconds
-        return None
 
     def claim(self, profile, refresh):
         key, now, lease = key_for(profile), int(time.time()), uuid4().hex

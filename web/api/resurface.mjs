@@ -1,6 +1,5 @@
 import { findAccounts } from '../server/socials.mjs';
 import { findStories } from '../server/discover.mjs';
-import { consumeSearch } from '../server/public-quota.mjs';
 
 function httpError(status, message) {
   return Object.assign(new Error(message), { status });
@@ -52,22 +51,18 @@ function assertSameOrigin(req) {
   if (parsed.host !== host) throw httpError(403, 'This request must come from Resurface.');
 }
 
-export function createHandler({ lookup = findAccounts, discover = findStories, getApiKey = () => process.env.YOU_COM_API_KEY, limit = consumeSearch } = {}) {
+export function createHandler({ lookup = findAccounts, discover = findStories, getApiKey = () => process.env.YOU_COM_API_KEY } = {}) {
   return async (req, res) => {
-    const send = (status, body, headers = {}) => {
-      res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...headers });
+    const send = (status, body) => {
+      res.writeHead(status, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(JSON.stringify(body));
     };
     try {
       const { action } = routeFor(req);
-      if (req.method === 'POST' && (action === 'accounts' || action === 'discover')) {
+      if (req.method === 'POST') {
         assertSameOrigin(req);
-        const body = await readJson(req);
-        let retry;
-        try { retry = await limit(req.headers); }
-        catch { return send(503, { error: 'Search is temporarily unavailable.' }); }
-        if (retry) return send(429, { error: 'Daily search limit reached. Try again tomorrow (UTC).' }, { 'Retry-After': retry });
-        return send(200, await (action === 'accounts' ? lookup : discover)(body, { apiKey: getApiKey() }));
+        if (action === 'accounts') return send(200, await lookup(await readJson(req), { apiKey: getApiKey() }));
+        if (action === 'discover') return send(200, await discover(await readJson(req), { apiKey: getApiKey() }));
       }
       return send(404, { error: 'Route not found.' });
     } catch (error) {

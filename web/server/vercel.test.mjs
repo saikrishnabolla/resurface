@@ -60,17 +60,3 @@ test('the former hosted sample routes have been removed', async () => {
   })).status, 404);
   assert.equal((await request(handler, { url: '/api/archive/kameron-sample/search?q=rights' })).status, 404);
 });
-
-test('account and news search share a limit and never call You.com when blocked', async () => {
-  const search = () => assert.fail('Provider must not be called');
-  const handler = createHandler({ lookup: search, discover: search, limit: async () => 120 });
-  for (const url of ['/api/accounts', '/api/discover']) {
-    const result = await request(handler, { method: 'POST', url, body: {} });
-    assert.equal(result.status, 429);
-    assert.equal(result.headers['Retry-After'], 120);
-  }
-  const unavailable = createHandler({ lookup: search, limit: async () => { throw new Error('database details'); } });
-  const result = await request(unavailable, { method: 'POST', url: '/api/accounts', body: {} });
-  assert.equal(result.status, 503);
-  assert.deepEqual(result.body, { error: 'Search is temporarily unavailable.' });
-});

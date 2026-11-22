@@ -43,15 +43,6 @@ class ArchiveStoreTests(unittest.TestCase):
         self.store.release_caption(self.account, "video1")
         self.assertTrue(self.store.claim_caption(self.account, "video1"))
 
-    def test_public_quota_is_shared_across_instances_and_resets_at_utc_midnight(self):
-        for client in ("a", "b"):
-            for _ in range(4):
-                self.assertIsNone(ArchiveStore().consume_public_quota("import", client, now=86395))
-        self.assertEqual(self.store.consume_public_quota("import", "a", now=86395), 5)
-        self.assertEqual(self.store.consume_public_quota("import", "new", now=86395), 5)
-        self.assertIsNone(self.store.consume_public_quota("caption", "a", now=86395))
-        self.assertIsNone(self.store.consume_public_quota("import", "a", now=86400))
-
     def test_archive_search_preserves_first_cue_across_multiple_cues(self):
         self.store.inventory(self.account, [{"id": "video1", "title": "A video", "format": "video"}])
         self.store.record(self.account, {"id": "video1", "status": "ok"}, [
