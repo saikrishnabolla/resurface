@@ -1,0 +1,88 @@
+.creator-onboarding { max-width: 760px; }
+.onboarding-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+}
+.onboarding-steps li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: baseline;
+  padding-top: 8px;
+  border-top: 2px solid var(--rule);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+.onboarding-steps li[aria-current] { border-color: var(--accent); color: var(--accent); }
+.onboarding-steps li > span { font-size: 11px; font-variant-numeric: tabular-nums; }
+.creator-onboarding h1:focus { outline: none; }
+.onboarding-form {
+  display: grid;
+  gap: 16px;
+  max-width: 560px;
+  padding: 20px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+}
+.onboarding-form label { display: grid; min-width: 0; gap: 6px; font-weight: 700; }
+.onboarding-form label small { color: var(--muted); font-weight: 400; }
+.onboarding-form input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  color: var(--ink);
+}
+.onboarding-form input[aria-invalid] { border-color: var(--danger); }
+.onboarding-form .workspace-message { margin: 0; }
+.onboarding-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.onboarding-actions > :last-child { margin-left: auto; }
+.onboarding-actions > button, .onboarding-secondary { min-height: 44px; }
+.onboarding-secondary {
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+}
+.onboarding-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.onboarding-secondary:disabled { opacity: .6; }
+.onboarding-status { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; color: var(--muted); }
+.onboarding-status svg { flex: none; }
+.onboarding-accounts {
+  display: grid;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.onboarding-accounts li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.onboarding-account { min-width: 0; overflow-wrap: anywhere; }
+.onboarding-account > label { display: flex; align-items: center; gap: 8px; min-height: 28px; font-weight: 700; cursor: pointer; }
+.onboarding-account input { width: 16px; height: 16px; flex: none; margin: 0; accent-color: var(--accent); }
+.onboarding-account > p { margin-left: 24px; color: var(--muted); font-size: 12px; }
+.onboarding-profile-link { font-size: 12px; text-wrap: nowrap; }
+.onboarding-profile-link svg { vertical-align: middle; }
+.onboarding-add { max-width: none; grid-template-columns: minmax(0, 1fr) auto; align-items: end; margin-top: 20px; }
+.onboarding-add + .onboarding-actions, .creator-onboarding > .onboarding-actions { margin-top: 20px; }
+@media (max-width: 420px) {
+  .onboarding-steps { margin-bottom: 24px; }
+  .onboarding-form { padding: 12px; gap: 12px; }
+  .onboarding-add { grid-template-columns: minmax(0, 1fr); }
+  .onboarding-add button { justify-self: end; }
+}

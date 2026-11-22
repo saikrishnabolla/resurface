@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn { @apply inline-flex items-center gap-2 px-4 py-2 text-sm font-medium border border-solid border-line text-ink hover:border-emerald hover:text-emerald transition-colors disabled:opacity-40; text-decoration: none; }
+.btn-primary { @apply bg-emerald border-emerald text-cream hover:bg-ink hover:border-ink hover:text-cream; }
+.btn-gold { @apply border-emerald text-emerald; }
+.input { @apply border border-solid border-line bg-surface px-3 py-2 text-sm w-full text-ink focus:border-emerald; }
+.label { @apply text-[11px] uppercase tracking-[0.14em] text-mute font-medium; }
+@layer base {
+  :where(.zip-page) :where(div, section, form, li, aside, nav, button, select, input, span, header, img, video, a, iframe, fieldset, blockquote), :where(.zip-sidebar, .zip-sidebar button) {
+    border-style: solid;
+    border-width: 0;
+    border-color: var(--rule);
+  }
+  :where(.zip-page, .zip-sidebar) :where(button) { background: transparent; color: inherit; }
+  :where(.zip-page) :where(blockquote, fieldset, legend, pre, ol, ul) { margin: 0; padding: 0; }
+  :where(.zip-page) :where(ol, ul) { list-style: none; }
+  :where(.zip-page) :where(img, svg, iframe) { vertical-align: middle; }
+}

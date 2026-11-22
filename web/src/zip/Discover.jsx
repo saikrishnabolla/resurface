@@ -1,0 +1,96 @@
+import { useEffect, useRef, useState } from 'react';
+import { Header, Loading, ErrorBox, Empty, ClipRow } from './ui.jsx';
+import { searchDiscover } from './discover-model.mjs';
+
+export function Discover({ accounts, entries, findStories, findMatches, onOpen, onResults }) {
+  const [query, setQuery] = useState('');
+  const [result, setResult] = useState(null);
+  const [sort, setSort] = useState('date');
+  const [searching, setSearching] = useState(false);
+  const [showSources, setShowSources] = useState(true);
+  const sequence = useRef(0);
+  const scope = JSON.stringify(accounts.map(account => account.url));
+  useEffect(() => {
+    setResult(null);
+    setSearching(false);
+    return () => { sequence.current += 1; };
+  }, [scope]);
+
+  async function search(term) {
+    const keyword = term.trim();
+    if (!keyword || !accounts.length) return;
+    const attempt = ++sequence.current;
+    setSearching(true);
+    setResult(null);
+    onResults([]);
+    const next = await searchDiscover({ query: keyword, accounts, entries, findStories, findMatches });
+    if (attempt !== sequence.current) return;
+    setResult(next);
+    setShowSources(true);
+    onResults(next.clips);
+    setSearching(false);
+  }
+
+  const list = (result?.clips ?? []).slice().sort((a, b) => sort === 'len'
+    ? (a.end - a.start) - (b.end - b.start)
+    : b.video.publishedAt.localeCompare(a.video.publishedAt));
+  const retry = result ? () => search(result.topic.name) : undefined;
+  const allArchivesFailed = result && result.failedArchives.length === accounts.length;
+  return <>
+    <Header kicker="01 / Discover" title="What's worth revisiting?"
+      sub="Look up a topic in today’s news and find where it appears in your archive." />
+    <form className="flex flex-wrap items-end gap-2 mb-8" onSubmit={event => { event.preventDefault(); void search(query); }}>
+      <label className="flex-1 min-w-[200px]" htmlFor="discover-topic"><span className="label block mb-2">Topic</span>
+        <input id="discover-topic" className="input" value={query} maxLength={120} required
+          placeholder="Search for a topic or phrase" onChange={event => setQuery(event.target.value)} /></label>
+      <button className="btn btn-primary" type="submit" disabled={!query.trim() || !accounts.length}>
+        {searching ? 'Searching…' : 'Search'}
+      </button>
+    </form>
+    <div className="border-t border-line mb-12">
+      {result && <>
+        <button type="button" aria-expanded={showSources} aria-controls="discover-sources"
+          onClick={() => setShowSources(!showSources)}
+          className="w-full flex flex-wrap items-baseline gap-x-5 gap-y-2 py-4 border-b border-line text-left">
+          <span className="label w-6">01</span>
+          <span className="text-3xl md:text-4xl font-semibold tracking-tight text-emerald break-words min-w-0 max-w-full">{result.topic.name}</span>
+          <span className="label !text-emerald border border-emerald px-1.5 py-0.5">
+            {result.newsError ? 'Sources unavailable' : `${result.topic.sources.length} news sources`}
+          </span>
+        </button>
+        <div id="discover-sources" hidden={!showSources}>
+          {result.newsError ? <ErrorBox msg="You.com news search is unavailable. You can still open archive matches." retry={retry} />
+            : !result.topic.sources.length ? <p className="text-mute py-4">No recent You.com sources found for this topic.</p>
+            : <ul aria-label="You.com news sources">{result.topic.sources.map(source =>
+              <li key={source.url} className="border-b border-line py-3">
+                <a className="font-medium hover:text-emerald underline underline-offset-4" href={source.url}
+                  target="_blank" rel="noreferrer">{source.title}</a>
+                <p className="text-mute text-xs mt-1">{source.publisher}</p>
+              </li>)}</ul>}
+        </div>
+      </>}
+    </div>
+    <div className="flex flex-wrap items-end justify-between gap-3 mb-2">
+      <h2 className="text-2xl font-semibold tracking-tight">
+        {searching ? 'Searching archive' : !result ? 'Archive matches' :
+          allArchivesFailed ? 'Archive matches unavailable' :
+            `${list.length} clip${list.length === 1 ? '' : 's'} found for ${result.topic.name}`}
+      </h2>
+      <select className="input !w-auto" aria-label="Sort clips" value={sort} onChange={event => setSort(event.target.value)}>
+        <option value="date">Newest video</option><option value="len">Shortest clip</option>
+      </select>
+    </div>
+    {searching ? <Loading /> : result ? <>
+      {!!result.failedArchives.length && <ErrorBox
+        msg={`Couldn’t search ${result.failedArchives.map(item => item.platform + ' ' + item.handle).join(', ')}.`} retry={retry} />}
+      {!allArchivesFailed && (list.length
+        ? <div className="border-t border-line mt-4">{list.map(clip =>
+          <ClipRow key={clip.id} clip={clip} onOpen={onOpen} />)}</div>
+        : <Empty text="No saved transcripts contain that exact phrase. Try a shorter search." />)}
+    </> : <Empty text={accounts.length
+      ? 'Search for a topic or phrase to find matching moments in your archive.'
+      : 'Connect an account to search its archive.'} />}
+  </>;
+}
+
+export default Discover;

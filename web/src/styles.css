@@ -12,11 +12,11 @@
   --danger: #ffb7a7;
   background: var(--paper);
   color: var(--ink);
-  font: 14px/1.5 Manrope, 'Inter Variable', system-ui, sans-serif;
+  font: 16px/1.5 Manrope, 'Inter Variable', system-ui, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; min-width: 320px; min-height: 100vh; }
+body { margin: 0; min-width: 320px; min-height: 100vh; font-size: 14px; }
 h1, h2, h3, p { margin: 0; }
 button, input, select { font: inherit; }
 button { cursor: pointer; }
