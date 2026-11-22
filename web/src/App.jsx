@@ -212,82 +212,84 @@ function PageHeading({ section, title, children }) {
   </header>;
 }
 
-function Discover({ archive, onMatch, onAccount }) {
-  const [query, setQuery] = useState('');
-  const [stories, setStories] = useState(null);
-  const [matches, setMatches] = useState([]);
+function Discover({ archive, onAccount }) {
+  const [name, setName] = useState('');
+  const [profile, setProfile] = useState(null);
+  const [result, setResult] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [name, setName] = useState('');
-  const [accounts, setAccounts] = useState(null);
-  const [accountBusy, setAccountBusy] = useState(false);
-  const [accountError, setAccountError] = useState('');
+  const profileUrl = profile ?? archive?.profile?.url ?? '';
   async function search(event) {
     event.preventDefault();
-    setBusy(true); setError(''); setMatches([]); setStories(null);
+    setBusy(true); setError(''); setResult(null);
+    setProfile(profileUrl);
     try {
-      const term = query.trim();
-      const news = await request('/api/discover', { body: { query: term } }).then(r => r.json());
-      setStories(news.stories);
-      if (archive?.profile) {
-        const result = await request(archivePath(archive.profile.url, { q: term })).then(r => r.json());
-        setMatches(result.matches);
-      }
+      setResult(await request('/api/accounts', { body: { name, profileUrl } }).then(r => r.json()));
     } catch (error) { setError(error.message); }
     finally { setBusy(false); }
   }
-  async function related(event) {
-    event.preventDefault();
-    setAccountBusy(true); setAccountError(''); setAccounts(null);
-    try {
-      setAccounts(await request('/api/accounts', { body: { name, profileUrl: archive.profile.url } }).then(r => r.json()));
-    } catch (error) { setAccountError(error.message); }
-    finally { setAccountBusy(false); }
-  }
   return <section className="discover-page">
-    <PageHeading section="01 / Discover" title="What’s worth revisiting?">
-      Find out what’s in the news and where you’ve talked about it before.
+    <PageHeading section="01 / Discover" title="Find a creator’s social accounts">
+      Start with their name and one public profile. You.com looks for their other accounts.
     </PageHeading>
     <form className="discover-form" onSubmit={search}>
-      <label>Topic<input value={query} required maxLength={120} placeholder="Creator contracts"
-        onChange={event => setQuery(event.target.value)} /></label>
-      <button className="primary" disabled={busy || !query.trim()}>{busy ? 'Searching…' : 'Find stories'}</button>
+      <label>Creator name<input value={name} required minLength={2} maxLength={100}
+        disabled={busy} onChange={event => setName(event.target.value)} /></label>
+      <label>Known profile URL<input value={profileUrl} required maxLength={500}
+        autoCapitalize="none" spellCheck={false} placeholder="YouTube, Instagram, or TikTok"
+        disabled={busy} onChange={event => setProfile(event.target.value)} /></label>
+      <button className="primary" disabled={busy || name.trim().length < 2 || !profileUrl.trim()}>
+        {busy ? 'Searching…' : 'Find accounts'}</button>
     </form>
-    <p className="workspace-message">Search powered by You.com</p>
     {error && <p className="workspace-message" role="alert">{error}</p>}
-    {stories && <div className="discover-results">
-      <section><h2>Recent stories</h2>
-        {stories.length ? <ul>{stories.map(story => <li key={story.url}>
-          <a className="workspace-link" href={story.url} target="_blank" rel="noreferrer">{story.title}</a>
-          {story.publishedAt && <p className="video-date">{date(story.publishedAt)}</p>}
-          <p>{story.description}</p>
-        </li>)}</ul> : <p>No recent stories matched.</p>}
-      </section>
-      <section><h2>Archive mentions</h2>
-        {matches.length ? <ul>{matches.map(match => <li key={match.id + ':' + match.start}>
-          <button type="button" className="time-link" onClick={() => onMatch(match)}>{time(match.start)}</button>
-          <strong>{match.title}</strong><p>{match.text}</p>
-        </li>)}</ul> : <p>{archive?.profile ? 'No transcript lines match that topic.' : 'Open an archive to find transcript mentions.'}</p>}
-      </section>
-    </div>}
-    {archive?.profile && <details className="account-discovery"><summary>Find related social profiles</summary>
-      <form className="discover-form" onSubmit={related}><label>Creator name
-        <input value={name} required minLength={2} maxLength={100} onChange={event => setName(event.target.value)} />
-      </label><button className="primary" disabled={accountBusy}>{accountBusy ? 'Looking…' : 'Find accounts'}</button></form>
-      {accountError && <p role="alert">{accountError}</p>}
-      {accounts && <><p>{accounts.mode === 'live' ? 'You.com searched the public web.' : accounts.message}</p>
-        <ul>{accounts.accounts.filter(item => item.origin !== 'provided').map(item => <li key={item.url}>
-          <button className="time-link" type="button" onClick={() => onAccount(item.url)}>{item.platform} · {item.handle}</button>
-          {' '}<a className="workspace-link" href={item.url} rel="noreferrer" target="_blank" aria-label={'Verify ' + item.platform + ' profile'}>
-            <ArrowSquareOutIcon aria-hidden="true" /></a>
-          <span> · {item.evidence}</span>
-        </li>)}</ul></>}
-    </details>}
+    {result && <section className="account-results">
+      <h2>Social profiles</h2>
+      {(result.message || result.accounts.some(item => item.origin === 'suggested')) &&
+        <p className="workspace-message" role="status">{result.message || 'Check suggested profiles before importing.'}</p>}
+      <ul>{result.accounts.map(item => <li key={item.url}>
+        <div>
+          <a className="workspace-link" href={item.url} rel="noreferrer" target="_blank">
+            {item.platform} · {item.handle} <ArrowSquareOutIcon aria-hidden="true" /></a>
+          <p>{item.evidence}{item.sourceUrl && item.sourceUrl !== item.url &&
+            <> · <a href={item.sourceUrl} rel="noreferrer" target="_blank">Source</a></>}</p>
+        </div>
+        <button className="primary" type="button" aria-label={'Open ' + item.platform + ' archive'} onClick={() => onAccount(item.url)}>
+          Open archive</button>
+      </li>)}</ul>
+    </section>}
+  </section>;
+}
+
+function ArchiveSearch({ profileUrl, onMatch }) {
+  const [query, setQuery] = useState('');
+  const [matches, setMatches] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  async function search(event) {
+    event.preventDefault();
+    setBusy(true); setError(''); setMatches(null);
+    try {
+      const data = await request(archivePath(profileUrl, { q: query.trim() })).then(r => r.json());
+      setMatches(data.matches);
+    } catch (error) { setError(error.message); }
+    finally { setBusy(false); }
+  }
+  return <section className="archive-search">
+    <form className="discover-form" onSubmit={search}>
+      <label>Search all transcripts<input value={query} required maxLength={120}
+        onChange={event => setQuery(event.target.value)} /></label>
+      <button className="primary" disabled={busy || !query.trim()}>{busy ? 'Searching…' : 'Search archive'}</button>
+    </form>
+    {error && <p className="workspace-message" role="alert">{error}</p>}
+    {matches && (matches.length ? <ul aria-label="Archive mentions">{matches.map(match => <li key={match.id + ':' + match.start}>
+      <button type="button" className="time-link" onClick={() => onMatch(match)}>{time(match.start)}</button>{' '}
+      <strong>{match.title}</strong><p>{match.text}</p>
+    </li>)}</ul> : <p className="workspace-message">No transcript lines match.</p>)}
   </section>;
 }
 
 export function App() {
-  const [tab, setTab] = useState('archive');
+  const [tab, setTab] = useState(startup.has('profile') ? 'archive' : 'discover');
   const [profileInput, setProfileInput] = useState(startup.get('profile') ?? '');
   const [archive, setArchive] = useState(null);
   const [selected, setSelected] = useState(startup.get('video') ?? '');
@@ -409,11 +411,10 @@ export function App() {
       </div>}
     </aside>
     <main className="workspace-main">
-      {tab === 'discover' ? <Discover archive={archive} onAccount={url => {
+      <div hidden={tab !== 'discover'}><Discover archive={archive} onAccount={url => {
         setProfileInput(url); setSelected(''); setFormat('video'); setTab('archive'); open(url);
-      }} onMatch={match => {
-        pick(match.id, { start: match.start, serial: Date.now() }); setTab('archive');
-      }} /> : <>
+      }} /></div>
+      {tab === 'archive' && <>
         <PageHeading section="02 / Archive" title="My Archive">
           Browse your videos and search their timestamped transcripts.
         </PageHeading>
@@ -439,6 +440,8 @@ export function App() {
             </button>
           </div>
           {!busy && !archive.importing && archive.message && <p className="workspace-message" role="status">{archive.message}</p>}
+          {videos.length > 0 && <ArchiveSearch key={archive.profile.url} profileUrl={archive.profile.url}
+            onMatch={match => pick(match.id, { start: match.start, serial: Date.now() })} />}
           {videos.length > 0
             ? <div className="library">
               <section className="video-library" aria-label="Video library">
