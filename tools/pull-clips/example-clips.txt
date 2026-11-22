@@ -1,0 +1,9 @@
+# name|source|start|end
+# source: YouTube/Instagram URL, or yt:ID / ig:CODE
+# times: seconds (16.5), mm:ss (01:05) or hh:mm:ss. Blank end = whole video.
+
+01-LinkedIn-business-card|ig:DUoooY2Ee9z|16.5|32.1
+02-Claude-Riemann|https://www.instagram.com/reel/DWCslDgEW_o/|43.2|49.9
+03-Tariff-refunds|yt:rYGg2nYZvLI|00:00|00:28
+04-Bitcoin-below-60k|https://www.youtube.com/watch?v=-BtL0nQoBng|01:05|01:14
+backup-DbA29WoRqGg|ig:DbA29WoRqGg||
