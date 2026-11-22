@@ -186,6 +186,7 @@ function VideoDetail({ profile, video, jump, importing }) {
 
 const lookupAccounts = body => request('/api/accounts', { body }).then(response => response.json());
 const findStories = query => request('/api/discover', { body: { query } }).then(response => response.json());
+const loadTopics = url => request(archivePath(url, { topics: '1' })).then(response => response.json());
 const findMatches = (url, q) => request(archivePath(url, { q })).then(response => response.json());
 
 function useCreatorArchives(accounts) {
@@ -489,7 +490,7 @@ function Dashboard({ workspace, onEdit, view, setView }) {
   }
   return <>
     <div hidden={view !== 'discover'}><Discover accounts={workspace.accounts} entries={entries}
-      findStories={findStories} findMatches={findMatches} onOpen={openInArchive} onResults={setResults} /></div>
+      findStories={findStories} findMatches={findMatches} loadTopics={loadTopics} onOpen={openInArchive} onResults={setResults} /></div>
     <div hidden={view !== 'archive'}><CreatorArchive {...{workspace, onEdit, entries, start, sourceJump, clips}} /></div>
   </>;
 }

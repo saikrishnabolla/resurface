@@ -145,6 +145,13 @@ class ArchiveStore:
         with self.connect() as sql:
             sql("DELETE FROM resurface_caption_claims WHERE profile_key=? AND video_id=?", (key_for(profile), video_id))
 
+    def topics(self, profile):
+        with self.connect() as sql:
+            rows = sql("""SELECT metadata, segments FROM resurface_videos
+                WHERE profile_key=? AND position<? AND status='ok' ORDER BY position LIMIT 200""",
+                (key_for(profile), capacity(profile))).fetchall()
+        return topic_graph(rows)
+
     def find(self, profile, term):
         words = normalize(term).split()
         if not words:
@@ -182,6 +189,64 @@ class ArchiveStore:
                         return result
                 previous = line
         return result
+
+STOP = set("""about above after again all also always am an and any are around because been before being between both but can cant could did does doing dont down each even every few for from get gets getting go goes going gonna got had has have having her here hers him his how i id if im in into is it its ive just kind know let like little look lot made make many may maybe me might more most much must my need never not now of off okay on one only or other our out over own people really right said same say see she should so some something sort still such take than that thats the their them then there these they thing things think this those through too two up us very want was way we well were what when where which while who why will with would yeah yes you your youre actually basically literally gonna going wanna kinda stuff music applause laughter hello beautiful morning quick quickly super excited cute child anyway definitely check comment below somebody last night real tiktok love work life good great better makes making content guys guy video videos today time times one two three first second back come comes came use used using go put pretty because cause also thank thanks hey hi welcome subscribe channel""".split())
+
+
+def topic_graph(rows, limit=24):
+    docs = []
+    for video, raw in rows:
+        meta = json.loads(video)
+        words = []
+        for line in json.loads(raw):
+            words.extend(normalize(line["text"]).split())
+        docs.append((meta, words, json.loads(raw)))
+    df, first = {}, {}
+    for meta, words, lines in docs:
+        seen = set()
+        for i, w in enumerate(words):
+            if len(w) > 3 and w not in STOP and not w.isdigit():
+                seen.add(w)
+            if i and len(w) > 2 and len(words[i - 1]) > 2 and w not in STOP and words[i - 1] not in STOP:
+                seen.add(words[i - 1] + " " + w)
+        for term in seen:
+            df.setdefault(term, set()).add(meta["id"])
+    n = max(len(docs), 1)
+    ranked = sorted(((len(v) * (1 - len(v) / n) ** 2 * (2.2 if " " in t else 1.0), t) for t, v in df.items() if len(v) >= 3), reverse=True)
+    chosen = []
+    for _, term in ranked:
+        clash = [c for c in chosen if " " in term and " " in c and set(term.split()) & set(c.split())
+                 and len(df[term]) <= 2.6 * len(df[c]) and len(df[c]) <= 2.6 * len(df[term])]
+        if clash:
+            if len(df[term]) > max(len(df[c]) for c in clash):
+                chosen = [c for c in chosen if c not in clash]
+                chosen.append(term)
+            continue
+        if any(term in c.split() and len(df[c]) >= 0.6 * len(df[term]) for c in chosen if " " in c and term != c):
+            continue
+        if any(c in term.split() and len(df[term]) >= 0.6 * len(df[c]) for c in chosen if " " not in c and term != c):
+            chosen = [c for c in chosen if not (" " not in c and c in term.split())]
+        chosen.append(term)
+        if len(chosen) >= limit:
+            break
+    patterns = {t: re.compile(r"\b" + r"\W+".join(map(re.escape, t.split())) + r"\b") for t in chosen}
+    pair, nodes = {}, {t: {"term": t, "videos": len(df[t]), "mentions": 0, "sample": None} for t in chosen}
+    for meta, words, lines in docs:
+        text = " ".join(words)
+        present = [t for t in chosen if meta["id"] in df[t]]
+        for t in present:
+            nodes[t]["mentions"] += len(patterns[t].findall(text))
+            if nodes[t]["sample"] is None:
+                for line in lines:
+                    if patterns[t].search(normalize(line["text"])):
+                        nodes[t]["sample"] = {"id": meta["id"], "title": meta["title"], "start": line["start"]}
+                        break
+        for i, a in enumerate(present):
+            for b in present[i + 1:]:
+                pair[(a, b)] = pair.get((a, b), 0) + 1
+    links = [{"a": a, "b": b, "weight": n} for (a, b), n in pair.items() if n >= 2]
+    return {"videoCount": len(docs), "topics": sorted(nodes.values(), key=lambda n: -n["videos"]),
+            "links": sorted(links, key=lambda l: -l["weight"])[:80]}
 
 
 def normalize(text):

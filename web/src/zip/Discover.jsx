@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { Header, Loading, ErrorBox, Empty, ClipRow } from './ui.jsx';
 import { searchDiscover } from './discover-model.mjs';
+import { TopicGraph } from './TopicGraph.jsx';
 
-export function Discover({ accounts, entries, findStories, findMatches, onOpen, onResults }) {
+export function Discover({ accounts, entries, findStories, findMatches, loadTopics, onOpen, onResults }) {
   const [query, setQuery] = useState('');
   const [result, setResult] = useState(null);
   const [sort, setSort] = useState('date');
@@ -10,6 +11,25 @@ export function Discover({ accounts, entries, findStories, findMatches, onOpen, 
   const [showSources, setShowSources] = useState(true);
   const sequence = useRef(0);
   const scope = JSON.stringify(accounts.map(account => account.url));
+  const [niche, setNiche] = useState(null);
+  const [feed, setFeed] = useState([]);
+  const ready = accounts.map(account => entries?.[account.url]?.snapshot?.videos?.length ?? 0).join(',');
+  useEffect(() => {
+    let live = true;
+    setNiche(null); setFeed([]);
+    (async () => {
+      for (const account of accounts) {
+        const data = await loadTopics(account.url).catch(() => null);
+        if (!live || !data?.topics?.length) continue;
+        setNiche({ ...data, account });
+        const lead = data.topics.filter(topic => topic.videos / data.videoCount < 0.4).slice(0, 4);
+        const stories = await Promise.allSettled(lead.map(topic => findStories(topic.term)));
+        if (live) setFeed(lead.map((topic, i) => ({ topic, stories: stories[i].status === 'fulfilled' ? stories[i].value.stories.slice(0, 3) : [] })));
+        return;
+      }
+    })();
+    return () => { live = false; };
+  }, [scope, ready]);
   useEffect(() => {
     setResult(null);
     setSearching(false);
@@ -39,6 +59,23 @@ export function Discover({ accounts, entries, findStories, findMatches, onOpen, 
   return <>
     <Header kicker="01 / Discover" title="What's worth revisiting?"
       sub="Look up a topic in today’s news and find where it appears in your archive." />
+    {niche && <section className="mb-10" aria-label="Your niche">
+      <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+        <h2 className="text-2xl font-semibold tracking-tight">Your niche</h2>
+        <span className="label">From {niche.videoCount} transcripts · bigger = in more videos · click a topic</span></div>
+      <TopicGraph topics={niche.topics} links={niche.links} active={query} onPick={term => { setQuery(term); void search(term); }} />
+    </section>}
+    {feed.length > 0 && <section className="mb-10" aria-label="Latest news for your niche">
+      <h2 className="text-2xl font-semibold tracking-tight mb-3">Latest for your niche</h2>
+      <p className="text-mute text-xs mb-3">Last-week news from You.com on the topics you talk about most.</p>
+      <div className="border-t border-line">{feed.map(({ topic, stories }) => <div key={topic.term} className="py-4 border-b border-line">
+        <div className="flex items-baseline gap-3 flex-wrap"><span className="text-xl font-semibold text-emerald">{topic.term}</span>
+          <span className="label">{topic.videos} videos</span>
+          <button type="button" className="btn" onClick={() => { setQuery(topic.term); void search(topic.term); }}>Find my clips</button></div>
+        {stories.length ? <ul className="mt-2">{stories.map(story => <li key={story.url} className="py-1">
+          <a className="hover:text-emerald underline underline-offset-4" href={story.url} target="_blank" rel="noreferrer">{story.title}</a></li>)}</ul>
+          : <p className="text-mute text-sm mt-1">No recent stories.</p>}
+      </div>)}</div></section>}
     <form className="flex flex-wrap items-end gap-2 mb-8" onSubmit={event => { event.preventDefault(); void search(query); }}>
       <label className="flex-1 min-w-[200px]" htmlFor="discover-topic"><span className="label block mb-2">Topic</span>
         <input id="discover-topic" className="input" value={query} maxLength={120} required

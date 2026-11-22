@@ -100,7 +100,7 @@ def load_caption(profile, video_id, token):
 
 
 @app.get("/api/import_youtube")
-def read_archive(profile: str = "", video: str = "", q: str = ""):
+def read_archive(profile: str = "", video: str = "", q: str = "", topics: str = ""):
     if not protected():
         return error("Live archives are available in the protected preview.", 503)
     try:
@@ -113,6 +113,8 @@ def read_archive(profile: str = "", video: str = "", q: str = ""):
         store.setup()
         if video:
             result = store.transcript(account, video)
+        elif topics:
+            return reply(store.topics(account))
         elif q:
             return reply({"matches": store.find(account, q)})
         else:
