@@ -45,10 +45,26 @@ function Short({ story, index }) {
 
 // Pre-rendered demo: ten finished reels for Jahbari Taylor (22 Nov 2026), made offline from his archive and that week's news.
 export function DemoReels() {
+  const [mode, setMode] = useState('looks');
+  const frameRef = useRef(null);
+  // The looks page is same-origin: grow its frame to fit, so the page scrolls once.
+  useEffect(() => {
+    if (mode !== 'looks') return undefined;
+    const fit = () => { try { const frame = frameRef.current; frame.style.height = frame.contentDocument.documentElement.scrollHeight + 'px'; } catch { /* keep default */ } };
+    const timer = window.setInterval(fit, 1000);
+    return () => window.clearInterval(timer);
+  }, [mode]);
   return <>
     <Header kicker="03 / Demo" title="This week’s news, with your own clips"
       sub="Ten reels made for Jahbari Taylor from the week’s news and clips he already posted. Pre-rendered for the demo." />
-    {stories.map((story, i) => <Short key={story.file} story={story} index={i} />)}
+    <div className="flex gap-2 mb-8" role="group" aria-label="Demo view">
+      {[['looks', 'Three looks per story'], ['shorts', 'Finished shorts']].map(([key, label]) =>
+        <button key={key} type="button" className="btn" aria-pressed={mode === key}
+          style={mode === key ? { borderColor: '#7BDDB0', color: '#7BDDB0' } : undefined} onClick={() => setMode(key)}>{label}</button>)}
+    </div>
+    {mode === 'looks'
+      ? <iframe title="Three looks per story" src="/demo/jahbari/variations/index.html" className="w-full border border-line bg-cream" style={{ height: '1600px' }} ref={frameRef} />
+      : stories.map((story, i) => <Short key={story.file} story={story} index={i} />)}
   </>;
 }
 export default DemoReels;
