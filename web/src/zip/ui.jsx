@@ -23,13 +23,14 @@ export function Thumb({ title, className = '', thumbnail }) {
       : <svg width="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l13-8z" fill="#7BDDB0" /></svg>}
   </div>;
 }
-export function ClipRow({ clip, onOpen }) {
+export function ClipRow({ clip, onOpen, more = 0 }) {
   const { video, topic } = clip;
   return <div className="flex flex-wrap gap-4 sm:gap-5 py-5 border-b border-line items-start">
     <Thumb title={video?.title ?? ''} thumbnail={video?.thumbnail} className="w-40 aspect-video shrink-0 !hidden sm:!flex" />
     <div className="flex-1 min-w-[120px]">
       <div className="label">{fdate(video?.publishedAt)} · from {fmt(clip.start)} · {Math.round(clip.end - clip.start)}s{topic && ` · ${topic.name}`}</div>
-      <div className="text-lg font-semibold mt-1">{video?.title}</div><p className="text-mute mt-1">{clip.why}</p>
+      <p className="text-lg font-semibold mt-1 leading-snug">“{clip.excerpt}”</p>
+      <p className="text-mute mt-1 text-xs">{video?.title}{more > 0 && ` · ${more} more moment${more === 1 ? '' : 's'} in this video`}</p>
     </div>
     <button type="button" className="btn" onClick={() => onOpen(clip)}>Open in Archive</button>
   </div>;
