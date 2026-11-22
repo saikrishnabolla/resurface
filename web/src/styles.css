@@ -1,0 +1,30 @@
+@import '@fontsource-variable/inter';
+
+:root {
+  color-scheme: dark;
+  --paper: #080a09;
+  --surface: #141917;
+  --ink: #f7f8f5;
+  --accent: #7bddb0;
+  --muted: #9ca7a1;
+  --rule: #2a322e;
+  --selected: #14261f;
+  --danger: #ffb7a7;
+  background: var(--paper);
+  color: var(--ink);
+  font: 14px/1.5 Manrope, 'Inter Variable', system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; min-height: 100vh; }
+h1, h2, h3, p { margin: 0; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
+button, a, input { -webkit-tap-highlight-color: transparent; }
+input::placeholder { color: var(--muted); opacity: 1; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.spin { animation: spin .9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }

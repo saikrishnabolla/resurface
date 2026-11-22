@@ -1,0 +1,58 @@
+import os
+import tempfile
+import unittest
+from unittest.mock import patch
+
+from server.archive_store import ArchiveStore
+
+
+class ArchiveStoreTests(unittest.TestCase):
+    def setUp(self):
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        options = patch.dict(os.environ, {"RESURFACE_ARCHIVE_DB": directory.name + "/archive.db",
+                                         "DATABASE_URL": "", "VERCEL": ""})
+        options.start()
+        self.addCleanup(options.stop)
+        self.store = ArchiveStore()
+        self.store.setup()
+        self.account = {"platform": "YouTube", "url": "https://www.youtube.com/@example"}
+
+    def test_profile_is_saved_with_two_independent_caps(self):
+        lease = self.store.claim(self.account, False)
+        self.assertIsNotNone(lease)
+        self.assertIsNone(self.store.claim(self.account, True))
+        self.store.inventory(self.account, [
+            {"id": f"{kind}{i}", "title": str(i), "format": kind, "publishedAt": f"{i:03d}"}
+            for i in range(102) for kind in ("video", "short")])
+        saved = {**self.store.video(self.account, "video99"), "status": "ok"}
+        self.store.record(self.account, saved, [{"start": 18.08, "text": "an interesting match"}])
+        self.store.finish(self.account, lease, True, "")
+        reopened = ArchiveStore().snapshot(self.account)
+        self.assertEqual(sum(v["format"] == "short" for v in reopened["videos"]), 100)
+        self.assertEqual(sum(v["format"] == "video" for v in reopened["videos"]), 100)
+        self.assertIsNone(self.store.claim(self.account, False))
+        self.assertEqual(self.store.find(self.account, "interesting match")[0]["start"], 18.08)
+        self.store.inventory(self.account, [{"id": "new", "title": "New", "format": "video", "publishedAt": "103"}], partial=True)
+        self.assertEqual(self.store.transcript(self.account, "video99")["status"], "ok")
+        self.assertIsNotNone(self.store.video(self.account, "short99"))
+
+    def test_caption_lease_prevents_duplicate_provider_calls(self):
+        self.assertTrue(self.store.claim_caption(self.account, "video1"))
+        self.assertFalse(self.store.claim_caption(self.account, "video1"))
+        self.store.release_caption(self.account, "video1")
+        self.assertTrue(self.store.claim_caption(self.account, "video1"))
+
+    def test_archive_search_preserves_first_cue_across_multiple_cues(self):
+        self.store.inventory(self.account, [{"id": "video1", "title": "A video", "format": "video"}])
+        self.store.record(self.account, {"id": "video1", "status": "ok"}, [
+            {"start": 1, "text": "An intro."},
+            {"start": 3.5, "text": "Forward movement"},
+            {"start": 5, "text": "is still good"},
+            {"start": 7, "text": "movement."},
+            {"start": 28, "text": "A new subject"},
+        ])
+        result = self.store.find(self.account, "forward movement is still good movement")
+        self.assertEqual([(row["start"], row["text"]) for row in result],
+                         [(3.5, "Forward movement is still good movement.")])
+        self.assertEqual(self.store.find(self.account, "movement a new subject"), [])

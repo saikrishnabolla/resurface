@@ -1,0 +1,6 @@
+.env*
+.cache/
+.vercel/
+node_modules/
+dist/
+design-qa.md

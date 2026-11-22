@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/client",
+  "functions": {
+    "api/import_youtube.py": { "maxDuration": 300, "includeFiles": "server/*.py" }
+  },
+  "rewrites": [
+    { "source": "/api/accounts", "destination": "/api/resurface?action=accounts" },
+    { "source": "/api/discover", "destination": "/api/resurface?action=discover" }
+  ]
+}
