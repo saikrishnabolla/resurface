@@ -2,6 +2,8 @@ import json
 import logging
 import os
 import re
+from hashlib import sha256
+from ipaddress import ip_address
 from threading import Thread
 from urllib.parse import urlsplit
 
@@ -26,8 +28,19 @@ def error(message, status):
     return reply({"error": message}, status)
 
 
-def protected():
-    return not os.environ.get("VERCEL") or os.environ.get("VERCEL_ENV") == "preview"
+def public_quota(headers, kind):
+    if os.environ.get("VERCEL_ENV") != "production":
+        return None
+    forwarded = headers.get("x-vercel-forwarded-for") or headers.get("x-forwarded-for", "")
+    try:
+        ip = str(ip_address(forwarded))
+    except ValueError:
+        ip = "unknown"
+    retry = store.consume_public_quota(kind, sha256(ip.encode()).hexdigest())
+    if retry:
+        return JSONResponse({"error": "Daily archive limit reached. Try again tomorrow (UTC)."},
+                            status_code=429, headers={"Cache-Control": "no-store", "Retry-After": str(retry)})
+    return None
 
 
 def payload(event):
@@ -69,7 +82,7 @@ def run_local_import(token, profile, lease, existing):
         logger.error("Background archive import failed: %s", type(exc).__name__)
 
 
-def load_caption(profile, video_id, token):
+def load_caption(profile, video_id, token, headers):
     if not VIDEO_ID.fullmatch(video_id):
         return error("Invalid video.", 400)
     store.setup()
@@ -81,13 +94,16 @@ def load_caption(profile, video_id, token):
     if profile["platform"] != "Instagram" and (store.snapshot(profile) or {}).get("importing"):
         return reply({"status": "pending", "segments": []}, 202)
     if not token:
-        return error("Treg is not configured for this preview.", 503)
+        return error("Treg is not configured.", 503)
     if not store.claim_caption(profile, video_id):
         return reply({"status": "pending", "segments": []}, 202)
     try:
         result = store.transcript(profile, video_id)
         if result and result["status"] in ("ok", "no_captions"):
             return reply(result)
+        limited = public_quota(headers, "caption")
+        if limited is not None:
+            return limited
         segments = fetch_transcript(token, profile, video)
         status = "ok" if segments else "no_captions"
         store.record(profile, {**video, "status": status}, segments)
@@ -101,8 +117,6 @@ def load_caption(profile, video_id, token):
 
 @app.get("/api/import_youtube")
 def read_archive(profile: str = "", video: str = "", q: str = ""):
-    if not protected():
-        return error("Live archives are available in the protected preview.", 503)
     try:
         account = normalize_profile(profile)
     except (ValueError, TypeError):
@@ -125,8 +139,6 @@ def read_archive(profile: str = "", video: str = "", q: str = ""):
 
 @app.post("/api/import_youtube")
 async def update_archive(request: Request):
-    if not protected():
-        return error("Live archives are available in the protected preview.", 503)
     origin = request.headers.get("origin")
     try:
         other_origin = origin and urlsplit(origin).netloc != request.headers.get("host")
@@ -150,14 +162,17 @@ async def update_archive(request: Request):
         if video is not None:
             if not isinstance(video, str):
                 return error("Invalid video.", 400)
-            return await run_in_threadpool(load_caption, profile, video, os.environ.get("TREG_API_KEY"))
+            return await run_in_threadpool(load_caption, profile, video, os.environ.get("TREG_API_KEY"), request.headers)
         await run_in_threadpool(store.setup)
         snapshot = await run_in_threadpool(store.snapshot, profile)
         if snapshot and (snapshot["importing"] or (snapshot["savedAt"] and not refresh)):
             return reply(snapshot)
         token = os.environ.get("TREG_API_KEY")
         if not token:
-            return error("Treg is not configured for this preview.", 503)
+            return error("Treg is not configured.", 503)
+        limited = await run_in_threadpool(public_quota, request.headers, "import")
+        if limited is not None:
+            return limited
         lease = await run_in_threadpool(store.claim, profile, refresh)
         if not lease:
             return reply(await run_in_threadpool(store.snapshot, profile))
