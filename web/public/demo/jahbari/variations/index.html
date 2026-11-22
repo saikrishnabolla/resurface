@@ -147,9 +147,9 @@ footer{margin-top:24px;color:var(--ink-3);font-size:12.5px;max-width:78ch}
 .reels header,.reels footer,.reels .lab span{display:none}
 .reels .wrap{padding:0 0 24px;display:flow-root}
 .reels .story:first-child{margin-top:0}
-.reels .frames{display:block;margin:0;padding:0;overflow:visible}
-.reels figure{max-width:300px;margin:0 auto}
-.reels .lab{font-size:0}
+.reels .frames{display:grid;margin:0;padding:0;overflow:visible}
+.reels figure{width:100%;max-width:300px;margin:0 auto}
+@media (max-width:720px){.reels .frames{grid-template-columns:minmax(0,1fr)}}
 </style></head><body><div class="wrap">
 <header><h1>Motion options for the news panel</h1>
 <p class="lede">Three takes on the top half of the split screen for each story. Every one moves once, freezes, then keeps a small idle loop so the eye stays on it while the clip plays underneath. Each take also tries a different colour world, one dark, one light and one saturated, so colour can be judged alongside the idea.</p>
@@ -262,8 +262,7 @@ function wire(art){const vs=[...art.querySelectorAll("video")];if(!vs.length)ret
  vs.forEach(v=>{const f=v.closest("figure");f.querySelector(".phone").addEventListener("click",()=>sound(v));f.querySelector(".sb").addEventListener("click",()=>sound(v));f.querySelector(".cta").addEventListener("click",ev=>ev.stopPropagation())});
  vs[0].addEventListener("ended",()=>{if(art.dataset.vis==="1"&&!EXP)build(art)})}
 const pick=s=>Object.values(V).find(v=>v.match.test(s.t));
-function build(art){const i=+art.dataset.i,s=S[i],original=pick(s),fr=art.querySelector(".frames");
- const v=REELS?{...original,v:original.v.slice(0,1)}:original;
+function build(art){const i=+art.dataset.i,s=S[i],v=pick(s),fr=art.querySelector(".frames");
  if(!fr.children.length){fr.innerHTML=v.v.map((x,j)=>{const p=palFor(i,j);setPal(p);return'<figure><div class="lab">'+NAMES[j]+" <span>"+e(p.n)+"</span>"+(s.clip?'<button type="button" class="sb">Sound off</button>':"")+'</div><div class="phone" style="--p:'+BG+";--hl:"+W+";--mut:"+G+";--acc:"+A+'"><div class="top"></div>'+clipHtml(s,ctaFor(i,j))+'</div><form class="fb" data-r="'+s.r+'" data-j="'+j+'" data-pal="'+e(p.n)+'"><input type="text" placeholder="Feedback on this one" aria-label="Feedback"><button type="submit">Send</button></form><div class="fbs" data-k="'+s.r+'-'+j+'"></div></figure>'}).join("");wire(art)}
  // replay: redraw only the news panels, then restart the clips from the top
  v.v.forEach((x,j)=>{setPal(palFor(i,j));fr.children[j].querySelector(".top").innerHTML='<div class="dl"><span class="date">'+e(s.d)+'</span><span class="srcl">'+e(s.src)+'</span></div><div class="hl">'+e(v.hl)+'</div><svg viewBox="0 0 360 190" role="img" aria-label="'+e(x[0])+'">'+x[1]()+"</svg>"});
@@ -275,7 +274,7 @@ arts.forEach(a=>{if(!pick(S[+a.dataset.i])){a.remove();return}build(a);a.querySe
 if(EXP){const [r,j]=EXP.split("-").map(Number);document.documentElement.classList.add("exp");arts.forEach(a=>{if(S[+a.dataset.i].r===r){a.classList.add("x");a.querySelectorAll("figure")[j].classList.add("x")}})}
 document.getElementById("all").addEventListener("click",()=>arts.forEach(build));
 // replay a story the first time it scrolls into view, so the one-off move is seen
-if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(x=>{const a=x.target;if(x.isIntersecting){if(a.dataset.vis!=="1"){a.dataset.vis="1";build(a)}}else if(a.dataset.vis==="1"){a.dataset.vis="0";a.querySelectorAll("video").forEach(v=>{if(!v.muted)sound(null);v.pause()})}}),{threshold:.3});arts.forEach(a=>io.observe(a))}
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(x=>{const a=x.target;if(x.isIntersecting){if(a.dataset.vis!=="1"){a.dataset.vis="1";build(a)}}else if(a.dataset.vis==="1"){a.dataset.vis="0";a.querySelectorAll("video").forEach(v=>{if(!v.muted)sound(null);v.pause()})}}),{threshold:REELS?.1:.3});arts.forEach(a=>io.observe(a))}
 if(HASCLIPS)document.getElementById("sndnote").hidden=false;
 // while a clip plays: show the caption for the current moment, and the call to action in its last two seconds
 function tick(){arts.forEach(art=>{if(art.dataset.vis!=="1")return;const cues=S[+art.dataset.i].cues||[];art.querySelectorAll("video").forEach(v=>{const ph=v.closest(".phone"),t=window.__clipT!=null?window.__clipT:v.currentTime;ph.classList.toggle("end",!!v.duration&&v.duration-t<=2);const c=cues.find(c=>t>=c[0]&&t<c[1]),tx=c?c[2]:"",cc=ph.querySelector(".cc");if(cc.dataset.t!==tx){cc.dataset.t=tx;cc.innerHTML=tx?"<span>"+e(tx)+"</span>":""}})});requestAnimationFrame(tick)}
