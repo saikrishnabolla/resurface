@@ -8,6 +8,7 @@ import { prepareTranscript, transcriptRows } from './transcript.mjs';
 import { CreatorOnboarding } from './Onboarding.jsx';
 import { normalizeAccount, normalizeWorkspace, readWorkspace, workspaceKey } from './creator-workspace.mjs';
 import { Discover } from './zip/Discover.jsx';
+import { DemoReels } from './zip/DemoReels.jsx';
 import { Header, Thumb, Empty, fdate, fmt } from './zip/ui.jsx';
 import './zip/zip.css';
 
@@ -475,7 +476,7 @@ function CreatorArchive({ workspace, onEdit, entries, start, sourceJump, clips }
   </>;
 }
 
-const sections = [['discover', 'Discover'], ['archive', 'Archive']];
+const sections = [['discover', 'Discover'], ['archive', 'Archive'], ['demo', 'Demo reels']];
 
 function Dashboard({ workspace, onEdit, view, setView }) {
   const { entries, start } = useCreatorArchives(workspace.accounts);
@@ -492,6 +493,7 @@ function Dashboard({ workspace, onEdit, view, setView }) {
   return <>
     <div hidden={view !== 'discover'}><Discover accounts={workspace.accounts} entries={entries}
       findStories={findStories} findMatches={findMatches} loadTopics={loadTopics} onOpen={openInArchive} onResults={setResults} /></div>
+    {view === 'demo' && <DemoReels />}
     <div hidden={view !== 'archive'}><CreatorArchive {...{workspace, onEdit, entries, start, sourceJump, clips}} /></div>
   </>;
 }
