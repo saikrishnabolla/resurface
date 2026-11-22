@@ -1,0 +1,10 @@
+[
+  {
+    "id": "app-icon",
+    "description": "macOS app icon for Resurface Transcriptions: a transcript/text page with a magnifying glass, dark background, subtle accent blue (#5b9cff). Used as the Dock/Finder icon (electron-builder picks up build/icon.png automatically). Currently the default Electron icon is the placeholder.",
+    "width": 1024,
+    "height": 1024,
+    "color": "full",
+    "currentFile": "build/icon.png"
+  }
+]

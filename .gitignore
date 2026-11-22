@@ -46,3 +46,11 @@ next-env.d.ts
 .eslintcache
 .turbo
 .swc
+
+# Resurface Transcriptions (Electron app)
+/dist
+python/.venv
+__pycache__
+build/python
+build/pyinstaller-work
+build/*.spec
