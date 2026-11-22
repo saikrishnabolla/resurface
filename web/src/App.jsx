@@ -502,9 +502,14 @@ export function App() {
   const [workspace, setWorkspace] = useState(() => {
     try { return readWorkspace(window.localStorage); } catch { return null; }
   });
+  const demoLink = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo');
+  useEffect(() => {
+    // A shared ?demo link opens straight into the demo reels, with no setup.
+    if (demoLink && !workspace) setWorkspace(normalizeWorkspace({ name: 'Jahbari Taylor', anchor: 'https://www.youtube.com/@jahbaritaylor', accounts: [{ url: 'https://www.youtube.com/@jahbaritaylor' }] }));
+  }, []);
   const [editing, setEditing] = useState(false);
   const [storageFailed, setStorageFailed] = useState(false);
-  const [view, setView] = useState('archive');
+  const [view, setView] = useState(() => typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo') ? 'demo' : 'archive');
   const dashboard = useRef(null);
   function show(page) {
     setView(page);
