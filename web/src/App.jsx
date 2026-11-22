@@ -8,6 +8,7 @@ import { prepareTranscript, transcriptRows } from './transcript.mjs';
 import { CreatorOnboarding } from './Onboarding.jsx';
 import { normalizeAccount, normalizeWorkspace, readWorkspace, workspaceKey } from './creator-workspace.mjs';
 import { Discover } from './zip/Discover.jsx';
+import { DemoReels } from './zip/DemoReels.jsx';
 import { TopicGraph } from './zip/TopicGraph.jsx';
 import { Header, Thumb, Empty, Loading, fdate, fmt } from './zip/ui.jsx';
 import './zip/zip.css';
@@ -476,7 +477,7 @@ function CreatorArchive({ workspace, onEdit, entries, start, sourceJump, clips }
   </>;
 }
 
-const sections = [['discover', 'Discover'], ['archive', 'Archive'], ['niche', 'Niche Map']];
+const sections = [['discover', 'Discover'], ['archive', 'Archive'], ['niche', 'Niche Map'], ['demo', 'Demo reels']];
 
 function Dashboard({ workspace, onEdit, view, setView }) {
   const { entries, start } = useCreatorArchives(workspace.accounts);
@@ -498,6 +499,7 @@ function Dashboard({ workspace, onEdit, view, setView }) {
     <div hidden={view !== 'discover'}><Discover accounts={workspace.accounts} entries={entries}
       findStories={findStories} findMatches={findMatches} loadTopics={loadTopics} onOpen={openInArchive}
       onResults={setResults} niche={niche} onNiche={setNiche} topicRequest={topicRequest} /></div>
+    {view === 'demo' && <DemoReels />}
     <div hidden={view !== 'archive'}><CreatorArchive {...{workspace, onEdit, entries, start, sourceJump, clips}} /></div>
     <div hidden={view !== 'niche'}>
       <Header kicker="03 / Niche Map" title="Your niche map"
@@ -516,9 +518,14 @@ export function App() {
   const [workspace, setWorkspace] = useState(() => {
     try { return readWorkspace(window.localStorage); } catch { return null; }
   });
+  const demoLink = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('demo');
+  useEffect(() => {
+    // A shared ?demo link opens straight into the demo reels, with no setup.
+    if (demoLink && !workspace) setWorkspace(normalizeWorkspace({ name: 'Jahbari Taylor', anchor: 'https://www.youtube.com/@jahbaritaylor', accounts: [{ url: 'https://www.youtube.com/@jahbaritaylor' }] }));
+  }, []);
   const [editing, setEditing] = useState(false);
   const [storageFailed, setStorageFailed] = useState(false);
-  const [view, setView] = useState('archive');
+  const [view, setView] = useState(() => demoLink ? 'demo' : 'archive');
   const dashboard = useRef(null);
   function show(page) {
     setView(page);

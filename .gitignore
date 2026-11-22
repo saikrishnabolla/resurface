@@ -49,3 +49,6 @@ next-env.d.ts
 .eslintcache
 .turbo
 .swc
+
+# demo reels are served as static assets
+!web/public/demo/**/*.mp4
