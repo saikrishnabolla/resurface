@@ -64,3 +64,18 @@ test('Discover uses dated web stories when You.com omits its news bucket', async
   }) });
   assert.deepEqual(result.stories.map(story => story.title), ['Recent']);
 });
+
+test('Discover keeps only stories that name the topic and drops reference pages and homepages', async () => {
+  const result = await findStories({ query: 'social docket', terms: ['social docket'] }, {
+    apiKey: 'test',
+    fetchImpl: async () => ok({
+      news: [
+        { url: 'https://valdez.example/p/story', title: 'How a lawyer built Social Docket', description: 'A founder story' },
+        { url: 'https://en.wikipedia.org/wiki/Docket', title: 'Social docket - Wikipedia', description: 'social docket' },
+        { url: 'https://school.example/', title: 'Social Docket home', description: 'social docket' },
+        { url: 'https://movies.example/review', title: 'The Social Reckoning', description: 'A film about a docket' },
+      ],
+    }),
+  });
+  assert.deepEqual(result.stories.map(story => story.url), ['https://valdez.example/p/story']);
+});

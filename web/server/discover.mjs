@@ -1,5 +1,8 @@
 const SEARCH_URL = 'https://ydc-index.io/v1/search';
 const MAX_STORIES = 8;
+// Reference, dictionary and homepage results are not events. Drop them.
+const REFERENCE_HOSTS = /(^|\.)(wikipedia\.org|wikimedia\.org|grokipedia\.com|britannica\.com|dictionary\.com|cambridge\.org|merriam-webster\.com|wiktionary\.org|fandom\.com)$/;
+const squash = value => (typeof value === 'string' ? value : '').normalize('NFKC').toLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 
 function problem(status, message) {
   return Object.assign(new Error(message), { status });
@@ -31,7 +34,7 @@ function articleDate(value) {
   return Number.isFinite(timestamp) ? new Date(timestamp).toISOString() : null;
 }
 
-export async function findStories({ query } = {}, { apiKey, fetchImpl = fetch } = {}) {
+export async function findStories({ query, terms } = {}, { apiKey, fetchImpl = fetch } = {}) {
   if (typeof query !== 'string' || !query.trim() || query.trim().length > 160) {
     throw problem(400, 'Enter a topic between 1 and 160 characters.');
   }
@@ -72,6 +75,12 @@ export async function findStories({ query } = {}, { apiKey, fetchImpl = fetch } 
     const url = sourceUrl(item?.url);
     const title = text(item?.title, 200);
     if (!url || !title) continue;
+    if (REFERENCE_HOSTS.test(url.hostname) || url.pathname.replace(/\//g, '') === '') continue;
+    if (Array.isArray(terms) && terms.length) {
+      // Keep only stories that actually say the topic, as a phrase, in the headline or summary.
+      const haystack = ` ${squash(`${item?.title} ${item?.description}`)} `;
+      if (!terms.slice(0, 3).some(term => squash(term) && haystack.includes(` ${squash(term)} `))) continue;
+    }
     const key = `${url.hostname.replace(/^www\./, '')}${url.pathname.replace(/\/$/, '')}${url.search}`;
     if (seen.has(key)) continue;
     seen.add(key);

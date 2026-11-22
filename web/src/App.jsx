@@ -185,7 +185,7 @@ function VideoDetail({ profile, video, jump, importing }) {
 }
 
 const lookupAccounts = body => request('/api/accounts', { body }).then(response => response.json());
-const findStories = query => request('/api/discover', { body: { query } }).then(response => response.json());
+const findStories = (query, extra = {}) => request('/api/discover', { body: { query, ...extra } }).then(response => response.json());
 const loadTopics = url => request(archivePath(url, { topics: '1' })).then(response => response.json());
 const findMatches = (url, q) => request(archivePath(url, { q })).then(response => response.json());
 
