@@ -1,0 +1,18 @@
+appId: com.resurface.transcriptions
+productName: Resurface Transcriptions
+directories:
+  output: dist
+  buildResources: build
+files:
+  - out/**
+  - package.json
+  - "!**/*.map"
+extraResources:
+  - from: build/python/extractor
+    to: extractor
+asarUnpack:
+  - "**/*.node"
+mac:
+  target: dir
+  category: public.app-category.productivity
+  identity: null
