@@ -1,0 +1,166 @@
+@brand | Card issuers and networks
+Chase
+American Express = american express|\bamex\b
+Capital One = capital one|cap one
+Citi = \bciti\b|citibank|citigroup
+Wells Fargo
+Bank of America = bank of america|\bbofa\b
+Discover = \bdiscover (card|it)\b
+Bilt
+Visa = \bvisa\b
+Mastercard = master ?card
+Robinhood
+SoFi = so ?fi\b
+Apple Card
+Synchrony
+@brand | Cards
+Sapphire Reserve = sapphire reserve
+Sapphire Preferred = sapphire preferred
+Freedom Unlimited
+Freedom Flex
+Freedom Rise
+Amex Platinum = platinum
+Amex Gold = (amex|american express) gold|\bgold card
+Venture X = venture ?x\b
+Savor = \bsavor\b
+Citi Strata = strata
+Double Cash
+Ink Business = \bink\b
+Delta card = delta
+Secured card = secured (credit )?card
+@topic | Card mechanics
+Annual fee = annual fee
+Sign-up bonus = (welcome|sign[- ]?up|opening) bonus
+Points = \bpoints\b
+Miles = \bmiles\b
+Cash back = cash ?back
+Transfer partners = transfer partner|transfer (your|my|the)? ?points
+Travel portal = portal
+Statement credit = statement credit|\bcredits?\b
+Lounge access = lounges?\b
+Priority Pass
+Centurion = centurion
+Global Entry / TSA = global entry|tsa pre|precheck
+Uber credit = uber
+Credit score = credit score|fico|\b[678]\d0 credit
+Credit limit = credit limit|utilization
+Interest / APR = \bapr\b|interest rate|0% intro|intro(ductory)? apr
+Balance transfer
+Credit card debt = credit card debt|carry(ing)? a balance|pay (it )?off in full|minimum payment
+Late payment = late (payment|fee)
+Swipe fees = swipe fee|interchange|processing fee
+Chase 5/24 = 5 ?/ ?24|five twenty four
+Trifecta = trifecta
+Tier list = \btier\b
+Retention offer = retention
+Product change = downgrade|product change
+@topic | Banking and saving
+High-yield savings = high[- ]yield|\bhysa\b|\bapy\b
+Checking account = checking account
+Emergency fund = emergency fund
+Budget = budget\w*
+Paycheck = paycheck|salary|per hour|/hour|an hour
+Debit card = debit card
+Bank fees = overdraft|monthly fee|maintenance fee
+FDIC = fdic
+Savings goal = save \$?\d|savings
+@topic | Investing
+Roth IRA = roth
+Traditional IRA = traditional
+401k = 401 ?\(?k\)?|four oh one
+Index funds = index fund|\betfs?\b|s&p ?500|s and p
+Stocks = \bstocks?\b
+Stock market = stock market|the market\b|wall street|dow jones|nasdaq
+Crypto = crypto|bitcoin
+Compound interest = compound
+Dividends = dividend
+Brokerage = brokerage
+Portfolio = portfolio
+Bonds / Treasuries = \bbonds?\b|treasur(y|ies)|t-bills?
+Gold (metal) = gold (price|bar|coin)|price of gold
+Real estate = real estate|landlord|rental property
+Retire = retire\w*
+Net worth = net worth
+Millionaire = millionaire
+@topic | Economy and news
+Tariffs = tariff
+Inflation = inflation
+Recession = recession
+Interest rates (Fed) = federal reserve|the fed\b|rate (cut|hike)
+Layoffs = laid off|layoff|lay off|job cuts?
+Severance = severance
+Unemployment = unemploy
+Gas prices = gas price|price of gas|gas station
+Grocery prices = grocer\w*|supermarket
+Housing / rent = \brent\b|mortgage|home ?buy|down payment
+Taxes = \btax(es)?\b|\birs\b|refund
+Student loans = student loan
+Minimum wage = minimum wage
+Prediction markets = polymarket|kalshi|prediction market
+AI bubble = \bai\b|artificial intelligence|bubble
+Billionaires = billionaire
+Lawsuit = lawsuit|\bsued?\b|settlement
+Shutdown = shut(ting)? down|shutdown
+Price increase = price (hike|increase)|raising (the )?price|more expensive
+IPO = \bipo\b|go(ing)? public
+Bankruptcy = bankrupt
+CEO = \bceo\b
+Earnings = earnings|revenue|profit
+Millennials / Gen Z = millennial|gen ?z\b
+@brand | Companies
+Amazon
+Walmart
+Costco
+Target = \btarget\b(?! (date|audience|market))
+Apple = \bapple\b(?! card)
+Netflix
+Disney
+Tesla
+Nvidia
+OpenAI / ChatGPT = open ?ai|chat ?gpt
+Sora
+Google
+Meta = \bmeta\b|facebook
+Instagram
+TikTok = tik ?tok
+YouTube
+Starbucks
+McDonald's = mcdonald
+Arby's = arby
+Chipotle
+DoorDash = door ?dash
+Uber Eats = uber eats
+Airbnb = air ?bnb
+Delta Air Lines = delta (air|airlines)
+United = \bunited (airlines)?\b(?! states)
+Southwest
+Marriott
+Hilton
+Hyatt
+IHG = \bihg\b
+Spotify
+Peloton
+@culture | Culture and events
+Super Bowl
+Olympics = olympi
+Oscars = oscar
+Spider-Man = spider ?man
+Black Friday
+Holidays = christmas|holiday|thanksgiving
+Taylor Swift
+Michael Jackson
+@life | Life moments and work
+LLC / business = \bllc\b|small business|start(ing)? a business|business owner
+Side hustle = side hustle
+Creator economy = creator|influencer|brand deal
+Turning 30 = (turn|before) 30|your 20s|in your twenties
+College = college|university
+Wedding = wedding
+Kids = \bkids?\b|children
+Moving / NYC = new york|nyc|brooklyn
+Travel = \btravel\w*|vacation|trip\b
+Flights = flights?\b
+Hotels = hotels?\b
+Dining out = dining|restaurants?
+Rental car = rental car|car rental
+Insurance = insurance

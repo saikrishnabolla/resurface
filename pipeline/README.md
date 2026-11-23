@@ -38,4 +38,6 @@ No script. The agent searches (You.com or web search) following the rules in the
 - `palettes.json`: nine palettes in three families (dark, light, saturated). Each story's three versions get one from each family.
 - `build_motion.py <shortlist.json> <variants.js> <out.html> --handle <creator>`: assembles the page. Add `--clips clips.json` (story rank to clip file, paths relative to the page) to play the real clips under each graphic. Add `--cues cues.json` (story rank to `[[start_s, end_s, text], ...]`, timed from the start of the clip) for captions along the bottom of each clip. With clips, a small "Watch the full video" pop-up appears in the top right of the clip for its last two seconds, in four looks rotated across the frames. Clip files stay out of the repo.
 
+- `export_video.py <page-folder> <out-folder> <rank>-<version> ...`: renders finished shorts as 1080 x 1920 MP4 files, for example `2-funny 5-simple`. It drives the page frame by frame, lays the frames over the original clip and keeps the clip's sound. Needs Playwright with Chrome and ffmpeg. Pass `--fonts <folder>` with the font files when the machine cannot reach Google Fonts.
+
 The story-specific graphics live in the run's `variants.js`, three per story (simple, exaggerated, funny). See the example run for thirty of them and the notes at the top of that file.

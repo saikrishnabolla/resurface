@@ -1,0 +1,24 @@
+{"t":"Tariff refunds: $128bn cleared; FedEx, Walmart, Apple lead","d":"2026-11-19","src":["ProPublica","Forbes","Daily Caller"],"kept":true}
+{"t":"Trump backs 10% credit card interest cap","d":"2026-11-21","src":["AP","The Hill","Common Dreams","Epoch Times"],"kept":true}
+{"t":"Bitcoin below $60k, worst month since 2022","d":"2026-11-20","src":["Yahoo Finance","Crypto Briefing"],"kept":true}
+{"t":"Visa/Mastercard $38bn settlement would end Honor All Cards","d":"2026-11-16","src":["Reuters","PYMNTS","Spokesman-Review"],"kept":true}
+{"t":"S&P 500 and Dow in correction; Nasdaq erases 2026 gain","d":"2026-11-20","src":["CNBC","NBC News","CBC","Yahoo Finance"],"kept":true}
+{"t":"Thanksgiving dinner $58.63, up 6%; turkey up 10%","d":"2026-11-18","src":["AFBF","IBTimes"],"kept":true}
+{"t":"Reported SEC probe of Nvidia accounting; shares -14% Friday","d":"2026-11-20","src":["CNBC","CBC"],"kept":true}
+{"t":"Mortgage rates 7.28%; Dec 9 Fed hike priced","d":"2026-11-19","src":["AP","LA Times","Mortgage Daily"],"kept":true}
+{"t":"Amex Platinum $600 hotel credit needs 2-night FHR stays from 1 Jan","d":"2026-11-20","src":["Yahoo Finance","Travel Update"],"kept":true}
+{"t":"AAA: Thanksgiving travel streak ends; airfare +31%","d":"2026-11-16","src":["Skift","The Hill","NewsNation"],"kept":true}
+{"t":"Uber Eats raises restaurant commissions, first change in ~10 years","d":"2026-11-19","src":["Restaurant Business"],"kept":false,"why":"single source; scored below top 10"}
+{"t":"Anthropic IPO, biggest on record","d":"2026-11-19","src":["CNBC","CBC"],"kept":false,"why":"thin clip match (one Claude short)"}
+{"t":"Jensen Huang resigns as Nvidia CEO","d":"2026-11-12","src":["Nvidia","BBC","Guardian"],"kept":false,"why":"outside 5-day window; folded into Nvidia story"}
+{"t":"Chase IHG cards: higher fees in 2027","d":"2026-11-20","src":["Upgraded Points"],"kept":false,"why":"announced in October; single source"}
+{"t":"Atmos Rewards business card fee rises to $195","d":"2026-11-19","src":["One Mile at a Time"],"kept":false,"why":"niche; no clip"}
+{"t":"High-yield savings rates edging up after Sept hike","d":"2026-11-20","src":["NerdWallet","Experian"],"kept":false,"why":"folded into mortgage story"}
+{"t":"Black Friday: Adobe forecasts $12.9bn online, $807m BNPL","d":"2026-11-27","src":["Adobe via aggregators"],"kept":false,"why":"forecast only; no BNPL clips; recheck after Black Friday"}
+{"t":"P&G to cut 20-30% of supply jobs by 2030","d":"2026-11-20","src":["JobAdvisor"],"kept":false,"why":"needs primary source"}
+{"t":"Intel cuts more jobs","d":"2026-11-18","src":["Business Insider"],"kept":false,"why":"thin clip match"}
+{"t":"Microsoft offers buyouts to 60,000","d":"2026-11-17","src":["Yahoo Tech"],"kept":false,"why":"reported, unconfirmed"}
+{"t":"Priority Pass price rise Jan 2027","d":"2026-11-19","src":["Traveler Tribes"],"kept":false,"why":"single low-quality source"}
+{"t":"Donald Trump Jr. explains Kalshi split, Polymarket deal","d":"2026-11-17","src":["Axios"],"kept":false,"why":"weak fit"}
+{"t":"Chase adds Cathay Pacific and Qantas transfer partners","d":"2026-11-22","src":["Lazy Points"],"kept":false,"why":"blog only; verify with Chase, could be a strong Direct hook"}
+{"t":"Berkshire trims Capital One stake","d":"2026-11-17","src":["Fiscal.ai"],"kept":false,"why":"needs primary source"}

@@ -1,0 +1,42 @@
+{
+ "1": {
+  "file": "01-Tariff-refunds.mp4",
+  "pos": "50% 35%"
+ },
+ "2": {
+  "file": "02-Interest-cap.mp4",
+  "pos": "50% 35%"
+ },
+ "3": {
+  "file": "03-Bitcoin-below-60k.mp4",
+  "pos": "50% 35%"
+ },
+ "4": {
+  "file": "04-Rewards-cards.mp4",
+  "pos": "50% 35%"
+ },
+ "5": {
+  "file": "05-Market-correction.mp4",
+  "pos": "50% 35%"
+ },
+ "6": {
+  "file": "06-Thanksgiving-dinner.mp4",
+  "pos": "50% 35%"
+ },
+ "7": {
+  "file": "07-Nvidia-probe.mp4",
+  "pos": "50% 35%"
+ },
+ "8": {
+  "file": "08-Mortgage-rates.mp4",
+  "pos": "50% 35%"
+ },
+ "10": {
+  "file": "10-Thanksgiving-travel.mp4",
+  "pos": "50% 35%"
+ },
+ "9": {
+  "file": "09-Amex-hotel.mp4",
+  "pos": "50% 45%"
+ }
+}

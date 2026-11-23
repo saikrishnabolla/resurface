@@ -233,7 +233,26 @@ python3 pipeline/motion/build_motion.py runs/<date>/shortlist.json runs/<date>/v
 
 Render the page and look at it before sharing: check every end state, and check that the headline is still readable where an exaggerated graphic crosses it. Publish it as a page with a replay control per story.
 
-When the user supplies the cut clips, rebuild with `--clips clips.json` (story rank to clip file) and `--cues cues.json` (story rank to caption cues, timed from the start of the clip). The page then plays each real clip under its three graphics, muted until a frame is clicked, with captions and the end call to action. This page reads local video files, so save it beside the clips instead of publishing it.
+When the user supplies the cut clips, rebuild with `--clips clips.json` (story rank to `{"file", "pos", "zoom"}`: `pos` is the object-position of the crop, `zoom` an optional scale such as 1.2) and `--cues cues.json` (story rank to caption cues, timed from the start of the clip). The page then plays each real clip under its three graphics, muted until a frame is clicked, with captions and the end call to action. This page reads local video files, so save it beside the clips instead of publishing it.
+
+Before building, check the supplied clips: convert anything that is not H.264 .mp4 (a .mov, say) to .mp4 beside the original, note any clip that is not 9:16 or runs past the agreed out point, look at a frame from each, skip added captions when captions are already burned in, and flag any on-screen recorded date or month title.
+
+### The review pages and their feedback loop
+
+Under each frame of the motion options page there is no description text, only a single-line feedback box with a small Send button. The shortlist page has one feedback box per story. Each note is a record: `id`, `page`, `story`, `version` (simple, exaggerated, funny or story), `palette`, `text`, `at`.
+
+- **Published page:** declare `db` on the artifact; Send writes the note to the `feedback` collection, and replies are read live from the `replies` collection.
+- **Page opened from disk beside the clips:** Send appends the note to `feedback.jsonl` in the clips folder (Chrome asks for the folder once and remembers it); where the browser cannot write to a folder it downloads `feedback-<id>.json` instead. Replies come from `replies.js` beside the page, and the page checks `build.js` every 3 seconds and reloads itself when the stamp changes.
+
+When the user says feedback is in:
+
+1. Read the new notes (the `feedback` collection, `feedback.jsonl`, or downloaded `feedback-*.json`). Act only on notes that have no reply yet.
+2. Apply each one. A crop note changes that story's `pos` or `zoom` in `clips.json`. A trim note re-cuts the clip with ffmpeg beside the original, never over it. A graphic, headline or colour note edits that story's entry in `variants.js`.
+3. Rebuild with `build_motion.py`. Write a one-line reply per note (`{k: "<story>-<version index or s>", id, reply}`) to the `replies` collection or `replies.js`, republish the page or write a new stamp to `build.js`, and record lasting preferences in `taste.md`.
+
+### Rendering the finished shorts
+
+To save one option per story as a vertical video, render the chosen frame's news panel deterministically (a virtual clock drives the page's timers and every CSS animation is paused and seeked frame by frame), screenshot the panel at 1080x960 for each frame at 30 fps, then stack it over the clip cropped to 1080x960 with the clip's `pos` and `zoom`, overlay the small "Watch the full video" pill in the clip's top-right corner for its last two seconds, and keep the clip's audio. Output 1080x1920 H.264 .mp4.
 
 ### After the user picks
 

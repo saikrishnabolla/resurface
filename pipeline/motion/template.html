@@ -29,6 +29,8 @@ figure{margin:0;min-width:0}
 .sb{margin-left:auto;font:500 11px var(--mono);padding:2px 9px;border-radius:6px}
 .bridge q{color:var(--ink-3)}figcaption .ec{color:var(--ink-3)}
 figcaption{font-size:13px;color:var(--ink-2);margin-top:8px}
+.fb{display:flex;gap:6px;margin:8px auto 0;max-width:300px}.fb input{flex:1;min-width:0;font:13px var(--body);padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink)}.fb button{font:500 11px var(--mono);padding:4px 10px;border-radius:7px;border:1px solid var(--ink);background:var(--ink);color:var(--surface);cursor:pointer}
+.fbs{max-width:300px;margin:4px auto 0;font:11.5px var(--mono);color:var(--ink-3)}.fbs.done{color:#1a8a4a}
 /* the short itself: fixed dark look whatever the page theme */
 .phone{--p:#0f1218;aspect-ratio:9/16;background:var(--p);border-radius:14px;overflow:hidden;container-type:inline-size;display:grid;grid-template-rows:1fr 1fr;max-width:300px;margin:0 auto;box-shadow:0 0 0 1px #0003}
 .top{position:relative;z-index:1;display:flex;flex-direction:column;padding:5cqw 6cqw 0;overflow:hidden;color:var(--hl);min-height:0}
@@ -132,6 +134,13 @@ figcaption{font-size:13px;color:var(--ink-2);margin-top:8px}
 @keyframes isway{0%,100%{transform:rotate(0)}25%{transform:rotate(var(--a,1deg))}75%{transform:rotate(calc(var(--a,1deg)*-1))}}
 .i-sway{transform-box:fill-box;transform-origin:50% 0%;animation:isway var(--it,2.8s) ease-in-out var(--id,2.4s) infinite}
 .i-wobble{transform-box:fill-box;transform-origin:50% 100%;animation:isway 1.9s ease-in-out var(--id,1.4s) infinite}
+/* export mode (?export=<story rank>-<version 0 to 2>): one frame only, full width, with the clip area left transparent so the real footage can be laid in underneath */
+html.exp,html.exp body{background:transparent}
+.exp .wrap{max-width:none;padding:0}.exp header,.exp footer,.exp .head,.exp .lab,.exp figcaption{display:none}
+.exp .story{display:none;border:0;padding:0;margin:0;background:none}.exp .story.x{display:block}
+.exp .frames{display:block;margin:0;padding:0}.exp figure{display:none}.exp figure.x{display:block}
+.exp .phone{max-width:none;width:100vw;border-radius:0;box-shadow:none;background:transparent}
+.exp .top{background:var(--p)}.exp .clip{background:transparent}.exp .clip video{visibility:hidden}
 @media (prefers-reduced-motion:reduce){.phone *{animation-duration:.01s!important;animation-delay:0s!important;animation-iteration-count:1!important}}
 footer{margin-top:24px;color:var(--ink-3);font-size:12.5px;max-width:78ch}
 @media (max-width:720px){.frames{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:0 -18px;padding:0 18px 6px}figure{flex:0 0 74%;scroll-snap-align:center}.head{grid-template-columns:auto minmax(0,1fr)}.head button{grid-column:1/-1;justify-self:start}}
@@ -183,30 +192,53 @@ function run(root){
  root.querySelectorAll("[data-scramble]").forEach(el=>{const fin=el.dataset.scramble,t0=performance.now()+400,iv=setInterval(()=>{if(!el.isConnected){clearInterval(iv);return}const n=performance.now();if(n<t0)return;if(n>t0+1300){el.textContent=fin;clearInterval(iv);return}el.textContent=fin.replace(/\?/g,()=>Math.floor(Math.random()*10))},60)});
 }
 const HASCLIPS=S.some(s=>s.clip);
+// export mode: an outside script drives time and supplies the clip position, so nothing plays or loops by itself
+const EXP=new URLSearchParams(location.search).get("export");
 // the real clip when one is supplied, with captions along its bottom edge and the end pop-up in its corner, otherwise a stand-in
 const CTAS=["Solid pill","Dark glass","White card","Edge tab"],ctaFor=(i,j)=>(i+j)%CTAS.length;
-const clipHtml=(s,k)=>s.clip?'<div class="clip"><video src="'+e(s.clip)+'" muted playsinline preload="auto" style="object-position:'+e(s.pos||"50% 50%")+'"></video><div class="cc"></div><a class="cta s'+k+'" href="https://www.youtube.com/watch?v='+e(s.v)+'" target="_blank" rel="noopener"><span class="pb"><i></i></span>Watch the full video</a></div>':'<div class="clip"><div class="who">@'+e(HANDLE)+"</div>"+person+'<div class="ph">'+(HASCLIPS?"clip not supplied yet":"clip plays here, untouched")+"</div></div>";
+const clipHtml=(s,k)=>s.clip?'<div class="clip"><video src="'+e(s.clip)+'" muted playsinline preload="auto" style="object-position:'+e(s.pos||"50% 50%")+(s.zoom?';transform:scale('+(+s.zoom)+');transform-origin:'+e(s.pos||"50% 50%"):"")+'"></video><div class="cc"></div><a class="cta s'+k+'" href="https://www.youtube.com/watch?v='+e(s.v)+'" target="_blank" rel="noopener"><span class="pb"><i></i></span>Watch the full video</a></div>':'<div class="clip"><div class="who">@'+e(HANDLE)+"</div>"+person+'<div class="ph">'+(HASCLIPS?"clip not supplied yet":"clip plays here, untouched")+"</div></div>";
 // one clip has sound at a time; pass null to mute everything
 function sound(v){const on=!!v&&v.muted;document.querySelectorAll("figure").forEach(f=>{const o=f.querySelector("video");if(!o)return;o.muted=!(on&&o===v);o.volume=1;f.querySelector(".phone").classList.toggle("snd",!o.muted);f.querySelector(".sb").textContent=o.muted?"Sound off":"Sound on"});if(on)v.play().catch(()=>{})}
 // the video elements are made once and kept, so sound chosen by a click survives every loop
 function wire(art){const vs=[...art.querySelectorAll("video")];if(!vs.length)return;
  vs.forEach(v=>{const f=v.closest("figure");f.querySelector(".phone").addEventListener("click",()=>sound(v));f.querySelector(".sb").addEventListener("click",()=>sound(v));f.querySelector(".cta").addEventListener("click",ev=>ev.stopPropagation())});
- vs[0].addEventListener("ended",()=>{if(art.dataset.vis==="1")build(art)})}
+ vs[0].addEventListener("ended",()=>{if(art.dataset.vis==="1"&&!EXP)build(art)})}
 const pick=s=>Object.values(V).find(v=>v.match.test(s.t));
 function build(art){const i=+art.dataset.i,s=S[i],v=pick(s),fr=art.querySelector(".frames");
- if(!fr.children.length){fr.innerHTML=v.v.map((x,j)=>{const p=palFor(i,j);setPal(p);return'<figure><div class="lab">'+NAMES[j]+" <span>"+e(p.n)+"</span>"+(s.clip?'<button type="button" class="sb">Sound off</button>':"")+'</div><div class="phone" style="--p:'+BG+";--hl:"+W+";--mut:"+G+";--acc:"+A+'"><div class="top"></div>'+clipHtml(s,ctaFor(i,j))+"</div><figcaption>"+e(x[0])+(s.clip?' <span class="ec">End pop-up: '+CTAS[ctaFor(i,j)]+".</span>":"")+"</figcaption></figure>"}).join("");wire(art)}
+ if(!fr.children.length){fr.innerHTML=v.v.map((x,j)=>{const p=palFor(i,j);setPal(p);return'<figure><div class="lab">'+NAMES[j]+" <span>"+e(p.n)+"</span>"+(s.clip?'<button type="button" class="sb">Sound off</button>':"")+'</div><div class="phone" style="--p:'+BG+";--hl:"+W+";--mut:"+G+";--acc:"+A+'"><div class="top"></div>'+clipHtml(s,ctaFor(i,j))+'</div><form class="fb" data-r="'+s.r+'" data-j="'+j+'" data-pal="'+e(p.n)+'"><input type="text" placeholder="Feedback on this one" aria-label="Feedback"><button type="submit">Send</button></form><div class="fbs" data-k="'+s.r+'-'+j+'"></div></figure>'}).join("");wire(art)}
  // replay: redraw only the news panels, then restart the clips from the top
  v.v.forEach((x,j)=>{setPal(palFor(i,j));fr.children[j].querySelector(".top").innerHTML='<div class="dl"><span class="date">'+e(s.d)+'</span><span class="srcl">'+e(s.src)+'</span></div><div class="hl">'+e(v.hl)+'</div><svg viewBox="0 0 360 190" role="img" aria-label="'+e(x[0])+'">'+x[1]()+"</svg>"});
  run(art);
- art.querySelectorAll("video").forEach(o=>{o.currentTime=0;if(art.dataset.vis==="1")o.play().catch(()=>{})})}
+ art.querySelectorAll("video").forEach(o=>{if(EXP)return;o.currentTime=0;if(art.dataset.vis==="1")o.play().catch(()=>{})})}
 document.getElementById("stories").innerHTML=S.map((s,i)=>'<article class="story" data-i="'+i+'"><div class="head"><div class="num">'+s.r+"</div><div><h2>"+e(s.t)+'</h2><p class="bridge">Clip: '+e(s.b)+' <q>'+e(s.q)+'…</q> <a href="https://www.youtube.com/watch?v='+s.v+"&t="+s.s+'s" target="_blank" rel="noopener">Watch at '+ft(s.s)+'</a></p></div><button type="button" class="re">Replay</button></div><div class="frames"></div></article>').join("");
 const arts=[...document.querySelectorAll(".story")];
 arts.forEach(a=>{if(!pick(S[+a.dataset.i])){a.remove();return}build(a);a.querySelector(".re").addEventListener("click",()=>build(a))});
+if(EXP){const [r,j]=EXP.split("-").map(Number);document.documentElement.classList.add("exp");arts.forEach(a=>{if(S[+a.dataset.i].r===r){a.classList.add("x");a.querySelectorAll("figure")[j].classList.add("x")}})}
 document.getElementById("all").addEventListener("click",()=>arts.forEach(build));
 // replay a story the first time it scrolls into view, so the one-off move is seen
 if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(x=>{const a=x.target;if(x.isIntersecting){if(a.dataset.vis!=="1"){a.dataset.vis="1";build(a)}}else if(a.dataset.vis==="1"){a.dataset.vis="0";a.querySelectorAll("video").forEach(v=>{if(!v.muted)sound(null);v.pause()})}}),{threshold:.3});arts.forEach(a=>io.observe(a))}
 if(HASCLIPS)document.getElementById("sndnote").hidden=false;
 // while a clip plays: show the caption for the current moment, and the call to action in its last two seconds
-function tick(){arts.forEach(art=>{if(art.dataset.vis!=="1")return;const cues=S[+art.dataset.i].cues||[];art.querySelectorAll("video").forEach(v=>{const ph=v.closest(".phone"),t=v.currentTime;ph.classList.toggle("end",!!v.duration&&v.duration-t<=2);const c=cues.find(c=>t>=c[0]&&t<c[1]),tx=c?c[2]:"",cc=ph.querySelector(".cc");if(cc.dataset.t!==tx){cc.dataset.t=tx;cc.innerHTML=tx?"<span>"+e(tx)+"</span>":""}})});requestAnimationFrame(tick)}
+function tick(){arts.forEach(art=>{if(art.dataset.vis!=="1")return;const cues=S[+art.dataset.i].cues||[];art.querySelectorAll("video").forEach(v=>{const ph=v.closest(".phone"),t=window.__clipT!=null?window.__clipT:v.currentTime;ph.classList.toggle("end",!!v.duration&&v.duration-t<=2);const c=cues.find(c=>t>=c[0]&&t<c[1]),tx=c?c[2]:"",cc=ph.querySelector(".cc");if(cc.dataset.t!==tx){cc.dataset.t=tx;cc.innerHTML=tx?"<span>"+e(tx)+"</span>":""}})});requestAnimationFrame(tick)}
 if(HASCLIPS)requestAnimationFrame(tick);
+
+// feedback: on a published page it goes to the artifact's database; opened from disk, each Send appends a line to feedback.jsonl in the clips folder (Chrome asks for the folder once), else downloads it
+const FBDB=(window.claude&&window.claude.use)?window.claude.use("db").catch(()=>null):Promise.resolve(null);
+let DIR=null;const FBK="nh-fb-dir";
+const idb=(m,v)=>new Promise(r=>{try{const q=indexedDB.open("nh",1);q.onupgradeneeded=()=>q.result.createObjectStore("k");q.onsuccess=()=>{const t=q.result.transaction("k",m?"readwrite":"readonly").objectStore("k");const g=m?t.put(v,FBK):t.get(FBK);g.onsuccess=()=>r(g.result);g.onerror=()=>r(null)};q.onerror=()=>r(null)}catch(x){r(null)}});
+async function folder(){if(!window.showDirectoryPicker)return null;if(!DIR)DIR=await idb(0);if(DIR&&(await DIR.requestPermission({mode:"readwrite"}))==="granted")return DIR;DIR=await showDirectoryPicker({mode:"readwrite",id:"newsclips"});await idb(1,DIR);return DIR}
+async function save(rec){const db=await FBDB;if(db){try{await db.collection("feedback").doc(rec.id).set(rec);return "saved"}catch(x){return "failed"}}
+ const line=JSON.stringify(rec)+"\n";try{const d=await folder();if(d){const h=await d.getFileHandle("feedback.jsonl",{create:true}),f=await h.getFile(),w=await h.createWritable({keepExistingData:true});await w.seek(f.size);await w.write(line);await w.close();return "saved"}}catch(x){if(x.name==="AbortError")return "cancelled"}
+ const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([line],{type:"application/json"}));a.download="feedback-"+rec.id+".json";document.body.append(a);a.click();a.remove();return "downloaded"}
+document.addEventListener("submit",async ev=>{const f=ev.target.closest(".fb");if(!f)return;ev.preventDefault();const inp=f.querySelector("input"),t=inp.value.trim();if(!t)return;
+ const j=f.dataset.j,rec={id:Date.now().toString(36),page:document.title,story:+f.dataset.r,version:j==="s"?"story":["simple","exaggerated","funny"][+j],palette:f.dataset.pal||"",text:t,at:new Date().toISOString()};
+ const st=f.nextElementSibling;st.className="fbs";st.textContent="Saving…";const r=await save(rec);
+ st.textContent=r==="saved"?"Sent. Tell Claude 'feedback in'.":r==="downloaded"?"Saved to Downloads. Tell Claude 'feedback in'.":"Not sent, try again";if(r==="saved"||r==="downloaded")inp.value=""});
+// replies to past feedback: live from the database when published, from replies.js beside the page when opened from disk
+function showReply(x){const el=document.querySelector('.fbs[data-k="'+x.k+'"]');if(el){el.className="fbs done";el.textContent="✓ "+x.reply}}
+function loadJs(src,cb){const t=document.createElement("script");t.src=src+"?"+Date.now();t.onload=()=>{t.remove();cb&&cb()};t.onerror=()=>t.remove();document.head.append(t)}
+FBDB.then(db=>{if(db){db.collection("replies").onSnapshot(sn=>sn.docs.forEach(d=>showReply(d.data())),()=>{});return}
+ loadJs("replies.js",()=>(window.NH_REPLIES||[]).forEach(showReply));
+ // opened from disk: reload when Claude writes a new build stamp beside the page
+ let BUILD=null;setInterval(()=>loadJs("build.js",()=>{if(BUILD===null)BUILD=window.NH_BUILD;else if(window.NH_BUILD!==BUILD)location.reload()}),3000)});
 </script></body></html>
