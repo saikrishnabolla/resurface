@@ -1,0 +1,847 @@
+@brand | Social platforms
+YouTube
+Instagram = instagram|(?-i:\bIG\b)
+TikTok = tik ?to[ck]k?s?\b|tiktok\w*
+LinkedIn
+Facebook
+Twitter
+Pinterest
+Snapchat
+Reddit
+Discord
+Patreon
+WhatsApp
+Substack
+Spotify
+SoundCloud
+MySpace
+Clubhouse = \bclubhouse\b
+@brand | AI tools
+ChatGPT = chat ?gpt|chad ?g[pb][tc]|chat ?gbt|\bGPT\b|open ?ai\b
+!Claude = \bClaude\b|Cloud Co-?[Ww]ork
+!Gemini
+Midjourney
+Copilot
+Siri = \bsiri\b
+@brand | Tech, apps and devices
+!Apple = \bApple\b(?! (cider|juice|pie|tea|in\b|I'm|sauce|and\b))
+iPhone
+iPad
+MacBook
+AirPods = air ?pods
+Apple Watch
+FaceTime
+Google = \bgoogl(e|ed|ing)\b(?! (calendar|drive|sheets?|docs?|meet|workspace))
+Gmail
+Google Calendar
+Google Drive and Docs = google (drive|docs?|sheets?|workspace)
+Google Meet
+Microsoft
+!Excel
+PowerPoint
+!Zoom = \bZooms?\b
+!Slack
+!Notion
+Notability
+ClickUp = click ?up\b
+Canva
+Figma
+Squarespace
+Shopify
+!Stripe
+PayPal
+Venmo
+Cash App
+Zelle
+DocuSign
+HoneyBook
+Acuity
+Calendly
+!Loom
+LastPass
+Dropbox
+Adobe = adobe|photoshop|lightroom|premiere pro
+Final Cut
+CapCut = cap ?cut
+Sony
+!Canon
+DJI = \bDJI\b
+GoPro
+!HP = \bHP\b
+Dyson
+Kindle = \bkindle\b(?! direct)
+Audible
+Fitbit
+Oura
+Ultrahuman = ultra ?human
+Samsung
+Tesla
+!Jeep
+Lexus = \blexus\b(?! nexus)
+Audi = \bAudi\b
+Uber = \buber(s|ed)?\b(?! eats)
+Lyft
+Airbnb
+Amazon = \bamazon\b(?!'s kdp| kdp| live)
+Amazon KDP = kindle direct publishing|\bKDP\b
+Amazon Live
+Book Bolt = book ?bolt
+Stan Store
+Vistaprint = vista ?print
+Kickstarter
+GitHub
+Vercel
+Supabase = supabase|superbase
+PostHog
+HubSpot
+Nespresso
+Keurig
+@brand | Fashion and retail
+Nordstrom
+Zara
+H&M = H&M|H and M
+!Gap = (from|at|in) (the )?Gap\b|\bGap (jeans|order|store|outlet)
+!Target = (?<!to )\bTarget\b(?! (me|nobody|other|audience|market|people))
+Walmart
+Shein
+Fashion Nova
+ASOS = \basos\b
+Abercrombie = ab\w{1,3}crombi\w*
+Ann Taylor = anne? taylor
+!Express = (?<!American )\bExpress\b
+Free People
+Aritzia = aritzia|babaton
+Rent the Runway
+Poshmark
+Lululemon
+Alo Yoga = alo yoga|(?-i:\bAlo\b)
+Nike = \bnikes?\b
+Adidas
+Yeezy = yeezys?
+Ugg = \buggs?\b
+Louis Vuitton = louis v\w+
+Chanel
+Gucci
+Prada
+Dior
+YSL = \bYSL\b|saint laurent
+Valentino
+Ralph Lauren
+Calvin Klein = cal\w* klein
+Tory Burch = tory b[ui]rch
+Ted Baker
+Sam Edelman
+Nine West
+DSW = \bDSW\b
+Macy's
+Tiffany and Co = tiffany (and|&) co|tiffany's
+Chrome Hearts = chrome hearts?
+!Supreme
+!Kith
+Spanx
+Hanes
+Odd Muse = od+ muse
+Rag and Bone = rag (&|and) bone
+!Coach = \bCoach\b(?! class)
+LVMH
+Pottery Barn
+IKEA
+West Elm
+HomeGoods = home ?goods
+TJ Maxx = t\.?j\.? ?maxx
+Marshalls
+Stanley cup = (?<!Morgan )(?-i:\bStanley\b)
+Skims = \bskims\b
+Telfar
+Marc Jacobs = mar[ck] jacobs
+Donna Karan = donna kar[ae]n|cashmere mist
+Armani
+Sephora
+Ulta
+CVS
+Walgreens
+Costco
+Best Buy
+Etsy
+eBay
+Facebook Marketplace
+Black Girl Vitamins
+Bear by Bria
+@brand | Beauty and hair
+Fenty = fenty
+Huda Beauty
+Charlotte Tilbury
+Lancome = lanc[oô]me
+!MAC Cosmetics = \bMAC\b
+NYX = \bNYX\b
+Maybelline
+Revlon
+L'Oreal = l'?or[eé]al
+Smashbox
+!Becca = \bBecca\b
+Laura Mercier
+!Tarte
+Tatcha
+Urban Decay
+Clinique
+Clarins
+Kiehl's
+Dermalogica
+Peter Thomas Roth = peter thomas( roth| rock)?
+!Tula
+Olay
+!Dove
+Vaseline
+PanOxyl
+Juvia's Place = juvia'?s?( place)?
+Merit Beauty = merit beauty|(?-i:\bMerit\b)
+Danessa Myricks = danessa
+Grown Alchemist
+L'Occitane
+!Topicals
+Belif
+!Essie
+Ardell
+Olaplex = olaplex|\bOll?ex\b|\bOLX\b
+Kenra
+Aveda
+!Dossier
+Mary Kay
+Pacifica
+Better Length = better ?length|better lane|butter length|\bbut length
+Outre
+Glossier
+Rare Beauty
+Sol de Janeiro = sol (de )?janeiro
+Neutrogena
+CeraVe
+Supergoop
+Summer Fridays
+Mielle
+Shea Moisture
+Jo Malone
+Le Labo
+@brand | Food and drink
+Trader Joe's = trader jo\w*('s)?|\btre ?jo\b|treader joe's|trad jo\b|\bTJ's
+Whole Foods
+Wegmans
+Publix
+Starbucks
+Dunkin
+Chick-fil-A = chick[- ]fil[- ]a
+McDonald's
+KFC = \bKFC\b
+Red Lobster
+Shake Shack
+Sweetgreen = sweet ?greens?\b
+Chipotle
+Whataburger
+Insomnia Cookies
+Magnolia Bakery
+Roberta's = rober\w*a's
+Black Seed Bagels
+Van Leeuwen = van leeuwen|vanluan
+Chomps = \bChomps\b
+Nature Valley
+Fruity Pebbles
+Kodiak
+Banza
+Gatorade
+Sprite = \bSprite\b
+!Celsius
+Coca-Cola = coca[- ]cola|(?-i:\bCoke\b)
+!Bloom greens = \bBloom\b
+Happy Viking
+OxyShred
+Drip Drop
+Electrolit = electro ?l[iy]t?\w*|elro lit
+Liquid IV = liquid i\.?v
+Tovala = tovala|tvala
+Meal Pal = meal ?pal
+Frothy Monkey
+!Planta
+Bondi Sushi
+Lenwich
+Ruby's Cafe
+Uber Eats
+DoorDash = door ?dash
+Instacart
+HelloFresh = hello ?fresh
+Tylenol
+Advil
+Dramamine
+Lysol
+Erewhon
+Poppi = \bpoppi\b
+Olipop
+@brand | Money, legal and learning
+TurboTax = turbo ?tax|turboax
+H&R Block = h ?(&|and) ?r block
+QuickBooks = quick ?books
+!Chase = \bChase\b(?!'s|,)
+American Express = american express|\bamex\b
+Capital One
+Bank of America
+Wells Fargo
+Goldman Sachs
+Morgan Stanley
+UBS = \bUBS\b
+State Farm
+AIG = \bAIG\b
+Robinhood = \bRobinhood\b
+Fidelity
+Vanguard
+Westlaw = west ?law
+LexisNexis = lex[iu]s ?nexis|lexus nexus
+Barbri = barbri|barberie|\bBarbary\b
+Kaplan
+LegalZoom = legal ?zoom
+BetterHelp = better ?help
+@brand | Fitness and wellness
+ClassPass = class ?pass
+Life Time Fitness = life ?time fitness
+CorePower Yoga = core ?power|corpire yoga|cory yoga
+SoulCycle = soul ?cycle
+Peloton
+Equinox
+Planet Fitness
+Solidcore = solid ?core
+Orangetheory = orange ?theory
+@brand | Travel
+!Delta = \bDelta\b|Del Sky Club
+Air France
+American Airlines
+JetBlue = jet ?blue
+TSA PreCheck = \bTSA\b
+Global Entry
+Marriott
+Hilton
+Hyatt
+Arlo Hotel
+CIVANA = civana
+Four Seasons = four seasons hotel|the four seasons
+LaGuardia = la ?guardia
+JFK airport = \bJFK\b
+LAX = \bLAX\b
+Amtrak
+Long Island Rail Road = long island rail ?road|\bLIRR\b
+Collective Voice
+Cloud Campaign
+AT&T = AT&T|\bATT\b
+!Spectrum
+Black and Decker = black (and|&) decker
+@brand | Media
+Netflix
+Hulu
+!Bravo
+HBO
+Disney
+Hallmark
+Paramount
+MTV
+!BET = \bBET\b
+!TLC
+IMAX
+Forbes
+Business Insider
+!Essence = \bEssence\b
+New York Times
+Wall Street Journal
+Bloomberg
+Vogue
+Birmingham Times
+@person | Public figures
+Beyonce = beyonc[eé]|(?-i:\bBey\b)
+Jay-Z = jay[- ]z\b
+Kanye
+Kim Kardashian = kim k\b|kardashian
+Rihanna
+Tyler Perry
+Gabrielle Union
+Venus Williams
+!Serena Williams = \bSerena\b
+Will Smith
+Mel Robbins = mel robb?ins
+Steven Bartlett = ste(v|ph)en bartlett|diary of a ceo|diary ceo
+Jay Shetty
+Keke Palmer = k[ei]k[ei] palmer
+Tamron Hall
+Jennifer Lopez = jennifer lopez|\bj\.? ?lo\b
+Taylor Swift
+!Aaliyah = \bAaliyah\b
+Martin Luther King = martin luther king|\bMLK\b
+Anthony O'Neal
+Marie Forleo = marie fo\w+
+Mellody Hobson = mel+ody ho\w+son
+Tracee Ellis Ross = tracee ellis|ellis ross
+Nathaniel Drew
+Kayla Nicole
+Aliyah Jay
+Oprah
+Michelle Obama
+Obama = (?<!michelle )\bobama
+Kamala
+Trump
+Biden
+Issa Rae
+Shonda Rhimes = shonda
+Viola Davis
+Zendaya
+!Drake = \bDrake\b
+Kendrick
+Cardi B = cardi b\b
+Megan Thee Stallion = megan thee
+SZA = \bSZA\b
+!Usher = \bUsher\b
+Whitney Houston
+Elle Woods
+Tony Robbins
+Gary Vee = gary v
+Alex Hormozi = hormozi
+Elon Musk = \belon\b
+Mark Zuckerberg = zuckerberg
+Sam Altman
+Steve Jobs
+Sara Blakely
+Emma Grede
+!Kylie Jenner = \bKylie\b
+Hailey Bieber
+Alix Earle
+Jackie Aina
+Michael B. Jordan = michael b\.? jordan
+LeBron
+Simone Biles
+Chris Pratt
+Judge Judy = judge judy|judge joe brown
+Hayley Paige = ha[iy]ley paige|j ?l ?m couture
+@org | Schools
+Cumberland School of Law = cumberland|samford
+Kennesaw State = kennesaw
+University of West Georgia = west georgia
+Harvard
+Stanford
+!Howard University = (?<!Nandi )\bHoward\b
+Morehouse
+Spelman
+!Columbia
+Cornell
+NYU = (?-i:\bNYU\b|\bStern\b)
+Emory = \bEmory\b
+University of Michigan
+Georgia State
+@org | Government and regulators
+FTC = \bFTC\b|federal trade commission
+IRS = \bIRS\b
+SBA = \bSBA\b|small business administration
+!SEC = \bSEC\b
+FDIC = \bFDIC\b
+Trademark Office (USPTO) = \bUSPTO\b|trademark office
+EEOC = \bEEOC\b
+NYC Consumer and Worker Protection = consumer and worker protection
+American Bar Association = american bar\b|bar association
+@org | Industry bodies and investors
+American Influencer Council
+Creator Economy NYC
+Techstars = tech ?stars
+Antler = \bAntler\b
+Y Combinator = y combinator|\bYC\b
+Gunderson Dettmer = gunderson
+Tory Burch Foundation
+Jackie Robinson Foundation
+Unlocked Foundation
+@org | Events and awards
+Webby Awards = webby
+Cannes Lions = cannes
+Essence Festival = essence fest\w*
+New York Fashion Week = fashion week|\bNYFW\b
+CES = \bCES\b
+Olympics = olympics?
+NFL = \bNFL\b
+NBA = \bNBA\b
+Super Bowl
+US Open
+New York Marathon = new york marathon|nyc marathon|the marathon
+Black Beauty Summit
+SXSW = \bSXSW\b|south by southwest
+AfroTech = afro ?tech
+CultureCon = culture ?con\b
+Forbes 30 Under 30 = 30 under 30
+Met Gala
+Oscars = \boscars\b
+Grammys = grammys?
+Coachella
+Art Basel
+@own | Her ventures and series
+Social Docket = social doc\w*|social rocket|social duck|social detective dialogue|social dialogue
+Level Up Legal = level ?up legal|\bLVLUP\b|\bLevel Up\b
+Lawyer Diaries = lawyer diaries|lori diaries
+The Legal Tea = legal tea?\b
+CEO Classroom
+!Rella = \bRell?a\b
+@culture | TV, film, books and music
+Legally Blonde
+Bridgerton
+The Handmaid's Tale = handmaid
+!Euphoria
+Gossip Girl = gossip girl|xo ?xo gossip
+!Suits = \bSuits\b
+How to Get Away with Murder = get away with murder
+Love Is Blind
+Real Housewives = housewives
+Selling Sunset
+Emily in Paris
+Lion King
+Moana
+Narnia
+Wall-E
+Peter Pan
+Mary Poppins = poppins
+Inspector Gadget
+Bob the Builder = bob the builder|barbara the builder
+Marvel = (?-i:\bMarvel\b|\bThor\b|\bLoki\b)|avengers|fantastic four|guardians of the galaxy
+Barbie
+The Alchemist = (?<!grown )\balchemist\b
+Careless People
+Jesus Calling = jesus call(s|ing)
+Atomic Habits
+Sweet Home Alabama
+Broadway = \bBroadway\b(?! and)
+R&B = r ?& ?b\b
+Bible and scripture = \bbible\b|scripture|ephesians|jeremiah|psalms?\b|proverbs|\bverse\b
+@place | New York
+New York = new york|\bNYC\b
+Brooklyn
+Manhattan
+Harlem
+!Queens = \bQueens\b
+Bronx
+Staten Island
+SoHo = \bsoho\b
+Tribeca
+Williamsburg
+!Dumbo
+Midtown
+!Chelsea = \bChelsea\b
+West Village
+Upper West and East Side = upper (west|east) side|\bUWS\b|\bUES\b
+Crown Heights
+Inwood
+Union Square
+Times Square = times? square
+Central Park
+Grand Central
+Madison Square = madison square
+Brooklyn Bridge
+Little Italy
+Canal Street
+Chelsea Market
+Wall Street
+Hudson Yards
+Rockefeller
+Long Island = long island(?! rail)
+Shelter Island and Greenport = shelter island|greenport
+Hamptons
+Westchester
+New Jersey = new jersey|(?-i:\bJersey\b)
+@place | United States
+Birmingham
+Alabama = alabama|(?-i:\bBama\b)
+Huntsville
+Atlanta = atlanta|(?-i:\bATL\b)
+Georgia = \bgeorgia\b(?! state)
+Miami
+Florida
+Tampa
+Destin = \bDestin\b
+Flint
+Michigan
+Detroit
+Chicago
+Boston
+Nashville
+Tennessee
+San Francisco = san francisco|bay area
+Silicon Valley
+Los Angeles = los angeles|(?-i:\bLA\b)|west hollywood
+San Diego
+California = california|(?-i:\bCali\b)
+Austin = \bAustin\b
+Texas
+Dallas
+Houston = \bHouston\b
+Las Vegas = vegas
+New Orleans = new orleans|\bNOLA\b
+Washington DC = washington d\.?c|(?-i:\bDC\b)|(?-i:\bD\.C\.)
+North Carolina = north carolina|greensboro|(?-i:\bCharlotte\b(?! Tilbury))
+Ohio = ohio|cincinnati
+Arizona = arizona|scottsdale
+Oklahoma
+Delaware
+Philadelphia = philadelphia|philly
+Hawaii
+@place | International
+Paris
+France = \bfrance\b(?<!air france)
+London
+Lisbon
+Portugal = portugal|(?-i:\bFaro\b)
+Spain
+Barcelona
+Italy = italy|(?-i:\bMilan\b|\bRome\b)
+Amsterdam
+Brussels
+Stockholm
+Scotland
+Greece = greece|santorini|mykonos|athens
+Europe = europe\w*
+Ghana = ghana|cape coast
+Africa = \bafrica\b
+Nigeria = nigeria\w*|lagos
+South Africa = south africa|cape town
+Jamaica
+Mexico = \bmexico\b
+Cabo = \bcabo\b
+Costa Rica
+Canada = canada|montreal|toronto
+Dubai
+Israel
+Korea
+China = \bChina\b
+Australia = australia|(?-i:\bSydney\b(?! Jackson))
+Brazil = brazil\b|rio de janeiro
+Japan = japan|tokyo
+Bali
+Thailand
+Colombia = \bColombia\b
+Dominican Republic = dominican|punta cana
+Bahamas
+Puerto Rico
+@moment | Calendar hooks
+New Year = new year'?s?\b|resolution
+Valentine's Day = valentine
+Black History Month
+Women's Day and Women's History Month = women's (history month|day)
+Tax season = tax season|tax day|file[d]? (my|your|their)? ?taxes|april 15
+Easter = \beaster\b
+Mother's Day = mother's day
+Father's Day = father's day
+Memorial Day
+Juneteenth
+Pride = pride (month|party|parade|event|weekend)
+Fourth of July = fourth of july|4th of july|independence day
+Back to school = back to school
+Labor Day
+Halloween
+Thanksgiving = thanksgiving|friendsgiving
+Black Friday and Cyber Monday = black friday|cyber monday
+Christmas = christmas|secret santa|\bgrinch\b
+New Year's Eve = new year's eve|\bNYE\b
+Her birthday and Virgo season = my birthday|birthday trip|birthday (month|week|dinner)|virgo
+Graduation = graduat(e|ed|ion|ing)
+Bar exam season = bar exam|bar prep|studying for the bar|passed the bar|take the bar|bar results
+Daylight saving and dark evenings = daylight saving|time change|gets dark
+First snow and winter weather = \bsnow(ing|ed|y|storm)?\b|blizzard|freezing|winter boots
+Heat wave and summer weather = heat ?wave|so hot|humid|\b\d\d ?(°|degrees)
+Quarter planning (Q1 to Q4) = \bQ[1-4]\b|quarter(ly)?\b
+Year in review = recap|year in review|this year i|reflect(ing|ion)? on (the|this|my) year|end of the year
+@topic | Law and legal
+Law school = law school|law students?|\b[123]L\b|law degree|juris doctor|\bJD\b
+LSAT and admissions = \bLSAT\b|personal statement|law school (application|admission)|\bGRE\b|\bGMAT\b
+Law firm life = law firms?|big law|billable|associate attorney|partner track|\bpartners?\b at
+Being a lawyer = \blawyers?\b|attorneys?\b
+Contracts = contracts?\b|redlin\w+|\bclause
+Trademarks = trademark
+Copyright and DMCA = copyright|\bDMCA\b|digital millennium
+Intellectual property = intellectual property|\bIP\b
+Business formation (LLC, C-corp) = \bLLCs?\b|c[- ]corp|s[- ]corp|incorporat\w+|business entity|\bDBA\b|operating agreement
+NDAs = \bNDAs?\b|non[- ]disclosure
+Employment law = employment (law|litigation)|fair labor|wrongful terminat|discriminat|harass|disabilit
+Litigation and court = litigat|lawsuit|\bsued?\b|suing|courtroom|(the|a) judge\b|\bjury\b|trial (team|court|attorney|lawyer)|(at|to) trial|deposition|\bcourt\b
+Usage rights and exclusivity = usage rights|exclusivity|whitelist|perpetuity|licens(e|ing) (the|my|your|content)
+Ad disclosure rules = disclos|#ad\b|sponsored post
+Legal tech = legal tech|legal infrastructure|modern legal
+Access to legal help = legal access|access to legal|legal fees|affordable legal|legal aid|afford (a|an) (lawyer|attorney)
+Terms, privacy and data = privacy policy|terms of service|terms and conditions|data privacy|\bGDPR\b
+Wills and estate planning = estate plan|executor|power of attorney|living will|\bprobate
+Immigration = immigration|green card|\bvisa (application|process)
+Legal education = legal education|legal literacy|know your rights|\bCLE\b
+Scams and getting burned = \bscam|taken advantage|ripped off|swindle|stole (my|their)|didn't pay me|never paid
+@topic | Startup and tech
+Building a startup = start[- ]?ups?\b
+Founder life = founders?\b|co-?founders?\b
+Fundraising and investors = fundrais|investors?\b|venture capital|\bVCs?\b|pre[- ]seed|seed round|angel invest|cap table|valuation|pitch deck|term sheet|\bSPV\b|\bIPO\b
+Pitching = \bpitch(es|ed|ing)?\b
+Accelerators = accelerator|incubator|cohort|demo day
+Hiring and team = \bhir(e|ed|es|ing)\b|new engineer|onboard|job description|\binterns?\b|contractor|team meeting
+Engineering and product = engineers?\b|developers?\b|\bcoding\b|\bMVP\b|\bbeta\b|prototype|roadmap|\bPRD\b|wirefram|\bbugs?\b|\bfeature(s)?\b|\bAPIs?\b|integrations?
+Launching = launch(ed|es|ing)?\b
+Apps = \bapps?\b|app store
+Artificial intelligence = \bAI\b|artificial intelligence|\bLLMs?\b|machine learning|a\.i\.
+Automation and workflows = automat|workflow|\bSOPs?\b|systems? and process|\bCRM\b
+SaaS metrics = \bSaaS\b|\bB2[BC]\b|\bARR\b|\bMRR\b|\bchurn\b
+Customers and go-to-market = go[- ]to[- ]market|customer|wait ?list|early adopter|beta users|user research|product[- ]market
+Revenue and pricing = revenue|pricing|price point|\bprofit|six figures?|seven figures?|(multi[- ])?(million|billion)[- ]dollars?
+Tech industry = tech (space|world|scene|industry|company|companies)|silicon valley|big tech
+Women and Black founders = female founder|women founders?|woman founder|black founders?|black women founders
+Bootstrapping = bootstrap|self[- ]fund|burn rate
+Advisors and mentors = advisory board|advisors?\b|mentor
+Networking = network(ing|ed)?\b
+CTO and technical cofounder = \bCTO\b|technical co-?founder
+Coworking = co-?work(ing)?\b|wework
+Demo and product walkthrough = \bdemo\b|walkthrough|product demo
+@topic | Creator economy
+Creator economy = creat(or|ive) economy
+Brand deals and sponsorships = brand (deal|partnership)s?|sponsor\w*|paid partnership|partner(ed|ing) with|\bcampaigns?\b
+Influencers = influencers?\b
+Talent managers and agencies = talent manag\w+|my manager|management (company|team)|agenc(y|ies)
+Rates and negotiation = negotiat\w+|rate card|my rates?|media kit|counter ?offer|underpaid|lowball|paid less|pay gap|know your worth
+Getting paid on time = invoic|net ?(30|60|90)|late payment|payment terms|get(ting)? paid|chasing
+UGC = \bUGC\b|user[- ]generated
+Affiliate income = affiliate|\bLTK\b|storefront|commission
+YouTube growth and monetisation = subscribers?\b|monetiz|adsense|algorithm|analytics|\bviral\b|\bviews\b|\bSEO\b
+Short-form video = short[- ]form|\breels?\b
+Making content = content creat\w+|creat(e|ing) content|shoot(ing)? (some )?content|\bfilm(ed|ing)\b|\bedit(ed|ing)?\b|b-roll|thumbnail|\bvlog\w*
+Camera and gear = camera|tripod|memory card|microphone|\bmic\b|ring light|\blens\b
+Personal branding = personal brand
+Community and audience = community|youtube fam\w*|comment section|followers?\b|audience
+PR packages and gifting = PR (package|haul|box|stuff)|\bPR\b|gifted|unboxing
+Influencer and brand events = influencer event|brand event|event tonight|\bevents?\b
+Speaking and panels = speaking (engagement|opportunit)\w*|\bpanels?\b|keynote|moderat\w+
+Podcasts = podcasts?\b
+Courses and digital products = digital products?|(?<!of )\bcourses?\b|e-?book|templates?\b|webinar|masterclass|workshop
+Coaching and consulting calls = coaching|clarity call|strategy call|1[- ]on[- ]1|one[- ]on[- ]one
+Newsletter and email = newsletter|email list|\bemails?\b
+Social media breaks and scrolling = social media break|off social|digital detox|screen time|doom ?scroll|\bscrolling\b
+Internet criticism = hate comments?|\btrolls?\b|cancel(l)?ed\b|internet streets|bad comments
+Social media bans and platform risk = tik ?tok ban|ban(ned|ning)? tik|shadow ?ban|account (got )?(hacked|deleted|banned)|\bhacked\b
+Creator burnout and consistency = consisten(t|cy)|posting schedule|upload schedule|show(ing)? up
+@topic | Money
+Taxes = \btax(es)?\b|write[- ]offs?|deduction|\b1099\b|\bW-?2\b|accountant|\bCPA\b|bookkeep
+Student loans and debt = student loans?|loan forgiveness|scholarship|tuition|financial aid|\bdebt\b
+Budgeting and saving = budget\w*|\bsavings?\b|emergency fund|sinking fund|frugal|no[- ]spend
+Investing and retirement = \binvesting\b|\bstocks?\b|\bRoth\b|401 ?\(?k\)?|retirement|index funds?|\bS&P\b|brokerage|net worth|stock (market|exchange)
+Credit cards and credit = credit cards?|credit score|credit report|\bpoints\b|\bmiles\b
+Salary and income = salary|paycheck|pay cut|\bincome\b|six figures?
+Rent and cost of living = (?<!\w)rent\b(?! the runway)|cost of living|expensive|\bafford|broker'?s? fee|\blease\b|landlord
+Insurance and benefits = insurance|\bbenefits\b|\bPTO\b|health care|healthcare
+Financial planning = financial (advis\w+|plan\w*|wellness|position|literacy|freedom)
+Economy and layoffs = inflation|recession|(?<!creator )(?<!creative )\beconom(y|ic)\b|lay ?offs?\b|laid off|tariff|job market|unemploy
+Side hustles and income streams = side hustle|multiple streams|passive income|streams of income
+Shopping and hauls = \bhauls?\b|\bshopping\b|\bon sale\b|discount code|promo code|\bcode\b
+Buying a home = mortgage|buy(ing)? a (house|home)|homeowner|real estate|down payment|\bcondo
+Pay gap and wealth gap = (pay|wealth|wage) gap|equal pay|pay equity|paid less than
+Money mindset = money mindset|scarcity|abundance|generational wealth|wealth
+@topic | Career and work
+Quitting and leaving the 9 to 5 = \bquit(ting)?\b|resign(ed|ation)?\b|two weeks'? notice|(leaving|left) my job|9[- ]?(to|2)[- ]?5|nine to five|corporate america
+Entrepreneurship = entrepreneur\w*|business owner|self[- ]employed|own business
+Burnout and stress = burn(ed|t)?[- ]?out|overwhelm\w*|exhaust\w*|stress\w*
+Work-life balance and boundaries = work[- ]life|balanc\w+|boundar(y|ies)
+Remote and office work = \bremote\b|work(ing)? from home|\bWFH\b|\bhybrid\b|the office
+Productivity and planning = productiv\w+|to-?do lists?|time[- ]block\w*|planner|digital planning|\bcalendar\b|lock(ed)? in|deep work
+Routines = (morning|night ?time|night|evening) routine|\broutines?\b
+Goals and vision = \bgoals?\b|vision board|manifest\w*|word of the year
+Confidence and imposter syndrome = impost[eo]r|self[- ]doubt|confiden\w+|compar(e|ing|ison)|insecur\w+
+Career pivots = \bpivot\w*|career (change|switch|update)|non-?traditional|transition\w*
+Job hunting and interviews = job offer|job search|\binterview\w*|\bresume\b|recruit\w+|\bapplied\b
+Delegating and managing a team = delegat\w+|outsourc\w+|virtual assistant|operations? manager|social media manager|my team|\bassistant\b
+Consulting and clients = consult(ing|ant)s?\b|\bclients?\b|retainer
+Rejection and setbacks = reject\w*|\bfail(ed|ure|ing)?\b|setback|didn't get (it|the)|told (me )?no\b
+College and school years = \bcollege\b|undergrad|\buniversity\b|\bGPA\b|dean'?s list|sorority|high school
+Meetings and calls = \bmeetings?\b|\bcalls?\b with|client call|team call|another call
+Mentoring students = mentee|law student call|give back|advice (to|for) (law )?students
+Black women at work = black wom[ae]n|women of color|black girl|representation|black[- ]owned|\bHBCU
+Leadership and CEO role = leadership|\bCEO\b|\bleader\b|decision[- ]making|making decisions
+Faith in the process and patience = trust the process|patience|delayed|God's timing|in due time
+Vulnerability and honesty = vulnerab\w+|being honest|transparen\w+|real with (you|y'all)
+@topic | NYC and home
+Moving = \bmov(e|ed|ing)\b (to|from|out|in)|movers|one[- ]way ticket|relocat\w+|u-?haul|unpack\w*
+Apartment hunting and renting = apartments?\b|\blease\b|\bbroker|\bstudio\b|roommate|doorman|approved for
+Home decor and furniture = decor\w*|furniture|\bcouch\b|\bsofa\b|murphy bed|\brug\b|declutter\w*|organiz(e|ed|ing)
+Subway and getting around = subway|\btrains?\b|commut\w+|\bMTA\b|\btaxi\b|\bcab\b
+Chores and errands = \bcleaning\b|laundry|\bdishes\b|errands?|grocer\w+|take out the trash
+City safety and noise = \bsafety\b|unsafe|feel safe|broke into|car alarm|door alarm|\brats?\b|\bnoise\b|sirens?
+Loneliness and making friends = lonel\w+|homesick|(make|making|made) friends|new friends|by myself|\balone\b
+Nights out = rooftop|happy hour|\bbrunch\b|night out|speakeasy|\bjazz\b|day ?drinking|nightclub|the club\b|hookah
+Southern roots = \bsouthern\b|the south\b|hometown|back home|grew up
+City vs small town = big city|small town|city life|city girl|new yorkers?
+@topic | Wellness and health
+Gym and workouts = \bgym\b|work(ed|ing)? ?out|workouts?\b|lifting|\bweights\b|trainer|cardio|treadmill|stairmaster
+Pilates and yoga = pilates|\byoga\b|\bbarre\b|reformer|hot yoga
+Walking = wellness walks?|hot girl walk|\bsteps\b|walking pad|long walk|(went|go|going) (for|on) a walk|walk everywhere|10,?000
+Running = run club|\bmarathon\b|\b5k\b|running shoes|(went|go|going|gone) (for|on) a run|\bjog
+Sleep = \bsleep\w*|\bnaps?\b|melatonin|bedtime|insomnia(?! cookies)
+Mental health and therapy = mental health|therap(y|ist)|anxiety|anxious|depress\w+|panic attack|\bPTSD\b
+Journaling and affirmations = journal\w*|affirmations?|gratitude|meditat\w+|mindful\w*|breath ?work
+Self-care and rest = self[- ]care|rest day|slow(ing)? down|recharge|\bspa\b|massage|\bfacial\b|sauna|cold plunge|give myself grace
+Supplements and nutrition = protein|vitamins?|supplements?|(?<!sweet )\bgreens\b|gut health|probiotic|collagen|creatine|electrolytes?|hydrat\w+|glutamine|fat burner|magnesium|\bCBD\b
+Weight and body = weight loss|(lose|lost|losing) weight|gain(ed|ing)? weight|body image|calories|\bmacros\b|ozempic|\bGLP
+Doctors and checkups = doctors?\b|dentist|dermatolog\w+|blood ?work|\bphysical\b exam|gyn\w*|check[- ]?up|egg freez\w+|fertility
+Being sick = \bsick\b|\bflu\b|migraine|headache|allerg\w+|cramps
+COVID and pandemic = covid|coronavirus|pandemic|quarantin\w+|lockdown|vaccin\w+
+Wearables and tracking = fitness ring|smart ring|apple watch|track(s|ing)? my (sleep|steps)|\bwearable
+Alcohol and going out = \bsober\b|dry january|hang ?over|hungover|mocktail|\bwine\b|cocktails?|tequila|margarita|champagne|mimosa|mezcal
+Skincare = skin ?care|\bserum|moisturiz\w+|sunscreen|\bSPF\b|retinol|\bacne\b|breakout|eye patches|face mask|cleanser|\btoner\b
+Wellness retreats = retreat|wellness resort
+Wellness (general) = dimensions of wellness|financial wellness|spiritual wellness|\bwellness\b
+@topic | Beauty and hair
+Natural hair = natural hair|wash day|twist out|silk press|\b4c\b|\bcurls?\b|deep condition\w*
+Wigs = \bwigs?\b|lace front|half wig
+Extensions = tape[- ]ins?|sew[- ]in|clip[- ]ins?|extensions|\bbundles\b|leave ?out|\bweave
+Braids and protective styles = braid\w*|protective style|\blocs\b|knotless|ponytail|\bbob\b
+Hair appointments = hair ?stylist|\bsalon\b|hair appointment|blow ?out|blow[- ]?dr(y|ied)|flat iron|heat protect\w+|bonnet|hair done
+Makeup = make ?up|concealer|mascara|lip ?gloss|lipstick|\bblush\b|eyeshadow|lashes|\bbrows?\b|setting spray|bronzer
+Nails = \bnails?\b|manicure|pedicure|cuticle
+Perfume = perfume|fragrance|\bscents?\b
+Cosmetic treatments = botox|\bfiller\b|laser hair|\bwax(ing|ed)?\b|invisalign|braces|teeth whitening|veneers
+@topic | Fashion
+Outfits = outfits?\b|\bOOTD\b|try[- ]on|look ?book|what i'm wearing
+Workwear = work ?wear|work clothes|blazers?\b|\bsuit\b|business casual|dress for the job|professional attire|dress professional
+Styling and wardrobe = \bstylist\b|styling session|wardrobe|capsule|\bcloset\b
+Shoes and bags = \bheels\b|sneakers|\bboots\b|handbag|\bpurse\b|\btote\b|loafers|\bshoes?\b
+Jewelry = jewel\w+|necklace|earrings|bracelet|anklet
+Luxury and designer = \bluxury\b|\bdesigner\b
+Thrift and resale = thrift\w*|resale|second[- ]?hand|consign\w+
+Winter wardrobe = \bcoats?\b|puffer|winter (boots|coat|attire)|\bscarf\b|ear ?muffs
+@topic | Travel
+Flights and airports = \bflights?\b|airport|layover|\blounge\b|boarding|first class|business class|\bupgrade
+Hotels and stays = \bhotels?\b|\bresort\b|room service|check(ed|ing)?[- ]in|\bsuite\b
+Solo travel and solo dates = solo (trip|travel|date)\w*
+Girls trips = girls'? trip|birthday trip|bachelorette
+Passport and travel documents = passport|customs
+Packing = \bpack(ing|ed)?\b|suitcase|luggage|carry[- ]on
+Road trips = road ?trip|rental car|\bdrove\b
+Living abroad = \babroad\b|digital nomad|expat|move to (lisbon|paris|europe|portugal)
+Languages = \bfrench\b(?! (fries|toast|press|tips?|manicure|braid|door|oak))|\bspanish\b|portuguese|duolingo|learn(ing)? (a |the )?language
+Travel planning and points = itinerary|travel (plans?|points|hacks?)|book(ed|ing)? (a |my |the )?(flight|trip|hotel)
+@topic | Relationships and life
+Dating and being single = \bdating\b|date night|(?<!every )(?<!a )\bsingle\b(?! (day|time|thing|one|person|week|year|video|moment|handed))|boyfriend|situationship|talking stage|dating apps?|\bhinge\b|\bbumble\b|\bbae\b|my man\b
+Marriage and weddings = wedding|\bmarried\b|marriage|got engaged|engagement ring|bridesmaid|\bbridal\b|husband
+Kids and motherhood = (have|having|want) kids|children|motherhood|pregnan\w+|nephew|niece|god(son|daughter|child)
+Family = my (mom|mother|dad|father|sister|brother|aunt|cousins?|grandm\w+|parents)|\bfamily\b
+Friendship = friendships?|best friends?|\bbestie|my friends?|girlfriends
+Turning 30 and ageing = turning \d\d|in my (20s|30s|thirties|twenties)|getting older|\b30th\b|definitely 30
+Faith and prayer = (?<!my )\bgod\b|jesus|\bpray\w*|church|sermon|\bfaith\b|devotional|bless(ed|ing|ings)|(?<!oh )\blord\b|\bamen\b
+Grief and loss = grief|griev\w+|passed away|funeral
+Astrology = virgo|zodiac|astrolog\w+|retrograde|horoscope
+Pets = \bdogs?\b|puppy|\bcats?\b|\bpets?\b
+Cars and driving = my car|car payment|sold my car|car insurance|\bdriving\b|\bparking\b
+Elections and politics = \bvot(e|ed|ing)\b|election|president(ial)?\b|politic\w+|congress|supreme court|senate|legislat\w+|ballot|government
+Race and social justice = \bBLM\b|black lives matter|protest\w*|racis\w+|police|injustice|civil rights|\bDEI\b|affirmative action|diversity
+News and current events = the news\b|current events|headline
+Books and reading = \bbooks\b|\breading\b|\b(a|this|the|my|her|his) book\b(?! bolt)|audiobook|book club
+Music and concerts = concert|\balbum\b|playlist|festival|musical\b
+TV and movies = \bmovies?\b|binge\w*|tv show|reality tv|documentary|\bseries\b
+Sports = basketball|football|tennis|\bknicks\b|\byankees\b|world cup|\bgame day
+Awards and recognition = \bawards?\b|honoree|nominee|nominat\w+|recogni(tion|zed)|featured in
+Gratitude and celebrating wins = celebrat\w+|proud of myself|grateful|thankful|\bwins?\b
+Change and new chapters = new chapter|new season|fresh start|starting over|change is|big change|identity shift
+Generations (Gen Z, millennials) = gen[- ]?z\b|millennials?|boomers?
+Internet trends and catchphrases = girl math|roman empire|soft life|that girl\b|main character|delulu|\brizz\b|demure|quiet luxury|hot girl|clean girl|soft launch|lazy girl|girl dinner|de-?influenc\w+|quiet quitting|just a girl|being a girl|girl boss
+NIL and athlete deals = \bNIL\b|name,? image
+@topic | Food and drink
+Coffee and matcha = coffee|latte|matcha|espresso|cold brew|caffeine
+Cooking at home = \bcook(ing|ed)?\b|recipe|air fryer|meal prep\w*|\boven\b|make dinner
+Restaurants and eating out = restaurant|reservation|sushi|pizza|bagels?\b|tacos?\b|ramen|steak|pasta|dessert|ice cream
+Healthy eating = \bsalad|smoothie|oatmeal|greek yogurt|protein shake|\bkale\b|vegan|plant[- ]based|dairy[- ]free|gluten
+Food delivery and takeout = delivery|take ?out\b|order(ed|ing)? (in|food)
+Sweet treats = sweet treat|cookies?\b|cupcake|donut|chocolate|\bcandy\b
