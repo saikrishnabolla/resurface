@@ -97,7 +97,7 @@ class ArchiveStore:
             raise RuntimeError("Archive storage is not configured.")
         else:
             path = Path(os.environ.get("RESURFACE_ARCHIVE_DB",
-                        Path(__file__).resolve().parents[2] / ".cache" / "live-archive.sqlite3"))
+                        Path(__file__).resolve().parents[1] / ".cache" / "live-archive.sqlite3"))
             path.parent.mkdir(parents=True, exist_ok=True)
             db = sqlite3.connect(path, timeout=5)
         try:

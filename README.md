@@ -11,7 +11,8 @@ The finished short is a vertical split screen. The top half is a news panel (dat
 | `skill/news-hook-clip-matcher/` | The Claude skill that runs the whole job, end to end |
 | `pipeline/` | The working scripts and the motion template the skill uses |
 | `examples/kameron-monet/` | A full first run on @KameronMonet, 22 Nov 2026 |
-| `web/` | The Resurface web app |
+| Repo root | The Resurface web app |
+| `electron/` | The desktop transcript archive app |
 
 ## The six stages
 
@@ -38,4 +39,4 @@ Full transcripts and API keys are left out on purpose (see `.gitignore`). The tr
 
 ## Status
 
-First run only. The scripts are the ones used on that run, lightly tidied: they work, but they are not yet a packaged tool. Scores on the example shortlist were set by the same pass that found the pairs.
+The pipeline scripts are not yet a packaged tool. Scores on the example shortlist were set by the same pass that found the pairs.
